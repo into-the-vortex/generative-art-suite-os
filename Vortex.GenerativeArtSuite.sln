@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32922.545
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{981C3852-DF56-4002-8E20-DB64BD18E193}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
+		LICENSE = LICENSE
+		NuGet.Config = NuGet.Config
+		Settings.XamlStyler = Settings.XamlStyler
+		stylecop.json = stylecop.json
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vortex.GenerativeArtSuite.Create", "Vortex.GenerativeArtSuite.Create\Vortex.GenerativeArtSuite.Create.csproj", "{100BDBA6-E9C8-4D09-BD2E-814087A7888B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vortex.GenerativeArtSuite.Inspect", "Vortex.GenerativeArtSuite.Inspect\Vortex.GenerativeArtSuite.Inspect.csproj", "{65EB5A1A-B651-4C49-A1C4-88098F5E9BCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vortex.GenerativeArtSuite.Common", "Vortex.GenerativeArtSuite.Common\Vortex.GenerativeArtSuite.Common.csproj", "{CFFC525E-46F9-4C31-8B03-7E9EEF6EC284}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{100BDBA6-E9C8-4D09-BD2E-814087A7888B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{100BDBA6-E9C8-4D09-BD2E-814087A7888B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{100BDBA6-E9C8-4D09-BD2E-814087A7888B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{100BDBA6-E9C8-4D09-BD2E-814087A7888B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65EB5A1A-B651-4C49-A1C4-88098F5E9BCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65EB5A1A-B651-4C49-A1C4-88098F5E9BCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65EB5A1A-B651-4C49-A1C4-88098F5E9BCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65EB5A1A-B651-4C49-A1C4-88098F5E9BCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFFC525E-46F9-4C31-8B03-7E9EEF6EC284}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFFC525E-46F9-4C31-8B03-7E9EEF6EC284}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFFC525E-46F9-4C31-8B03-7E9EEF6EC284}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFFC525E-46F9-4C31-8B03-7E9EEF6EC284}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5FDB992B-B06D-4200-B324-0E96229CAC90}
+	EndGlobalSection
+EndGlobal
