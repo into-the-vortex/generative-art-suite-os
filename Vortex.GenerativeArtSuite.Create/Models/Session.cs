@@ -2,10 +2,13 @@
 {
     public class Session
     {
-        public Session(SessionSettings settings)
+        public Session(string name, SessionSettings settings)
         {
+            Name = name;
             Settings = settings;
         }
+
+        public string Name { get; }
 
         public SessionSettings Settings { get; }
     }

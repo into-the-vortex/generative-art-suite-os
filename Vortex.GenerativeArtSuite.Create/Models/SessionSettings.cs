@@ -1,7 +1,16 @@
 ﻿namespace Vortex.GenerativeArtSuite.Create.Models
 {
-    public struct SessionSettings
+    public class SessionSettings
     {
+        public SessionSettings()
+        {
+            OutputFolder = string.Empty;
+            NamePrefix = string.Empty;
+            DescriptionTemplate = string.Empty;
+            BaseURI = string.Empty;
+            CollectionSize = 10000;
+        }
+
         public string OutputFolder { get; set; }
 
         public string NamePrefix { get; set; }

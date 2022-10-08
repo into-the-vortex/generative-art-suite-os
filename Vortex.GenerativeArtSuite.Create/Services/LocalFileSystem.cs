@@ -55,9 +55,9 @@ namespace Vortex.GenerativeArtSuite.Create.Services
             return JsonConvert.DeserializeObject<Session>(File.ReadAllText(path)) ?? throw new ArgumentException("Session could not be loaded", nameof(name));
         }
 
-        public void SaveSession(string name, Session session)
+        public void SaveSession(Session session)
         {
-            var dir = Path.Combine(sessionsPath, name);
+            var dir = Path.Combine(sessionsPath, session.Name);
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);

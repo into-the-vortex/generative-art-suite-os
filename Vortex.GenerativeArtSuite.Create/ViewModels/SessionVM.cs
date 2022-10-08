@@ -49,17 +49,24 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
                 selectedTag = tag;
                 OnPropertyChanged(nameof(SelectedTag));
 
-                if (tag == NavigationService.Home)
+                switch (tag)
                 {
-                    navigationService.GoHome();
-                }
-                else
-                {
-                    var parameters = new NavigationParameters
-                    {
-                        { nameof(Session), currentSession },
-                    };
-                    navigationService.NavigateTo(tag, parameters);
+                    case NavigationService.Home:
+                        if (currentSession is not null)
+                        {
+                            // TODO: Probably dialog this to make sure they want to save.
+                            fileSystem.SaveSession(currentSession);
+                        }
+
+                        navigationService.GoHome();
+                        break;
+                    default:
+                        var parameters = new NavigationParameters
+                        {
+                            { nameof(Session), currentSession },
+                        };
+                        navigationService.NavigateTo(tag, parameters);
+                        break;
                 }
             }
         }

@@ -23,6 +23,7 @@ namespace Vortex.GenerativeArtSuite.Create
 
             containerRegistry.RegisterForNavigation<HomePage, HomeVM>(NavigationService.Home);
             containerRegistry.RegisterForNavigation<SessionPage, SessionVM>(NavigationService.Session);
+            containerRegistry.RegisterForNavigation<SettingsPage, SettingsVM>(NavigationService.Settings);
         }
     }
 }

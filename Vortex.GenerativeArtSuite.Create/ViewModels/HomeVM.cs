@@ -27,8 +27,8 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
 
         private void OpenNewSession(string name, SessionSettings sessionSettings)
         {
-            var session = new Session(sessionSettings);
-            fileSystem.SaveSession(name, session);
+            var session = new Session(name, sessionSettings);
+            fileSystem.SaveSession(session);
             navigationService.OpenSession(session);
         }
 

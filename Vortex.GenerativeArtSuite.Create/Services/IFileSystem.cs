@@ -9,6 +9,6 @@ namespace Vortex.GenerativeArtSuite.Create.Services
 
         Session LoadSession(string name);
 
-        void SaveSession(string name, Session session);
+        void SaveSession(Session session);
     }
 }
