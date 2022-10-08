@@ -120,4 +120,61 @@
   <data name="AppName" xml:space="preserve">
     <value>GAS - Create</value>
   </data>
+  <data name="BaseURILabel" xml:space="preserve">
+    <value>Base URI:</value>
+  </data>
+  <data name="BaseURIPlaceholder" xml:space="preserve">
+    <value>ipfs://code</value>
+  </data>
+  <data name="CollectionSizeLabel" xml:space="preserve">
+    <value>Collection Size:</value>
+  </data>
+  <data name="CollectionSizePlaceholder" xml:space="preserve">
+    <value>10000</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Created:</value>
+  </data>
+  <data name="CreateSession" xml:space="preserve">
+    <value>Create Session</value>
+  </data>
+  <data name="DescriptionLabel" xml:space="preserve">
+    <value>Description:</value>
+  </data>
+  <data name="DescriptionPlaceholder" xml:space="preserve">
+    <value>Very gud nft :)</value>
+  </data>
+  <data name="Generate" xml:space="preserve">
+    <value>Generate</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Layers" xml:space="preserve">
+    <value>Layers</value>
+  </data>
+  <data name="Modified" xml:space="preserve">
+    <value>Modified:</value>
+  </data>
+  <data name="NamePrefixLabel" xml:space="preserve">
+    <value>Token Name Prefix:</value>
+  </data>
+  <data name="NamePrefixPlaceholder" xml:space="preserve">
+    <value>Collection Item</value>
+  </data>
+  <data name="OutputFolderLabel" xml:space="preserve">
+    <value>Output Folder:</value>
+  </data>
+  <data name="OutputFolderPlaceholder" xml:space="preserve">
+    <value>C:\Users\Account\Documents\Vortex\SessionNameOutput</value>
+  </data>
+  <data name="SessionNameLabel" xml:space="preserve">
+    <value>Session Name:</value>
+  </data>
+  <data name="SessionNamePlaceholder" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Traits" xml:space="preserve">
+    <value>Traits</value>
+  </data>
 </root>

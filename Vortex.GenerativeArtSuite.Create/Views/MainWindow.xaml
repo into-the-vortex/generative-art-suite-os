@@ -4,9 +4,79 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        xmlns:local="clr-namespace:Vortex.GenerativeArtSuite.Create"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:controls="clr-namespace:Vortex.GenerativeArtSuite.Common.Controls;assembly=Vortex.GenerativeArtSuite.Common"
+        xmlns:converters="clr-namespace:Vortex.GenerativeArtSuite.Common.Converters;assembly=Vortex.GenerativeArtSuite.Common"
+        xmlns:prism="http://prismlibrary.com/"
+        xmlns:services="clr-namespace:Vortex.GenerativeArtSuite.Create.Services"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels"
         Title="MainWindow"
-        Height="450"
-        Width="800">
-    <Grid />
+        d:DataContext="{d:DesignInstance vms:MainWindowVM}"
+        ui:TitleBar.ExtendViewIntoTitleBar="True"
+        ui:TitleBar.IsBackButtonVisible="False"
+        ui:TitleBar.Style="{DynamicResource AppTitleBarStyle}"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        MinHeight="700"
+        MinWidth="1200"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized">
+    <b:Interaction.Triggers>
+        <b:EventTrigger EventName="Loaded">
+            <b:InvokeCommandAction Command="{Binding OnLoaded}" />
+        </b:EventTrigger>
+    </b:Interaction.Triggers>
+
+    <Window.Resources>
+        <converters:PixelsToGridLengthConverter x:Key="PixelsToGridLength" />
+        <Style x:Key="AppTitleBarButtonStyle" TargetType="ui:TitleBarButton">
+            <Setter Property="IsActive" Value="{Binding IsActive, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <!--  Title Bar  -->
+            <RowDefinition Height="Auto" />
+            <!--  Content  -->
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <!--  Title Bar  -->
+        <Grid Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" Height="{Binding Path=(ui:TitleBar.Height), RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
+
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="TextElement.Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsActive, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="False">
+                            <Setter Property="TextElement.Foreground" Value="{DynamicResource SystemControlDisabledBaseMediumLowBrush}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding Path=(ui:TitleBar.SystemOverlayLeftInset), Converter={StaticResource PixelsToGridLength}, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="{Binding Path=(ui:TitleBar.SystemOverlayRightInset), Converter={StaticResource PixelsToGridLength}, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="1"
+                       Margin="10,0,0,0"
+                       FontSize="13"
+                       VerticalAlignment="Center"
+                       Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=Title}" />
+
+            <controls:ChangeThemeButton Grid.Column="3"
+                                        Style="{StaticResource AppTitleBarButtonStyle}"
+                                        DataContext="{Binding ChangeThemeVM}"
+                                        HorizontalAlignment="Right" />
+        </Grid>
+
+        <!--  Content  -->
+        <ContentControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static services:NavigationService.MainRegion}" />
+    </Grid>
 </Window>

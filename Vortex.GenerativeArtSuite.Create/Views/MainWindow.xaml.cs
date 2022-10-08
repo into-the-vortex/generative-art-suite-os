@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Windows;
 using Vortex.GenerativeArtSuite.Create.ViewModels;
 using static Microsoft.Requires;
