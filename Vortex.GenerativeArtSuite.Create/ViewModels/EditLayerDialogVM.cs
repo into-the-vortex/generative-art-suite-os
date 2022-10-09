@@ -6,30 +6,33 @@ using Vortex.GenerativeArtSuite.Create.Models;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels
 {
-    public class CreateLayerDialogVM : DialogVM
+    public class EditLayerDialogVM : DialogVM
     {
+        public const string OldLayer = nameof(OldLayer);
+        public const string NewLayer = nameof(NewLayer);
         public const string ExistingLayerNames = nameof(ExistingLayerNames);
 
         private List<string> existingLayerNames = new();
+        private Layer? oldLayer;
         private int index;
         private int maxIndex;
         private string name = string.Empty;
         private bool optional;
         private bool includeInDNA = true;
 
-        public CreateLayerDialogVM()
+        public EditLayerDialogVM()
         {
-            var create = new DelegateCommand(() => CloseDialog(OKAY), CanAdd);
+            var edit = new DelegateCommand(() => CloseDialog(OKAY), CanEdit);
             PropertyChanged += (s, e) =>
             {
-                create.RaiseCanExecuteChanged();
+                edit.RaiseCanExecuteChanged();
             };
 
-            Confirm = create;
+            Confirm = edit;
             Cancel = new DelegateCommand(() => CloseDialog(CANCEL), CanCloseDialog);
         }
 
-        public override string Title => Strings.CreateLayer;
+        public override string Title => Strings.EditLayer;
 
         public int Index
         {
@@ -105,8 +108,15 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
             if (parameters.TryGetValue(ExistingLayerNames, out List<string> layerNames))
             {
                 MaxIndex = layerNames.Count;
-                Index = MaxIndex;
                 existingLayerNames = layerNames;
+            }
+
+            if (parameters.TryGetValue(nameof(Layer), out Layer layer))
+            {
+                oldLayer = layer;
+                Name = layer.Name;
+                Optional = layer.Optional;
+                IncludeInDNA = layer.IncludeInDNA;
             }
         }
 
@@ -127,16 +137,16 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
         {
             var result = new DialogParameters();
 
-            if (parameter == OKAY)
+            if (parameter == OKAY && oldLayer != null)
             {
-                result.Add(nameof(Index), Index);
-                result.Add(nameof(Layer), new Layer(Name, optional, includeInDNA));
+                result.Add(NewLayer, new Layer(Name, optional, includeInDNA));
+                result.Add(OldLayer, oldLayer);
             }
 
             return result;
         }
 
-        private bool CanAdd()
+        private bool CanEdit()
         {
             return !existingLayerNames.Contains(Name) &&
                 !string.IsNullOrWhiteSpace(Name) &&

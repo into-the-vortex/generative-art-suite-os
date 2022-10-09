@@ -61,15 +61,6 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Layer.
-        /// </summary>
-        public static string AddLayer {
-            get {
-                return ResourceManager.GetString("AddLayer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to GAS - Create.
         /// </summary>
         public static string AppName {
@@ -124,6 +115,15 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        public static string Confirm {
+            get {
+                return ResourceManager.GetString("Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created:.
         /// </summary>
         public static string Created {
@@ -133,7 +133,7 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create new layer.
+        ///   Looks up a localized string similar to Create Layer.
         /// </summary>
         public static string CreateLayer {
             get {

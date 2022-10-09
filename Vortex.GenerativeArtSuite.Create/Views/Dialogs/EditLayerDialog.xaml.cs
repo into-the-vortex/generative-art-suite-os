@@ -3,9 +3,9 @@
     /// <summary>
     /// Interaction logic for Home.xaml
     /// </summary>
-    public partial class YesNoDialog
+    public partial class EditLayerDialog
     {
-        public YesNoDialog()
+        public EditLayerDialog()
         {
             InitializeComponent();
         }

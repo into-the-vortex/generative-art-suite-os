@@ -1,37 +1,27 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 using System.Windows.Input;
 using Prism.Commands;
-using Prism.Services.Dialogs;
 using Vortex.GenerativeArtSuite.Create.Models;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels
 {
     public class LayerVM
     {
-        private readonly Layer model;
-        private readonly IDialogService dialogService;
-        private readonly Action<IDialogResult> editCallback;
-        private readonly Action<IDialogResult> deleteCallback;
-
-        public LayerVM(Layer model, IDialogService dialogService, Action<IDialogResult> editCallback, Action<IDialogResult> deleteCallback)
+        public LayerVM(Layer model, Action<Layer> editCallback, Action<Layer> deleteCallback)
         {
-            this.model = model;
-            this.dialogService = dialogService;
-            this.editCallback = editCallback;
-            this.deleteCallback = deleteCallback;
+            Model = model;
 
             Fork = new DelegateCommand(OnAddSubLayer);
-            Edit = new DelegateCommand(OnEdit);
-            Delete = new DelegateCommand(OnDelete);
+            Edit = new DelegateCommand(() => editCallback(model));
+            Delete = new DelegateCommand(() => deleteCallback(model));
             BranchVMs = new ObservableCollection<SubLayerVM>(model.Branches.Select(b => new SubLayerVM(b)));
         }
 
-        public string Name => $"{Strings.NameLabel} {model.Name}";
+        public string Name => $"{Strings.NameLabel} {Model.Name}";
 
-        public string Info => $" - ({(model.Optional ? Strings.IsOptionalOn : Strings.IsOptionalOff)} | {(model.IncludeInDNA ? Strings.IsDNAOff : Strings.IsOptionalOn)})";
+        public string Info => $" - ({(Model.Optional ? Strings.IsOptionalOn : Strings.IsOptionalOff)} | {(Model.IncludeInDNA ? Strings.IsDNAOn : Strings.IsDNAOff)})";
 
         public ObservableCollection<SubLayerVM> BranchVMs { get; }
 
@@ -41,23 +31,10 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
 
         public ICommand Delete { get; }
 
+        public Layer Model { get; }
+
         private void OnAddSubLayer()
         {
-        }
-
-        private void OnEdit()
-        {
-        }
-
-        private void OnDelete()
-        {
-            var param = new DialogParameters
-            {
-                { nameof(DeleteLayerDialogVM.Message), string.Format(CultureInfo.CurrentCulture, Strings.DeleteLayerConfirmation, model.Name) },
-                { nameof(Layer), model },
-            };
-
-            dialogService.ShowDialog(DialogVM.DeleteLayerDialog, param, deleteCallback);
         }
     }
 }

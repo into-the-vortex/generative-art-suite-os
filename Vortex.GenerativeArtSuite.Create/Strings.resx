@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddLayer" xml:space="preserve">
-    <value>Create Layer</value>
-  </data>
   <data name="AppName" xml:space="preserve">
     <value>GAS - Create</value>
   </data>
@@ -138,11 +135,14 @@
   <data name="CollectionSizePlaceholder" xml:space="preserve">
     <value>10000</value>
   </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
   <data name="Created" xml:space="preserve">
     <value>Created:</value>
   </data>
   <data name="CreateLayer" xml:space="preserve">
-    <value>Create new layer</value>
+    <value>Create Layer</value>
   </data>
   <data name="CreateSession" xml:space="preserve">
     <value>Create Session</value>

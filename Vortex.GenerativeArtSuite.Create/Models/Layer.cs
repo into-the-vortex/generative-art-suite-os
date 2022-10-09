@@ -6,15 +6,12 @@ namespace Vortex.GenerativeArtSuite.Create.Models
     {
         private List<SubLayer> subLayers = new();
 
-        public Layer(int index, string name, bool optional, bool includeInDNA)
+        public Layer(string name, bool optional, bool includeInDNA)
         {
-            Index = index;
             Name = name;
             Optional = optional;
             IncludeInDNA = includeInDNA;
         }
-
-        public int Index { get; set; }
 
         public string Name { get; set; }
 

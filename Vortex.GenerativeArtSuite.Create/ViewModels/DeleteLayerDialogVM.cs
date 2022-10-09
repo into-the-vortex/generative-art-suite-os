@@ -8,6 +8,9 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
 {
     public class DeleteLayerDialogVM : DialogVM
     {
+        public const string Index = nameof(Index);
+
+        private int index;
         private Layer? layer;
         private string message = string.Empty;
 
@@ -43,6 +46,11 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
                 Message = message;
             }
 
+            if (parameters.TryGetValue(Index, out int index))
+            {
+                this.index = index;
+            }
+
             if (parameters.TryGetValue(nameof(Layer), out Layer layer))
             {
                 this.layer = layer;
@@ -71,6 +79,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
 
             return new DialogParameters()
             {
+                { Index, index },
                 { nameof(Layer), layer },
             };
         }
