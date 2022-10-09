@@ -1,4 +1,6 @@
-﻿namespace Vortex.GenerativeArtSuite.Create.Models
+﻿using System.Collections.Generic;
+
+namespace Vortex.GenerativeArtSuite.Create.Models
 {
     public class Session
     {
@@ -6,10 +8,13 @@
         {
             Name = name;
             Settings = settings;
+            Layers = new List<Layer>();
         }
 
         public string Name { get; }
 
         public SessionSettings Settings { get; }
+
+        public List<Layer> Layers { get; }
     }
 }

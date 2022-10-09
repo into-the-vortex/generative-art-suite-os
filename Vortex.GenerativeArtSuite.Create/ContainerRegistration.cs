@@ -4,6 +4,7 @@ using Prism.Regions;
 using Vortex.GenerativeArtSuite.Common.ViewModels;
 using Vortex.GenerativeArtSuite.Create.Services;
 using Vortex.GenerativeArtSuite.Create.ViewModels;
+using Vortex.GenerativeArtSuite.Create.Views.Dialogs;
 using Vortex.GenerativeArtSuite.Create.Views.Pages;
 
 namespace Vortex.GenerativeArtSuite.Create
@@ -27,6 +28,8 @@ namespace Vortex.GenerativeArtSuite.Create
             containerRegistry.RegisterForNavigation<TraitsPage, TraitsVM>(NavigationService.Traits);
             containerRegistry.RegisterForNavigation<GeneratePage, GenerateVM>(NavigationService.Generate);
             containerRegistry.RegisterForNavigation<SettingsPage, SettingsVM>(NavigationService.Settings);
+
+            containerRegistry.RegisterDialog<CreateLayerDialog, CreateLayerDialogVM>(DialogVM.CreateLayerDialog);
         }
     }
 }

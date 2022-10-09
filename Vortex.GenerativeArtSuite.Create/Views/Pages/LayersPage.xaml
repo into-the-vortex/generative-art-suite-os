@@ -17,4 +17,36 @@
         BorderThickness="1"
         CornerRadius="10"
         HorizontalAlignment="Stretch"
-        VerticalAlignment="Stretch" />
+        VerticalAlignment="Stretch">
+
+    <ui:SimpleStackPanel Spacing="10"
+                         HorizontalAlignment="Stretch"
+                         Orientation="Vertical"
+                         VerticalAlignment="Stretch">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <Label Content="{x:Static strings:Strings.Layers}"
+                   FontSize="32"
+                   FontWeight="Bold"
+                   VerticalAlignment="Center" />
+            <Button Grid.Column="2"
+                    VerticalAlignment="Center"
+                    Command="{Binding AddLayer}">
+                <ui:SymbolIcon Symbol="Add" />
+            </Button>
+        </Grid>
+        <Separator />
+        <ItemsControl ItemsSource="{Binding Layers}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Label Content="{Binding Name}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </ui:SimpleStackPanel>
+
+</Border>

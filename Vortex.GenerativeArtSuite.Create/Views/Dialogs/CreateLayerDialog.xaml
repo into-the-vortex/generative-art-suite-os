@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="Vortex.GenerativeArtSuite.Create.Views.Dialogs.CreateLayerDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels"
+             d:DataContext="{d:DesignInstance vms:CreateLayerDialogVM}"
+             Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+             Height="450"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch"
+             Width="800">
+
+    <ui:SimpleStackPanel Spacing="10"
+                         Margin="50"
+                         HorizontalAlignment="Stretch"
+                         Orientation="Vertical"
+                         VerticalAlignment="Stretch">
+        <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.NameLabel}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.LayerIndex}" Text="{Binding Index, UpdateSourceTrigger=PropertyChanged}" />
+        <ui:ToggleSwitch ui:ControlHelper.Header="{x:Static strings:Strings.IsOptional}"
+                         IsOn="{Binding Optional}"
+                         OffContent="{x:Static strings:Strings.IsOptionalOff}"
+                         OnContent="{x:Static strings:Strings.IsOptionalOn}" />
+        <ui:ToggleSwitch ui:ControlHelper.Header="{x:Static strings:Strings.IsDNA}"
+                         IsOn="{Binding IncludeInDNA}"
+                         OffContent="{x:Static strings:Strings.IsDNAOff}"
+                         OnContent="{x:Static strings:Strings.IsDNAOn}" />
+
+        <Separator />
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0"
+                    Margin="10,0,0,0"
+                    Content="{x:Static strings:Strings.AddLayer}"
+                    HorizontalAlignment="Stretch"
+                    Command="{Binding Confirm}" />
+            <Button Grid.Column="1"
+                    Margin="10,0"
+                    Content="{x:Static strings:Strings.Cancel}"
+                    HorizontalAlignment="Stretch"
+                    Command="{Binding Cancel}" />
+        </Grid>
+
+    </ui:SimpleStackPanel>
+
+</UserControl>

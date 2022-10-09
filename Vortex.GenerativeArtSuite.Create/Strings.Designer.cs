@@ -61,6 +61,15 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create Layer.
+        /// </summary>
+        public static string AddLayer {
+            get {
+                return ResourceManager.GetString("AddLayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to GAS - Create.
         /// </summary>
         public static string AppName {
@@ -88,6 +97,15 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Collection Size:.
         /// </summary>
         public static string CollectionSizeLabel {
@@ -111,6 +129,15 @@ namespace Vortex.GenerativeArtSuite.Create {
         public static string Created {
             get {
                 return ResourceManager.GetString("Created", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CreateLayer.
+        /// </summary>
+        public static string CreateLayer {
+            get {
+                return ResourceManager.GetString("CreateLayer", resourceCulture);
             }
         }
         
@@ -160,6 +187,69 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Include in DNA:.
+        /// </summary>
+        public static string IsDNA {
+            get {
+                return ResourceManager.GetString("IsDNA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trait doesn&apos;t make the token unique.
+        /// </summary>
+        public static string IsDNAOff {
+            get {
+                return ResourceManager.GetString("IsDNAOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trait makes the token unique.
+        /// </summary>
+        public static string IsDNAOn {
+            get {
+                return ResourceManager.GetString("IsDNAOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is Optional:.
+        /// </summary>
+        public static string IsOptional {
+            get {
+                return ResourceManager.GetString("IsOptional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trait always selected.
+        /// </summary>
+        public static string IsOptionalOff {
+            get {
+                return ResourceManager.GetString("IsOptionalOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trait may be &quot;none&quot;.
+        /// </summary>
+        public static string IsOptionalOn {
+            get {
+                return ResourceManager.GetString("IsOptionalOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Layer Index:.
+        /// </summary>
+        public static string LayerIndex {
+            get {
+                return ResourceManager.GetString("LayerIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Layers.
         /// </summary>
         public static string Layers {
@@ -174,6 +264,15 @@ namespace Vortex.GenerativeArtSuite.Create {
         public static string Modified {
             get {
                 return ResourceManager.GetString("Modified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name:.
+        /// </summary>
+        public static string NameLabel {
+            get {
+                return ResourceManager.GetString("NameLabel", resourceCulture);
             }
         }
         

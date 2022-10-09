@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-
-namespace Vortex.GenerativeArtSuite.Create.Models
+﻿namespace Vortex.GenerativeArtSuite.Create.Models
 {
-    internal struct SubLayer
+    public class SubLayer
     {
+        public SubLayer(string name)
+        {
+            DisplayName = name;
+        }
+
         public string DisplayName { get; set; }
-
-        public Gene? Gene { get; set; }
-
-        public IEnumerable<Gene> RequiredGenes { get; set; }
     }
 }
