@@ -1,15 +1,12 @@
 ﻿using Prism.Regions;
-using Vortex.GenerativeArtSuite.Common.ViewModels;
-using Vortex.GenerativeArtSuite.Create.Models;
 using Vortex.GenerativeArtSuite.Create.Services;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels
 {
-    public class SessionVM : NotifyPropertyChanged, INavigationAware
+    public class SessionVM : SessionAwareVM
     {
         private readonly INavigationService navigationService;
         private readonly IFileSystem fileSystem;
-        private Session? currentSession;
         private string? selectedTag;
 
         public SessionVM(IFileSystem fileSystem, INavigationService navigationService)
@@ -24,22 +21,10 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
             set => OnSelectedTagChanged(value);
         }
 
-        public bool IsNavigationTarget(NavigationContext navigationContext)
+        public override void OnNavigatedTo(NavigationContext navigationContext)
         {
-            return true;
-        }
-
-        public void OnNavigatedFrom(NavigationContext navigationContext)
-        {
-        }
-
-        public void OnNavigatedTo(NavigationContext navigationContext)
-        {
+            base.OnNavigatedTo(navigationContext);
             SelectedTag = NavigationService.Layers;
-            if (navigationContext.Parameters[nameof(Session)] is Session session)
-            {
-                currentSession = session;
-            }
         }
 
         private void OnSelectedTagChanged(string? tag)
@@ -52,18 +37,14 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
                 switch (tag)
                 {
                     case NavigationService.Home:
-                        if (currentSession is not null)
-                        {
-                            // TODO: Probably dialog this to make sure they want to save.
-                            fileSystem.SaveSession(currentSession);
-                        }
-
+                        // TODO: Probably dialog this to make sure they want to save.
+                        fileSystem.SaveSession(Session());
                         navigationService.GoHome();
                         break;
                     default:
                         var parameters = new NavigationParameters
                         {
-                            { nameof(Session), currentSession },
+                            { nameof(Session), Session() },
                         };
                         navigationService.NavigateTo(tag, parameters);
                         break;

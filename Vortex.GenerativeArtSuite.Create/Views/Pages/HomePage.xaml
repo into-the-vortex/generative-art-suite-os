@@ -34,7 +34,7 @@
             <Separator />
             <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.SessionNameLabel}"
                      ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.SessionNamePlaceholder}"
-                     Text="{Binding Name}" />
+                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -53,17 +53,17 @@
             <Separator />
             <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.NamePrefixLabel}"
                      ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.NamePrefixPlaceholder}"
-                     Text="{Binding NamePrefix}" />
+                     Text="{Binding NamePrefix, UpdateSourceTrigger=PropertyChanged}" />
             <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.DescriptionLabel}"
                      ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.DescriptionPlaceholder}"
-                     Text="{Binding DescriptionTemplate}" />
+                     Text="{Binding DescriptionTemplate, UpdateSourceTrigger=PropertyChanged}" />
             <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.BaseURILabel}"
                      ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.BaseURIPlaceholder}"
-                     Text="{Binding BaseURI}" />
+                     Text="{Binding BaseURI, UpdateSourceTrigger=PropertyChanged}" />
             <ui:NumberBox ui:ControlHelper.Header="{x:Static strings:Strings.CollectionSizeLabel}"
                           ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.CollectionSizePlaceholder}"
                           Minimum="1"
-                          Value="{Binding CollectionSize}" />
+                          Value="{Binding CollectionSize, UpdateSourceTrigger=PropertyChanged}" />
             <Separator />
             <Button Margin="50,0"
                     Content="{x:Static strings:Strings.CreateSession}"

@@ -1,10 +1,9 @@
 ﻿using Prism.Regions;
-using Vortex.GenerativeArtSuite.Common.ViewModels;
 using Vortex.GenerativeArtSuite.Create.Models;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels
 {
-    public class SettingsVM : NotifyPropertyChanged, INavigationAware
+    public class SettingsVM : SessionAwareVM
     {
         private SessionSettingsVM settings;
 
@@ -23,21 +22,10 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
             }
         }
 
-        public void OnNavigatedTo(NavigationContext navigationContext)
+        public override void OnNavigatedTo(NavigationContext navigationContext)
         {
-            if (navigationContext.Parameters[nameof(Session)] is Session session)
-            {
-                Settings = new SessionSettingsVM(session.Settings);
-            }
-        }
-
-        public void OnNavigatedFrom(NavigationContext navigationContext)
-        {
-        }
-
-        public bool IsNavigationTarget(NavigationContext navigationContext)
-        {
-            return true;
+            base.OnNavigatedTo(navigationContext);
+            Settings = new SessionSettingsVM(Session().Settings);
         }
     }
 }

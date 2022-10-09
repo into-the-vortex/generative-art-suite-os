@@ -1,0 +1,13 @@
+﻿namespace Vortex.GenerativeArtSuite.Create.Views.Pages
+{
+    /// <summary>
+    /// Interaction logic for Home.xaml
+    /// </summary>
+    public partial class LayersPage
+    {
+        public LayersPage()
+        {
+            InitializeComponent();
+        }
+    }
+}
