@@ -27,7 +27,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
         {
             base.OnNavigatedTo(navigationContext);
             Layers.Clear();
-            Layers.AddRange(Session().Layers.Select(l => new LayerVM(l)));
+            Layers.AddRange(Session().Layers.Select(l => new LayerVM(l, dialogService, EditCallback, DeleteCallback)));
         }
 
         private void OnAddLayer()
@@ -44,8 +44,22 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
         {
             if (dialogResult.Result == ButtonResult.OK && dialogResult.Parameters.TryGetValue(nameof(Layer), out Layer layer))
             {
-                Layers.Insert(layer.Index, new LayerVM(layer));
+                Layers.Insert(layer.Index, new LayerVM(layer, dialogService, EditCallback, DeleteCallback));
                 Session().Layers.Insert(layer.Index, layer);
+            }
+        }
+
+        private void EditCallback(IDialogResult dialogResult)
+        {
+
+        }
+
+        private void DeleteCallback(IDialogResult dialogResult)
+        {
+            if (dialogResult.Result == ButtonResult.OK && dialogResult.Parameters.TryGetValue(nameof(Layer), out Layer layer))
+            {
+                Layers.RemoveAt(layer.Index);
+                Session().Layers.RemoveAt(layer.Index);
             }
         }
     }

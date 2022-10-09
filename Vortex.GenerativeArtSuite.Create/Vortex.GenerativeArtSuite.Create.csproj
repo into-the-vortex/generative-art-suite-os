@@ -25,6 +25,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
+    <Compile Update="Views\Dialogs\YesNoDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Dialogs\CreateLayerDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -53,6 +56,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Views\Dialogs\YesNoDialog.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\Dialogs\CreateLayerDialog.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>

@@ -142,16 +142,25 @@
     <value>Created:</value>
   </data>
   <data name="CreateLayer" xml:space="preserve">
-    <value>CreateLayer</value>
+    <value>Create new layer</value>
   </data>
   <data name="CreateSession" xml:space="preserve">
     <value>Create Session</value>
+  </data>
+  <data name="DeleteLayer" xml:space="preserve">
+    <value>Delete Layer</value>
+  </data>
+  <data name="DeleteLayerConfirmation" xml:space="preserve">
+    <value>Are you sure you want to delete the layer "{0}"?</value>
   </data>
   <data name="DescriptionLabel" xml:space="preserve">
     <value>Description:</value>
   </data>
   <data name="DescriptionPlaceholder" xml:space="preserve">
     <value>Very gud nft :)</value>
+  </data>
+  <data name="EditLayer" xml:space="preserve">
+    <value>Edit Layer</value>
   </data>
   <data name="Generate" xml:space="preserve">
     <value>Generate</value>
@@ -195,6 +204,9 @@
   <data name="NamePrefixPlaceholder" xml:space="preserve">
     <value>Collection Item</value>
   </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
   <data name="OutputFolderLabel" xml:space="preserve">
     <value>Output Folder:</value>
   </data>
@@ -209,5 +221,8 @@
   </data>
   <data name="Traits" xml:space="preserve">
     <value>Traits</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
   </data>
 </root>

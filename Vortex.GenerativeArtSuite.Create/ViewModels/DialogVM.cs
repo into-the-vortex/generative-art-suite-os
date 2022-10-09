@@ -7,6 +7,12 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
     public abstract class DialogVM : NotifyPropertyChanged, IDialogAware
     {
         public const string CreateLayerDialog = nameof(CreateLayerDialog);
+        public const string EditLayerDialog = nameof(EditLayerDialog);
+        public const string DeleteLayerDialog = nameof(DeleteLayerDialog);
+
+        public const string CreateSubLayerDialog = nameof(CreateSubLayerDialog);
+        public const string EditSubLayerDialog = nameof(EditSubLayerDialog);
+        public const string DeleteSubLayerDialog = nameof(DeleteSubLayerDialog);
 
         public const string OKAY = "ok";
         public const string CANCEL = "cancel";

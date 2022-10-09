@@ -133,7 +133,7 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CreateLayer.
+        ///   Looks up a localized string similar to Create new layer.
         /// </summary>
         public static string CreateLayer {
             get {
@@ -147,6 +147,24 @@ namespace Vortex.GenerativeArtSuite.Create {
         public static string CreateSession {
             get {
                 return ResourceManager.GetString("CreateSession", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Layer.
+        /// </summary>
+        public static string DeleteLayer {
+            get {
+                return ResourceManager.GetString("DeleteLayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the layer &quot;{0}&quot;?.
+        /// </summary>
+        public static string DeleteLayerConfirmation {
+            get {
+                return ResourceManager.GetString("DeleteLayerConfirmation", resourceCulture);
             }
         }
         
@@ -165,6 +183,15 @@ namespace Vortex.GenerativeArtSuite.Create {
         public static string DescriptionPlaceholder {
             get {
                 return ResourceManager.GetString("DescriptionPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Layer.
+        /// </summary>
+        public static string EditLayer {
+            get {
+                return ResourceManager.GetString("EditLayer", resourceCulture);
             }
         }
         
@@ -295,6 +322,15 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Output Folder:.
         /// </summary>
         public static string OutputFolderLabel {
@@ -336,6 +372,15 @@ namespace Vortex.GenerativeArtSuite.Create {
         public static string Traits {
             get {
                 return ResourceManager.GetString("Traits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
     }

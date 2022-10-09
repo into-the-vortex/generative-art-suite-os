@@ -30,6 +30,7 @@ namespace Vortex.GenerativeArtSuite.Create
             containerRegistry.RegisterForNavigation<SettingsPage, SettingsVM>(NavigationService.Settings);
 
             containerRegistry.RegisterDialog<CreateLayerDialog, CreateLayerDialogVM>(DialogVM.CreateLayerDialog);
+            containerRegistry.RegisterDialog<YesNoDialog, DeleteLayerDialogVM>(DialogVM.DeleteLayerDialog);
         }
     }
 }

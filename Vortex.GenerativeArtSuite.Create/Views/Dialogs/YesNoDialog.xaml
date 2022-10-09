@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="Vortex.GenerativeArtSuite.Create.Views.Dialogs.YesNoDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels"
+             d:DataContext="{d:DesignInstance vms:YesNoDialogVM}"
+             Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+             Height="150"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch"
+             Width="300">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0"
+                   Grid.ColumnSpan="2"
+                   Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                   TextWrapping="Wrap"
+                   Text="{Binding Message}" />
+        <Button Grid.Row="2"
+                Grid.Column="0"
+                Margin="10,0,0,0"
+                Content="{x:Static strings:Strings.Yes}"
+                HorizontalAlignment="Stretch"
+                Command="{Binding Yes}" />
+        <Button Grid.Row="2"
+                Grid.Column="1"
+                Margin="10,0"
+                Content="{x:Static strings:Strings.No}"
+                HorizontalAlignment="Stretch"
+                Command="{Binding No}" />
+    </Grid>
+
+</UserControl>
