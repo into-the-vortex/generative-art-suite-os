@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Reactive.Linq;
@@ -7,6 +8,7 @@ using DynamicData;
 using Prism.Commands;
 using Prism.Regions;
 using Prism.Services.Dialogs;
+using Vortex.GenerativeArtSuite.Common.Extensions;
 using Vortex.GenerativeArtSuite.Create.Models;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels
@@ -14,6 +16,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
     public class LayersVM : SessionAwareVM
     {
         private readonly IDialogService dialogService;
+        private IDisposable? layerListner;
 
         public LayersVM(IDialogService dialogService)
         {
@@ -29,8 +32,9 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
         public override void OnNavigatedTo(NavigationContext navigationContext)
         {
             base.OnNavigatedTo(navigationContext);
-            Layers.Clear();
-            Layers.AddRange(Session().Layers.Select(l => new LayerVM(l, OnEdit, OnDelete)));
+
+            layerListner?.Dispose();
+            layerListner = Layers.ConnectModelCollection(Session().Layers, (l) => new LayerVM(l, OnEdit, OnDelete));
         }
 
         private void OnAdd()
@@ -72,7 +76,6 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
                 dialogResult.Parameters.TryGetValue(nameof(CreateLayerDialogVM.Index), out int index))
             {
                 Layers.Insert(index, new LayerVM(layer, OnEdit, OnDelete));
-                Session().Layers.Insert(index, layer);
             }
         }
 
@@ -82,9 +85,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
                  dialogResult.Parameters.TryGetValue(nameof(EditLayerDialogVM.NewLayer), out Layer newLayer) &&
                   dialogResult.Parameters.TryGetValue(nameof(EditLayerDialogVM.OldLayer), out Layer oldLayer))
             {
-                var oldIndex = Session().Layers.IndexOf(oldLayer);
-                Layers[oldIndex] = new LayerVM(newLayer, OnEdit, OnDelete);
-                Session().Layers[oldIndex] = newLayer;
+                Layers.Replace(Layers.First(l => l.Model == oldLayer), new LayerVM(newLayer, OnEdit, OnDelete));
             }
         }
 
@@ -93,7 +94,6 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
             if (dialogResult.Result == ButtonResult.OK && dialogResult.Parameters.TryGetValue(nameof(DeleteLayerDialogVM.Index), out int index))
             {
                 Layers.RemoveAt(index);
-                Session().Layers.RemoveAt(index);
             }
         }
     }

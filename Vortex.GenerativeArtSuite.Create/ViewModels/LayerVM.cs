@@ -3,11 +3,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Prism.Commands;
+using Vortex.GenerativeArtSuite.Common.ViewModels;
 using Vortex.GenerativeArtSuite.Create.Models;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels
 {
-    public class LayerVM
+    public class LayerVM : IViewModel<Layer>
     {
         public LayerVM(Layer model, Action<Layer> editCallback, Action<Layer> deleteCallback)
         {

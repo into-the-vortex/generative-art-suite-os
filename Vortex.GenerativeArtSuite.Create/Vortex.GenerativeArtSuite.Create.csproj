@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="gong-wpf-dragdrop" Version="3.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Validation" Version="17.0.64" />
     <PackageReference Include="ModernWpfUI" Version="0.9.6" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />

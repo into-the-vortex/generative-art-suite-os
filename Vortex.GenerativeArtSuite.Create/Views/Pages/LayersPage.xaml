@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
+        xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels"
@@ -40,19 +41,16 @@
                            Content="{Binding Info}" />
                     <Button Grid.Column="3"
                             Margin="0,0,15,0"
-                            ToolTip="Bozo"
                             Command="{Binding Fork}">
                         <ui:SymbolIcon Symbol="Find" />
                     </Button>
                     <Button Grid.Column="4"
                             Margin="0,0,15,0"
-                            ToolTip="Bozo"
                             Command="{Binding Edit}">
                         <ui:SymbolIcon Symbol="Edit" />
                     </Button>
                     <Button Grid.Column="5"
                             Margin="0,0,15,0"
-                            ToolTip="Bozo"
                             Command="{Binding Delete}">
                         <ui:SymbolIcon Symbol="Delete" />
                     </Button>
@@ -94,6 +92,9 @@
         </Grid>
         <Separator />
         <ItemsControl Margin="0,0,0,5"
+                      dd:DragDrop.IsDragSource="True"
+                      dd:DragDrop.IsDropTarget="True"
+                      HorizontalAlignment="Stretch"
                       ScrollViewer.VerticalScrollBarVisibility="Auto"
                       ItemTemplate="{StaticResource LayerTemplate}"
                       ItemsSource="{Binding Layers}">
