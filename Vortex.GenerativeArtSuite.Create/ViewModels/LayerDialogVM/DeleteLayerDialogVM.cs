@@ -4,7 +4,7 @@ using Prism.Commands;
 using Prism.Services.Dialogs;
 using Vortex.GenerativeArtSuite.Create.Models;
 
-namespace Vortex.GenerativeArtSuite.Create.ViewModels
+namespace Vortex.GenerativeArtSuite.Create.ViewModels.LayerDialogVM
 {
     public class DeleteLayerDialogVM : DialogVM
     {

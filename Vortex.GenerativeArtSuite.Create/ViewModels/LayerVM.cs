@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.Linq;
+using System.Collections.Generic;
 using System.Windows.Input;
 using Prism.Commands;
 using Vortex.GenerativeArtSuite.Common.ViewModels;
@@ -14,28 +13,24 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
         {
             Model = model;
 
-            Fork = new DelegateCommand(OnAddSubLayer);
+            Settings = new List<string>
+            {
+                Model.Optional ? Strings.IsOptionalOn : Strings.IsOptionalOff,
+                Model.IncludeInDNA ? Strings.IsDNAOn : Strings.IsDNAOff,
+                Model.AffectedByLayerMask ? Strings.IsAffectedByMaskOn : Strings.IsAffectedByMaskOff,
+            };
             Edit = new DelegateCommand(() => editCallback(model));
             Delete = new DelegateCommand(() => deleteCallback(model));
-            BranchVMs = new ObservableCollection<SubLayerVM>(model.Branches.Select(b => new SubLayerVM(b)));
         }
 
         public string Name => $"{Strings.NameLabel} {Model.Name}";
 
-        public string Info => $" - ({(Model.Optional ? Strings.IsOptionalOn : Strings.IsOptionalOff)} | {(Model.IncludeInDNA ? Strings.IsDNAOn : Strings.IsDNAOff)})";
-
-        public ObservableCollection<SubLayerVM> BranchVMs { get; }
-
-        public ICommand Fork { get; }
+        public IEnumerable<string> Settings { get; }
 
         public ICommand Edit { get; }
 
         public ICommand Delete { get; }
 
         public Layer Model { get; }
-
-        private void OnAddSubLayer()
-        {
-        }
     }
 }

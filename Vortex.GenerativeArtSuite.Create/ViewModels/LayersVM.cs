@@ -10,6 +10,7 @@ using Prism.Regions;
 using Prism.Services.Dialogs;
 using Vortex.GenerativeArtSuite.Common.Extensions;
 using Vortex.GenerativeArtSuite.Create.Models;
+using Vortex.GenerativeArtSuite.Create.ViewModels.LayerDialogVM;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels
 {

@@ -7,7 +7,7 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
              xmlns:ui="http://schemas.modernwpf.com/2019"
-             xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels"
+             xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.LayerDialogVM"
              d:DataContext="{d:DesignInstance vms:EditLayerDialogVM}"
              prism:ViewModelLocator.AutoWireViewModel="True"
              Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
@@ -30,6 +30,10 @@
                          IsOn="{Binding IncludeInDNA}"
                          OffContent="{x:Static strings:Strings.IsDNAOff}"
                          OnContent="{x:Static strings:Strings.IsDNAOn}" />
+        <ui:ToggleSwitch ui:ControlHelper.Header="{x:Static strings:Strings.IsAffectedByMask}"
+                         IsOn="{Binding AffectedByLayerMask}"
+                         OffContent="{x:Static strings:Strings.IsAffectedByMaskOff}"
+                         OnContent="{x:Static strings:Strings.IsAffectedByMaskOn}" />
 
         <Separator />
 

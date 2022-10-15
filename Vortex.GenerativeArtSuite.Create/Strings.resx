@@ -168,6 +168,15 @@
   <data name="Home" xml:space="preserve">
     <value>Home</value>
   </data>
+  <data name="IsAffectedByMask" xml:space="preserve">
+    <value>Affected by Layer Mask:</value>
+  </data>
+  <data name="IsAffectedByMaskOff" xml:space="preserve">
+    <value>Ignores layer mask</value>
+  </data>
+  <data name="IsAffectedByMaskOn" xml:space="preserve">
+    <value>Affected by layer mask</value>
+  </data>
   <data name="IsDNA" xml:space="preserve">
     <value>Include in DNA:</value>
   </data>
@@ -213,11 +222,17 @@
   <data name="OutputFolderPlaceholder" xml:space="preserve">
     <value>C:\Users\Account\Documents\Vortex\SessionNameOutput</value>
   </data>
+  <data name="Paths" xml:space="preserve">
+    <value>Paths: </value>
+  </data>
   <data name="SessionNameLabel" xml:space="preserve">
     <value>Session Name:</value>
   </data>
   <data name="SessionNamePlaceholder" xml:space="preserve">
     <value>Name</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings:</value>
   </data>
   <data name="Traits" xml:space="preserve">
     <value>Traits</value>

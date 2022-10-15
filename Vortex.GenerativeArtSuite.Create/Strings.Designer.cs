@@ -214,6 +214,33 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Affected by Layer Mask:.
+        /// </summary>
+        public static string IsAffectedByMask {
+            get {
+                return ResourceManager.GetString("IsAffectedByMask", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ignores layer mask.
+        /// </summary>
+        public static string IsAffectedByMaskOff {
+            get {
+                return ResourceManager.GetString("IsAffectedByMaskOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Affected by layer mask.
+        /// </summary>
+        public static string IsAffectedByMaskOn {
+            get {
+                return ResourceManager.GetString("IsAffectedByMaskOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Include in DNA:.
         /// </summary>
         public static string IsDNA {
@@ -349,6 +376,15 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Paths: .
+        /// </summary>
+        public static string Paths {
+            get {
+                return ResourceManager.GetString("Paths", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Session Name:.
         /// </summary>
         public static string SessionNameLabel {
@@ -363,6 +399,15 @@ namespace Vortex.GenerativeArtSuite.Create {
         public static string SessionNamePlaceholder {
             get {
                 return ResourceManager.GetString("SessionNamePlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings:.
+        /// </summary>
+        public static string Settings {
+            get {
+                return ResourceManager.GetString("Settings", resourceCulture);
             }
         }
         

@@ -4,60 +4,28 @@ using Prism.Commands;
 using Prism.Services.Dialogs;
 using Vortex.GenerativeArtSuite.Create.Models;
 
-namespace Vortex.GenerativeArtSuite.Create.ViewModels
+namespace Vortex.GenerativeArtSuite.Create.ViewModels.LayerDialogVM
 {
-    public class EditLayerDialogVM : DialogVM
+    public abstract class LayerDialogVM : DialogVM
     {
-        public const string OldLayer = nameof(OldLayer);
-        public const string NewLayer = nameof(NewLayer);
         public const string ExistingLayerNames = nameof(ExistingLayerNames);
 
         private List<string> existingLayerNames = new();
-        private Layer? oldLayer;
-        private int index;
-        private int maxIndex;
         private string name = string.Empty;
         private bool optional;
         private bool includeInDNA = true;
+        private bool affectedByLayerMask = true;
 
-        public EditLayerDialogVM()
+        public LayerDialogVM()
         {
-            var edit = new DelegateCommand(() => CloseDialog(OKAY), CanEdit);
+            var confirm = new DelegateCommand(() => CloseDialog(OKAY), CanConfirm);
             PropertyChanged += (s, e) =>
             {
-                edit.RaiseCanExecuteChanged();
+                confirm.RaiseCanExecuteChanged();
             };
 
-            Confirm = edit;
+            Confirm = confirm;
             Cancel = new DelegateCommand(() => CloseDialog(CANCEL), CanCloseDialog);
-        }
-
-        public override string Title => Strings.EditLayer;
-
-        public int Index
-        {
-            get => index;
-            set
-            {
-                if (index != value && value >= 0 && value <= maxIndex)
-                {
-                    index = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public int MaxIndex
-        {
-            get => maxIndex;
-            set
-            {
-                if (maxIndex != value)
-                {
-                    maxIndex = value;
-                    OnPropertyChanged();
-                }
-            }
         }
 
         public string Name
@@ -99,6 +67,19 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
             }
         }
 
+        public bool AffectedByLayerMask
+        {
+            get => affectedByLayerMask;
+            set
+            {
+                if (affectedByLayerMask != value)
+                {
+                    affectedByLayerMask = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public ICommand Confirm { get; }
 
         public ICommand Cancel { get; }
@@ -107,16 +88,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
         {
             if (parameters.TryGetValue(ExistingLayerNames, out List<string> layerNames))
             {
-                MaxIndex = layerNames.Count;
                 existingLayerNames = layerNames;
-            }
-
-            if (parameters.TryGetValue(nameof(Layer), out Layer layer))
-            {
-                oldLayer = layer;
-                Name = layer.Name;
-                Optional = layer.Optional;
-                IncludeInDNA = layer.IncludeInDNA;
             }
         }
 
@@ -133,25 +105,12 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
             }
         }
 
-        protected override IDialogParameters GetDialogParameters(string parameter)
-        {
-            var result = new DialogParameters();
-
-            if (parameter == OKAY && oldLayer != null)
-            {
-                result.Add(NewLayer, new Layer(Name, optional, includeInDNA));
-                result.Add(OldLayer, oldLayer);
-            }
-
-            return result;
-        }
-
-        private bool CanEdit()
+        protected virtual bool CanConfirm()
         {
             return !existingLayerNames.Contains(Name) &&
-                !string.IsNullOrWhiteSpace(Name) &&
-                Index >= 0 &&
-                Index <= MaxIndex;
+                !string.IsNullOrWhiteSpace(Name);
         }
+
+        protected Layer Create() => new(name, optional, includeInDNA, affectedByLayerMask);
     }
 }
