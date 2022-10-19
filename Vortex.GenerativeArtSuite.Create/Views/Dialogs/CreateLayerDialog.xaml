@@ -4,6 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
+             xmlns:controls="clr-namespace:Vortex.GenerativeArtSuite.Create.Controls"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
              xmlns:ui="http://schemas.modernwpf.com/2019"
@@ -37,65 +38,11 @@
 
             <Separator />
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="auto" />
-                </Grid.ColumnDefinitions>
-                <ui:ToggleSwitch Grid.Column="0"
-                                 ui:ControlHelper.Header="{x:Static strings:Strings.IsOptional}"
-                                 IsOn="{Binding Optional}"
-                                 OffContent="{x:Static strings:Strings.IsOptionalOff}"
-                                 OnContent="{x:Static strings:Strings.IsOptionalOn}" />
-                <ui:ToggleSwitch Grid.Column="1"
-                                 ui:ControlHelper.Header="{x:Static strings:Strings.IsDNA}"
-                                 HorizontalAlignment="Center"
-                                 IsOn="{Binding IncludeInDNA}"
-                                 OffContent="{x:Static strings:Strings.IsDNAOff}"
-                                 OnContent="{x:Static strings:Strings.IsDNAOn}" />
-                <ui:ToggleSwitch Grid.Column="2"
-                                 ui:ControlHelper.Header="{x:Static strings:Strings.IsAffectedByMask}"
-                                 IsOn="{Binding AffectedByLayerMask}"
-                                 OffContent="{x:Static strings:Strings.IsAffectedByMaskOff}"
-                                 OnContent="{x:Static strings:Strings.IsAffectedByMaskOn}" />
-            </Grid>
+            <controls:EditLayerSettings />
 
             <Separator />
 
-            <Label Content="{x:Static strings:Strings.Paths}" />
-
-            <ItemsControl ItemsSource="{Binding Paths}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <DockPanel>
-                            <Label Content="{Binding Path}" HorizontalAlignment="Left" />
-                            <Button Margin="5"
-                                    HorizontalAlignment="Right"
-                                    Command="{Binding Delete}">
-                                <ui:SymbolIcon Symbol="Delete" />
-                            </Button>
-                        </DockPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="auto" />
-                </Grid.ColumnDefinitions>
-                <TextBox ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.PathPlaceholder}"
-                         HorizontalAlignment="Stretch"
-                         Text="{Binding Path, UpdateSourceTrigger=PropertyChanged}" />
-                <Button Grid.Column="1"
-                        Margin="5,0,0,0"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Bottom"
-                        Command="{Binding AddPath}">
-                    <ui:SymbolIcon Symbol="Add" />
-                </Button>
-            </Grid>
+            <controls:EditLayerPaths />
 
             <Separator />
 

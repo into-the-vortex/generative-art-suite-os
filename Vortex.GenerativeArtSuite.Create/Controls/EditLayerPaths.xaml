@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="Vortex.GenerativeArtSuite.Create.Controls.EditLayerPaths"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.Layers"
+             d:DataContext="{d:DesignInstance vms:LayerDialogVM}"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+        </Grid.ColumnDefinitions>
+        <Label Grid.Row="0"
+               Grid.ColumnSpan="2"
+               Content="{x:Static strings:Strings.Paths}" />
+        <ItemsControl Grid.Row="1"
+                      Grid.ColumnSpan="2"
+                      ItemsSource="{Binding Paths}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel>
+                        <Label Content="{Binding Path}"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center" />
+                        <Button Margin="5,0,0,5"
+                                HorizontalAlignment="Right"
+                                Command="{Binding Delete}">
+                            <ui:SymbolIcon Symbol="Delete" />
+                        </Button>
+                    </DockPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <TextBox Grid.Row="2"
+                 ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.PathPlaceholder}"
+                 HorizontalAlignment="Stretch"
+                 Text="{Binding Path, UpdateSourceTrigger=PropertyChanged}" />
+        <Button Grid.Row="2"
+                Grid.Column="1"
+                Margin="5,0,0,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Command="{Binding AddPath}">
+            <ui:SymbolIcon Symbol="Add" />
+        </Button>
+    </Grid>
+</UserControl>
