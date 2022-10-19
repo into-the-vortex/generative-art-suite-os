@@ -55,9 +55,10 @@ namespace Vortex.GenerativeArtSuite.Common.Extensions
                         {
                             for (int i = 0; i < e.NewItems.Count; i++)
                             {
-                                if (e.NewItems[i] is TViewModel newVM)
+                                var index = e.NewStartingIndex + i;
+                                if (e.NewItems[index] is TViewModel newVM)
                                 {
-                                    modelCollection[i] = newVM.Model;
+                                    modelCollection[index] = newVM.Model;
                                 }
                             }
                         }

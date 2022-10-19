@@ -3,7 +3,7 @@ using Prism.Commands;
 using Vortex.GenerativeArtSuite.Common.ViewModels;
 using Vortex.GenerativeArtSuite.Create.Models;
 
-namespace Vortex.GenerativeArtSuite.Create.ViewModels
+namespace Vortex.GenerativeArtSuite.Create.ViewModels.Settings
 {
     public class SessionSettingsVM : NotifyPropertyChanged
     {

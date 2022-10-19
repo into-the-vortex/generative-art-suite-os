@@ -7,7 +7,7 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
              xmlns:ui="http://schemas.modernwpf.com/2019"
-             xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.LayerDialogVM"
+             xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.Layers"
              d:DataContext="{d:DesignInstance vms:CreateLayerDialogVM}"
              prism:ViewModelLocator.AutoWireViewModel="True"
              Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
@@ -15,46 +15,109 @@
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch"
              Width="800">
+    <prism:Dialog.WindowStyle>
+        <Style TargetType="Window">
+            <Setter Property="prism:Dialog.WindowStartupLocation" Value="CenterScreen" />
+            <Setter Property="ResizeMode" Value="NoResize" />
+            <Setter Property="ShowInTaskbar" Value="False" />
+            <Setter Property="SizeToContent" Value="WidthAndHeight" />
+        </Style>
+    </prism:Dialog.WindowStyle>
 
-    <ui:SimpleStackPanel Spacing="10"
-                         Margin="50"
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+
+        <ui:SimpleStackPanel Spacing="10"
+                             Margin="50,20"
+                             HorizontalAlignment="Stretch"
+                             Orientation="Vertical"
+                             VerticalAlignment="Stretch">
+
+            <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.NameLabel}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.LayerIndex}" Text="{Binding Index, UpdateSourceTrigger=PropertyChanged}" />
+
+            <Separator />
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <ui:ToggleSwitch Grid.Column="0"
+                                 ui:ControlHelper.Header="{x:Static strings:Strings.IsOptional}"
+                                 IsOn="{Binding Optional}"
+                                 OffContent="{x:Static strings:Strings.IsOptionalOff}"
+                                 OnContent="{x:Static strings:Strings.IsOptionalOn}" />
+                <ui:ToggleSwitch Grid.Column="1"
+                                 ui:ControlHelper.Header="{x:Static strings:Strings.IsDNA}"
+                                 HorizontalAlignment="Center"
+                                 IsOn="{Binding IncludeInDNA}"
+                                 OffContent="{x:Static strings:Strings.IsDNAOff}"
+                                 OnContent="{x:Static strings:Strings.IsDNAOn}" />
+                <ui:ToggleSwitch Grid.Column="2"
+                                 ui:ControlHelper.Header="{x:Static strings:Strings.IsAffectedByMask}"
+                                 IsOn="{Binding AffectedByLayerMask}"
+                                 OffContent="{x:Static strings:Strings.IsAffectedByMaskOff}"
+                                 OnContent="{x:Static strings:Strings.IsAffectedByMaskOn}" />
+            </Grid>
+
+            <Separator />
+
+            <Label Content="{x:Static strings:Strings.Paths}" />
+
+            <ItemsControl ItemsSource="{Binding Paths}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel>
+                            <Label Content="{Binding Path}" HorizontalAlignment="Left" />
+                            <Button Margin="5"
+                                    HorizontalAlignment="Right"
+                                    Command="{Binding Delete}">
+                                <ui:SymbolIcon Symbol="Delete" />
+                            </Button>
+                        </DockPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.PathPlaceholder}"
                          HorizontalAlignment="Stretch"
-                         Orientation="Vertical"
-                         VerticalAlignment="Stretch">
-        <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.NameLabel}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
-        <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.LayerIndex}" Text="{Binding Index, UpdateSourceTrigger=PropertyChanged}" />
-        <ui:ToggleSwitch ui:ControlHelper.Header="{x:Static strings:Strings.IsOptional}"
-                         IsOn="{Binding Optional}"
-                         OffContent="{x:Static strings:Strings.IsOptionalOff}"
-                         OnContent="{x:Static strings:Strings.IsOptionalOn}" />
-        <ui:ToggleSwitch ui:ControlHelper.Header="{x:Static strings:Strings.IsDNA}"
-                         IsOn="{Binding IncludeInDNA}"
-                         OffContent="{x:Static strings:Strings.IsDNAOff}"
-                         OnContent="{x:Static strings:Strings.IsDNAOn}" />
-        <ui:ToggleSwitch ui:ControlHelper.Header="{x:Static strings:Strings.IsAffectedByMask}"
-                         IsOn="{Binding AffectedByLayerMask}"
-                         OffContent="{x:Static strings:Strings.IsAffectedByMaskOff}"
-                         OnContent="{x:Static strings:Strings.IsAffectedByMaskOn}" />
+                         Text="{Binding Path, UpdateSourceTrigger=PropertyChanged}" />
+                <Button Grid.Column="1"
+                        Margin="5,0,0,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom"
+                        Command="{Binding AddPath}">
+                    <ui:SymbolIcon Symbol="Add" />
+                </Button>
+            </Grid>
 
-        <Separator />
+            <Separator />
 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="0"
-                    Margin="10,0,0,0"
-                    Content="{x:Static strings:Strings.Confirm}"
-                    HorizontalAlignment="Stretch"
-                    Command="{Binding Confirm}" />
-            <Button Grid.Column="1"
-                    Margin="10,0"
-                    Content="{x:Static strings:Strings.Cancel}"
-                    HorizontalAlignment="Stretch"
-                    Command="{Binding Cancel}" />
-        </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0"
+                        Margin="10,0,0,0"
+                        Content="{x:Static strings:Strings.Confirm}"
+                        HorizontalAlignment="Stretch"
+                        Command="{Binding Confirm}" />
+                <Button Grid.Column="1"
+                        Margin="10,0"
+                        Content="{x:Static strings:Strings.Cancel}"
+                        HorizontalAlignment="Stretch"
+                        Command="{Binding Cancel}" />
+            </Grid>
 
-    </ui:SimpleStackPanel>
+        </ui:SimpleStackPanel>
+
+    </ScrollViewer>
 
 </UserControl>

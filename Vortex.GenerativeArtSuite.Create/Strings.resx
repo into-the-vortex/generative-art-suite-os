@@ -222,6 +222,9 @@
   <data name="OutputFolderPlaceholder" xml:space="preserve">
     <value>C:\Users\Account\Documents\Vortex\SessionNameOutput</value>
   </data>
+  <data name="PathPlaceholder" xml:space="preserve">
+    <value>PathA / PathB (Must be unique, is case sensative)</value>
+  </data>
   <data name="Paths" xml:space="preserve">
     <value>Paths: </value>
   </data>

@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
         xmlns:ui="http://schemas.modernwpf.com/2019"
-        xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels"
+        xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.Settings"
         Margin="50"
         Padding="20"
         d:DataContext="{d:DesignInstance vms:SettingsVM}"

@@ -376,6 +376,15 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to PathA / PathB (Must be unique, is case sensative).
+        /// </summary>
+        public static string PathPlaceholder {
+            get {
+                return ResourceManager.GetString("PathPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Paths: .
         /// </summary>
         public static string Paths {

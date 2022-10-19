@@ -10,9 +10,9 @@ using Prism.Regions;
 using Prism.Services.Dialogs;
 using Vortex.GenerativeArtSuite.Common.Extensions;
 using Vortex.GenerativeArtSuite.Create.Models;
-using Vortex.GenerativeArtSuite.Create.ViewModels.LayerDialogVM;
+using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
 
-namespace Vortex.GenerativeArtSuite.Create.ViewModels
+namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
 {
     public class LayersVM : SessionAwareVM
     {
@@ -42,7 +42,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
         {
             var param = new DialogParameters
             {
-                { nameof(CreateLayerDialogVM.ExistingLayerNames), Layers.Select(l => l.Name).ToList() },
+                { nameof(LayerDialogVM.ExistingLayerNames), Layers.Select(l => l.Name).ToList() },
             };
 
             dialogService.ShowDialog(DialogVM.CreateLayerDialog, param, AddCallback);
@@ -53,7 +53,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
             var param = new DialogParameters
             {
                 { nameof(Layer), model },
-                { nameof(EditLayerDialogVM.ExistingLayerNames), Layers.Where(l => l.Name != model.Name).Select(l => l.Name).ToList() },
+                { nameof(LayerDialogVM.ExistingLayerNames), Layers.Where(l => l.Name != model.Name).Select(l => l.Name).ToList() },
             };
 
             dialogService.ShowDialog(DialogVM.EditLayerDialog, param, EditCallback);

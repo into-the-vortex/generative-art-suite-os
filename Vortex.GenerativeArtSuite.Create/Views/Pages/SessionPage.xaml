@@ -9,7 +9,7 @@
       xmlns:services="clr-namespace:Vortex.GenerativeArtSuite.Create.Services"
       xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
       xmlns:ui="http://schemas.modernwpf.com/2019"
-      xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels"
+      xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.Home"
       d:DataContext="{d:DesignInstance vms:SessionVM}"
       d:DesignHeight="450"
       d:DesignWidth="800">

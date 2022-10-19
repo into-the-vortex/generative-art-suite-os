@@ -2,7 +2,7 @@
 using Prism.Services.Dialogs;
 using Vortex.GenerativeArtSuite.Common.ViewModels;
 
-namespace Vortex.GenerativeArtSuite.Create.ViewModels
+namespace Vortex.GenerativeArtSuite.Create.ViewModels.Base
 {
     public abstract class DialogVM : NotifyPropertyChanged, IDialogAware
     {

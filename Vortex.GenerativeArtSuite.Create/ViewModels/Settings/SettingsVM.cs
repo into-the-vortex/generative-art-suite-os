@@ -1,7 +1,8 @@
 ﻿using Prism.Regions;
 using Vortex.GenerativeArtSuite.Create.Models;
+using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
 
-namespace Vortex.GenerativeArtSuite.Create.ViewModels
+namespace Vortex.GenerativeArtSuite.Create.ViewModels.Settings
 {
     public class SettingsVM : SessionAwareVM
     {

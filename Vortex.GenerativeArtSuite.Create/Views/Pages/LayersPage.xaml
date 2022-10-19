@@ -4,12 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
+        xmlns:converters="clr-namespace:Vortex.GenerativeArtSuite.Common.Converters;assembly=Vortex.GenerativeArtSuite.Common"
         xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
         xmlns:ui="http://schemas.modernwpf.com/2019"
-        xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels"
+        xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.Layers"
         Margin="50"
-        Padding="20"
+        Padding="0,10"
         d:DataContext="{d:DesignInstance vms:LayersVM}"
         d:DesignHeight="450"
         d:DesignWidth="800"
@@ -21,6 +22,8 @@
         VerticalAlignment="Stretch">
 
     <Border.Resources>
+        <converters:EmptyToCollapsedConverter x:Key="EmptyToCollapsedConverter" />
+
         <DataTemplate x:Key="LayerSettingTemplate">
             <Border Margin="5,0"
                     Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
@@ -40,16 +43,17 @@
                     CornerRadius="10"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
-                <ui:SimpleStackPanel Margin="5" Orientation="Vertical">
+                <ui:SimpleStackPanel Margin="5,0,5,5" Orientation="Vertical">
                     <DockPanel HorizontalAlignment="Stretch">
                         <Label Content="{Binding Name}"
                                FontSize="20"
-                               HorizontalAlignment="Left" />
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center" />
                         <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                            <Button Margin="5,0" Command="{Binding Edit}">
+                            <Button Margin="5" Command="{Binding Edit}">
                                 <ui:SymbolIcon Symbol="Edit" />
                             </Button>
-                            <Button Margin="5,0" Command="{Binding Delete}">
+                            <Button Margin="5" Command="{Binding Delete}">
                                 <ui:SymbolIcon Symbol="Delete" />
                             </Button>
                         </StackPanel>
@@ -69,10 +73,10 @@
                             </ItemsControl.ItemsPanel>
                         </ItemsControl>
                     </StackPanel>
-
-                    <Separator />
-                    <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Vertical" Visibility="{Binding Paths, Converter={StaticResource EmptyToCollapsedConverter}}">
+                        <Separator />
                         <Label Content="{x:Static strings:Strings.Paths}" />
+                        <ItemsControl ItemsSource="{Binding Paths}" />
                     </StackPanel>
                 </ui:SimpleStackPanel>
             </Border>
@@ -81,40 +85,42 @@
 
     </Border.Resources>
 
-    <ui:SimpleStackPanel Spacing="10"
-                         HorizontalAlignment="Stretch"
-                         Orientation="Vertical"
-                         VerticalAlignment="Stretch">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="auto" />
-            </Grid.ColumnDefinitions>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" Margin="20,0,20,10">
             <Label Content="{x:Static strings:Strings.Layers}"
                    FontSize="32"
                    FontWeight="Bold"
+                   HorizontalAlignment="Left"
                    VerticalAlignment="Center" />
             <Button Grid.Column="2"
+                    HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Command="{Binding AddLayer}">
                 <ui:SymbolIcon Symbol="Add" />
             </Button>
-        </Grid>
-        <Separator />
-        <ItemsControl Margin="0,0,0,5"
-                      dd:DragDrop.IsDragSource="True"
-                      dd:DragDrop.IsDropTarget="True"
-                      HorizontalAlignment="Stretch"
-                      ScrollViewer.VerticalScrollBarVisibility="Auto"
-                      ItemTemplate="{StaticResource LayerTemplate}"
-                      ItemsSource="{Binding Layers}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <ui:SimpleStackPanel Orientation="Vertical" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
-    </ui:SimpleStackPanel>
-
+        </DockPanel>
+        <Separator Grid.Row="1" Padding="20,0" />
+        <ScrollViewer Grid.Row="2"
+                      HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Visible">
+            <ItemsControl Padding="20,10,20,0"
+                          dd:DragDrop.IsDragSource="True"
+                          dd:DragDrop.IsDropTarget="True"
+                          HorizontalAlignment="Stretch"
+                          ItemTemplate="{StaticResource LayerTemplate}"
+                          ItemsSource="{Binding Layers}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ui:SimpleStackPanel Spacing="10" Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
 </Border>

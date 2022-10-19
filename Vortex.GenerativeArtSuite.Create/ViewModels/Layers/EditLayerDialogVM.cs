@@ -1,7 +1,7 @@
 ﻿using Prism.Services.Dialogs;
 using Vortex.GenerativeArtSuite.Create.Models;
 
-namespace Vortex.GenerativeArtSuite.Create.ViewModels.LayerDialogVM
+namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
 {
     public class EditLayerDialogVM : LayerDialogVM
     {
@@ -23,6 +23,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.LayerDialogVM
                 Optional = layer.Optional;
                 IncludeInDNA = layer.IncludeInDNA;
                 AffectedByLayerMask = layer.AffectedByLayerMask;
+                UpdatePathSource(layer.Paths);
             }
         }
 

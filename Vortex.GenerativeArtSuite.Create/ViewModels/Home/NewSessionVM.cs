@@ -2,8 +2,9 @@
 using System.Windows.Input;
 using Prism.Commands;
 using Vortex.GenerativeArtSuite.Create.Models;
+using Vortex.GenerativeArtSuite.Create.ViewModels.Settings;
 
-namespace Vortex.GenerativeArtSuite.Create.ViewModels
+namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
 {
     public class NewSessionVM : SessionSettingsVM
     {

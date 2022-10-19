@@ -5,7 +5,7 @@ using Vortex.GenerativeArtSuite.Common.ViewModels;
 using Vortex.GenerativeArtSuite.Create.Models;
 using Vortex.GenerativeArtSuite.Create.Services;
 
-namespace Vortex.GenerativeArtSuite.Create.ViewModels
+namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
 {
     public class HomeVM : NotifyPropertyChanged
     {

@@ -3,7 +3,7 @@ using System.Windows.Input;
 using Prism.Commands;
 using Vortex.GenerativeArtSuite.Create.Models;
 
-namespace Vortex.GenerativeArtSuite.Create.ViewModels
+namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
 {
     public class RecentSessionVM
     {

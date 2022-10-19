@@ -3,7 +3,7 @@ using Prism.Regions;
 using Vortex.GenerativeArtSuite.Common.ViewModels;
 using Vortex.GenerativeArtSuite.Create.Models;
 
-namespace Vortex.GenerativeArtSuite.Create.ViewModels
+namespace Vortex.GenerativeArtSuite.Create.ViewModels.Base
 {
     public abstract class SessionAwareVM : NotifyPropertyChanged, INavigationAware
     {

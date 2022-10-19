@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 using Prism.Commands;
 using Vortex.GenerativeArtSuite.Common.ViewModels;
 using Vortex.GenerativeArtSuite.Create.Models;
 
-namespace Vortex.GenerativeArtSuite.Create.ViewModels
+namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
 {
     public class LayerVM : IViewModel<Layer>
     {
@@ -19,6 +20,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
                 Model.IncludeInDNA ? Strings.IsDNAOn : Strings.IsDNAOff,
                 Model.AffectedByLayerMask ? Strings.IsAffectedByMaskOn : Strings.IsAffectedByMaskOff,
             };
+            Paths = new List<string>(model.Paths.Select(p => p.Path));
             Edit = new DelegateCommand(() => editCallback(model));
             Delete = new DelegateCommand(() => deleteCallback(model));
         }
@@ -26,6 +28,8 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels
         public string Name => $"{Strings.NameLabel} {Model.Name}";
 
         public IEnumerable<string> Settings { get; }
+
+        public IEnumerable<string> Paths { get; }
 
         public ICommand Edit { get; }
 

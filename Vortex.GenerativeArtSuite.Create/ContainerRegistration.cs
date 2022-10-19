@@ -4,7 +4,12 @@ using Prism.Regions;
 using Vortex.GenerativeArtSuite.Common.ViewModels;
 using Vortex.GenerativeArtSuite.Create.Services;
 using Vortex.GenerativeArtSuite.Create.ViewModels;
-using Vortex.GenerativeArtSuite.Create.ViewModels.LayerDialogVM;
+using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
+using Vortex.GenerativeArtSuite.Create.ViewModels.Generation;
+using Vortex.GenerativeArtSuite.Create.ViewModels.Home;
+using Vortex.GenerativeArtSuite.Create.ViewModels.Layers;
+using Vortex.GenerativeArtSuite.Create.ViewModels.Settings;
+using Vortex.GenerativeArtSuite.Create.ViewModels.Traits;
 using Vortex.GenerativeArtSuite.Create.Views.Dialogs;
 using Vortex.GenerativeArtSuite.Create.Views.Pages;
 

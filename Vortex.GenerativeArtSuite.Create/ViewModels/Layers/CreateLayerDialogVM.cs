@@ -2,7 +2,7 @@
 using Prism.Services.Dialogs;
 using Vortex.GenerativeArtSuite.Create.Models;
 
-namespace Vortex.GenerativeArtSuite.Create.ViewModels.LayerDialogVM
+namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
 {
     public class CreateLayerDialogVM : LayerDialogVM
     {
