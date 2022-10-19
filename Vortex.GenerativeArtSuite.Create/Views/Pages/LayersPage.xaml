@@ -98,8 +98,7 @@
                    FontWeight="Bold"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Center" />
-            <Button Grid.Column="2"
-                    HorizontalAlignment="Right"
+            <Button HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Command="{Binding AddLayer}">
                 <ui:SymbolIcon Symbol="Add" />

@@ -4,11 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
+        xmlns:converters="clr-namespace:Vortex.GenerativeArtSuite.Common.Converters;assembly=Vortex.GenerativeArtSuite.Common"
         xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
-        xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.Traits"
         Margin="50"
-        Padding="20"
+        Padding="0,10"
         d:DataContext="{d:DesignInstance vms:TraitsVM}"
         d:DesignHeight="450"
         d:DesignWidth="800"
@@ -17,4 +17,45 @@
         BorderThickness="1"
         CornerRadius="10"
         HorizontalAlignment="Stretch"
-        VerticalAlignment="Stretch" />
+        VerticalAlignment="Stretch">
+    <Grid>
+        <Grid.Resources>
+            <converters:EmptyToCollapsedConverter x:Key="EmptyToCollapsedConverter" />
+
+            <DataTemplate DataType="{x:Type vms:NoLayersVM}">
+                <Label Content="{x:Static strings:Strings.NoLayers}"
+                       FontSize="20"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+            </DataTemplate>
+        </Grid.Resources>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" Margin="20,0,20,10">
+            <Label Content="{x:Static strings:Strings.Traits}"
+                   FontSize="32"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center" />
+            <ComboBox HorizontalAlignment="Right"
+                      SelectedItem="{Binding SelectedLayer}"
+                      VerticalAlignment="Center"
+                      Visibility="{Binding Layers, Converter={StaticResource EmptyToCollapsedConverter}}"
+                      Width="300"
+                      ItemsSource="{Binding Layers}" />
+        </DockPanel>
+        <Separator Grid.Row="1" Padding="20,0" />
+        <ScrollViewer Grid.Row="2"
+                      HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Visible">
+            <ContentControl Content="{Binding Content}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch" />
+        </ScrollViewer>
+    </Grid>
+</Border>

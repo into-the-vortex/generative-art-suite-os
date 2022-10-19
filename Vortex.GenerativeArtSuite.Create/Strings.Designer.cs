@@ -358,6 +358,15 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have no layers. Return to the layers tab to add some..
+        /// </summary>
+        public static string NoLayers {
+            get {
+                return ResourceManager.GetString("NoLayers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Output Folder:.
         /// </summary>
         public static string OutputFolderLabel {

@@ -216,6 +216,9 @@
   <data name="No" xml:space="preserve">
     <value>No</value>
   </data>
+  <data name="NoLayers" xml:space="preserve">
+    <value>You have no layers. Return to the layers tab to add some.</value>
+  </data>
   <data name="OutputFolderLabel" xml:space="preserve">
     <value>Output Folder:</value>
   </data>
