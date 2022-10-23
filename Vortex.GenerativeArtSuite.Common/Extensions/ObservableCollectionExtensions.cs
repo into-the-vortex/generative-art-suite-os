@@ -4,14 +4,14 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Data;
 using System.Linq;
-using Vortex.GenerativeArtSuite.Common.Models;
+using System.Reactive.Disposables;
 using Vortex.GenerativeArtSuite.Common.ViewModels;
 
 namespace Vortex.GenerativeArtSuite.Common.Extensions
 {
     public static class ObservableCollectionExtensions
     {
-        public static IDisposable ConnectModelCollection<TViewModel, TModel>(this ObservableCollection<TViewModel> viewModelCollection, List<TModel> modelCollection, Func<TModel, TViewModel> createVM)
+        public static IDisposable ConnectModelCollection<TViewModel, TModel>(this ObservableCollection<TViewModel> viewModelCollection, IList<TModel> modelCollection, Func<TModel, TViewModel> createVM)
             where TViewModel : class, IViewModel<TModel>
         {
             viewModelCollection.Clear();
@@ -89,7 +89,7 @@ namespace Vortex.GenerativeArtSuite.Common.Extensions
             }
 
             viewModelCollection.CollectionChanged += OnObservableCollectionChanged;
-            return new DisposableAction(() => viewModelCollection.CollectionChanged -= OnObservableCollectionChanged);
+            return Disposable.Create(() => viewModelCollection.CollectionChanged -= OnObservableCollectionChanged);
         }
     }
 }

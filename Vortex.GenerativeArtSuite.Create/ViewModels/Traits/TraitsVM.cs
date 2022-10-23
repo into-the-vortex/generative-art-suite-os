@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Prism.Commands;
 using Prism.Regions;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
 
@@ -14,6 +15,9 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
         public TraitsVM()
         {
             content = new NoLayersVM();
+
+            Add = new DelegateCommand(() => (Content as LayerTraitVM)?.Add(), CanAdd);
+            MultiAdd = new DelegateCommand(() => (Content as LayerTraitVM)?.MultiAdd(), CanAdd);
         }
 
         public ObservableCollection<string> Layers { get; } = new();
@@ -45,6 +49,10 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
             }
         }
 
+        public DelegateCommand Add { get; }
+
+        public DelegateCommand MultiAdd { get; }
+
         public override void OnNavigatedTo(NavigationContext navigationContext)
         {
             base.OnNavigatedTo(navigationContext);
@@ -71,7 +79,15 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
                 throw new InvalidOperationException();
             }
 
-            Content = layer.Paths.Any() ? new PathedLayerTraitVM(layer) : new SimpleLayerTraitVM(layer);
+            Content = new LayerTraitVM(layer);
+
+            Add.RaiseCanExecuteChanged();
+            MultiAdd.RaiseCanExecuteChanged();
+        }
+
+        private bool CanAdd()
+        {
+            return Content is LayerTraitVM;
         }
     }
 }

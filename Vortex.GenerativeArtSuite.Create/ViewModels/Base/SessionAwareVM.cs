@@ -1,25 +1,17 @@
 ﻿using System;
 using Prism.Regions;
-using Vortex.GenerativeArtSuite.Common.ViewModels;
 using Vortex.GenerativeArtSuite.Create.Models;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Base
 {
-    public abstract class SessionAwareVM : NotifyPropertyChanged, INavigationAware
+    public abstract class SessionAwareVM : NavigationAware
     {
         private Session? currentSession;
 
-        public virtual bool IsNavigationTarget(NavigationContext navigationContext)
+        public override void OnNavigatedTo(NavigationContext navigationContext)
         {
-            return true;
-        }
+            base.OnNavigatedTo(navigationContext);
 
-        public virtual void OnNavigatedFrom(NavigationContext navigationContext)
-        {
-        }
-
-        public virtual void OnNavigatedTo(NavigationContext navigationContext)
-        {
             if (navigationContext.Parameters[nameof(Session)] is Session session)
             {
                 currentSession = session;

@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Vortex.GenerativeArtSuite.Create.Extensions;
 
 namespace Vortex.GenerativeArtSuite.Create.Models
 {
-    public class Layer
+    public sealed class Layer
     {
         public Layer(string name, bool optional, bool includeInDNA, bool affectedByLayerMask, List<PathSelector> paths)
         {
@@ -13,14 +15,34 @@ namespace Vortex.GenerativeArtSuite.Create.Models
             Paths = paths;
         }
 
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         public bool Optional { get; set; }
 
-        public bool IncludeInDNA { get; set; }
+        public bool IncludeInDNA { get; set; } = true;
 
-        public bool AffectedByLayerMask { get; set; }
+        public bool AffectedByLayerMask { get; set; } = true;
 
-        public List<PathSelector> Paths { get; }
+        public List<PathSelector> Paths { get; } = new();
+
+        public List<Trait> Traits { get; } = new();
+
+        public void OnOptionalChanged()
+        {
+            if (Optional && Traits.FirstOrDefault()?.Name != Trait.NONENAME)
+            {
+                Traits.Insert(0, Trait.None(Paths.Variants()));
+            }
+        }
+
+        public void OnTraitsInvalidated()
+        {
+            var variants = Paths.Variants();
+
+            foreach (var trait in Traits)
+            {
+                trait.OnVariantsChanged(variants);
+            }
+        }
     }
 }

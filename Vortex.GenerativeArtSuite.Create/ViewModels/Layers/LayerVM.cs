@@ -25,7 +25,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
             Delete = new DelegateCommand(() => deleteCallback(model));
         }
 
-        public string Name => $"{Strings.NameLabel} {Model.Name}";
+        public string Name => Model.Name;
 
         public IEnumerable<string> Settings { get; }
 

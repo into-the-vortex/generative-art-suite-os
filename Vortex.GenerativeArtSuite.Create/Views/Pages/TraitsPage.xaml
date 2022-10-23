@@ -6,6 +6,7 @@
         mc:Ignorable="d"
         xmlns:converters="clr-namespace:Vortex.GenerativeArtSuite.Common.Converters;assembly=Vortex.GenerativeArtSuite.Common"
         xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.Traits"
         Margin="50"
         Padding="0,10"
@@ -28,6 +29,38 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center" />
             </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vms:NoneTraitVM}">
+                <Label Content="{x:Static strings:Strings.None}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vms:LayerTraitVM}">
+                <ScrollViewer Padding="10">
+                    <ui:ItemsRepeater HorizontalAlignment="Stretch" ItemsSource="{Binding TraitVms}">
+                        <ui:ItemsRepeater.Layout>
+                            <ui:UniformGridLayout ItemsJustification="Start"
+                                                  ItemsStretch="Uniform"
+                                                  MinItemHeight="250"
+                                                  MinItemWidth="250" />
+                        </ui:ItemsRepeater.Layout>
+                        <ui:ItemsRepeater.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                                        BorderBrush="{DynamicResource SystemControlBackgroundBaseHighBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="10"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch">
+                                    <ContentControl Content="{Binding .}" />
+                                </Border>
+                            </DataTemplate>
+                        </ui:ItemsRepeater.ItemTemplate>
+                    </ui:ItemsRepeater>
+                </ScrollViewer>
+            </DataTemplate>
+
         </Grid.Resources>
 
         <Grid.RowDefinitions>
@@ -42,20 +75,32 @@
                    FontWeight="Bold"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Center" />
-            <ComboBox HorizontalAlignment="Right"
-                      SelectedItem="{Binding SelectedLayer}"
-                      VerticalAlignment="Center"
-                      Visibility="{Binding Layers, Converter={StaticResource EmptyToCollapsedConverter}}"
-                      Width="300"
-                      ItemsSource="{Binding Layers}" />
+            <ui:SimpleStackPanel Spacing="10"
+                                 HorizontalAlignment="Right"
+                                 Orientation="Horizontal"
+                                 VerticalAlignment="Center"
+                                 Visibility="{Binding Layers, Converter={StaticResource EmptyToCollapsedConverter}}">
+                <ComboBox SelectedItem="{Binding SelectedLayer}"
+                          Width="300"
+                          ItemsSource="{Binding Layers}" />
+                <Button HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Command="{Binding Add}">
+                    <ui:SymbolIcon Symbol="Add" />
+                </Button>
+                <Button HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Command="{Binding MultiAdd}">
+                    <ui:SymbolIcon Symbol="BrowsePhotos" />
+                </Button>
+            </ui:SimpleStackPanel>
+
+
         </DockPanel>
         <Separator Grid.Row="1" Padding="20,0" />
-        <ScrollViewer Grid.Row="2"
-                      HorizontalScrollBarVisibility="Disabled"
-                      VerticalScrollBarVisibility="Visible">
-            <ContentControl Content="{Binding Content}"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch" />
-        </ScrollViewer>
+        <ContentControl Grid.Row="2"
+                        Content="{Binding Content}"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch" />
     </Grid>
 </Border>

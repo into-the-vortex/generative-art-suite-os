@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Vortex.GenerativeArtSuite.Common.ViewModels;
+using Prism.Regions;
 using Vortex.GenerativeArtSuite.Create.Models;
 using Vortex.GenerativeArtSuite.Create.Services;
+using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
 {
-    public class HomeVM : NotifyPropertyChanged
+    public class HomeVM : NavigationAware
     {
         private readonly IFileSystem fileSystem;
         private readonly INavigationService navigationService;
@@ -18,12 +19,21 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
             this.navigationService = navigationService;
 
             NewSession = new NewSessionVM(NameIsValid, OpenNewSession);
-            RecentSessions = new List<RecentSessionVM>(fileSystem.RecentSessions().Select(s => new RecentSessionVM(s, OpenRecentSession)));
+            RecentSessions = new ObservableCollection<RecentSessionVM>();
         }
 
         public NewSessionVM NewSession { get; }
 
-        public IEnumerable<RecentSessionVM> RecentSessions { get; }
+        public ObservableCollection<RecentSessionVM> RecentSessions { get; }
+
+        public override void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            base.OnNavigatedTo(navigationContext);
+
+            NewSession.Clear();
+            RecentSessions.Clear();
+            RecentSessions.AddRange(fileSystem.RecentSessions().Select(s => new RecentSessionVM(s, OpenRecentSession)));
+        }
 
         private void OpenNewSession(string name, SessionSettings sessionSettings)
         {

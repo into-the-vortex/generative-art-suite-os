@@ -10,6 +10,7 @@ using Prism.Regions;
 using Prism.Services.Dialogs;
 using Vortex.GenerativeArtSuite.Common.Extensions;
 using Vortex.GenerativeArtSuite.Create.Models;
+using Vortex.GenerativeArtSuite.Create.Staging;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
@@ -52,8 +53,8 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
         {
             var param = new DialogParameters
             {
-                { nameof(Layer), model },
                 { nameof(LayerDialogVM.ExistingLayerNames), Layers.Where(l => l.Name != model.Name).Select(l => l.Name).ToList() },
+                { nameof(LayerStagingArea), new LayerStagingArea(model) },
             };
 
             dialogService.ShowDialog(DialogVM.EditLayerDialog, param, EditCallback);
@@ -73,8 +74,9 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
 
         private void AddCallback(IDialogResult dialogResult)
         {
-            if (dialogResult.Result == ButtonResult.OK && dialogResult.Parameters.TryGetValue(nameof(Layer), out Layer layer) &&
-                dialogResult.Parameters.TryGetValue(nameof(CreateLayerDialogVM.Index), out int index))
+            if (dialogResult.Result == ButtonResult.OK &&
+                dialogResult.Parameters.TryGetValue(nameof(CreateLayerDialogVM.Index), out int index) &&
+                dialogResult.Parameters.TryGetValue(nameof(Layer), out Layer layer))
             {
                 Layers.Insert(index, new LayerVM(layer, OnEdit, OnDelete));
             }
@@ -83,10 +85,10 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
         private void EditCallback(IDialogResult dialogResult)
         {
             if (dialogResult.Result == ButtonResult.OK &&
-                 dialogResult.Parameters.TryGetValue(nameof(EditLayerDialogVM.NewLayer), out Layer newLayer) &&
-                  dialogResult.Parameters.TryGetValue(nameof(EditLayerDialogVM.OldLayer), out Layer oldLayer))
+                dialogResult.Parameters.TryGetValue(nameof(EditLayerDialogVM.Name), out string name))
             {
-                Layers.Replace(Layers.First(l => l.Model == oldLayer), new LayerVM(newLayer, OnEdit, OnDelete));
+                var value = Layers.First(l => l.Name == name);
+                Layers.Replace(value, new LayerVM(value.Model, OnEdit, OnDelete));
             }
         }
 

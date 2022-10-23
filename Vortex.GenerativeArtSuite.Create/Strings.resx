@@ -138,6 +138,9 @@
   <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>
   </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
   <data name="Created" xml:space="preserve">
     <value>Created:</value>
   </data>
@@ -146,6 +149,9 @@
   </data>
   <data name="CreateSession" xml:space="preserve">
     <value>Create Session</value>
+  </data>
+  <data name="DefaultVariant" xml:space="preserve">
+    <value>Default</value>
   </data>
   <data name="DeleteLayer" xml:space="preserve">
     <value>Delete Layer</value>
@@ -219,6 +225,9 @@
   <data name="NoLayers" xml:space="preserve">
     <value>You have no layers. Return to the layers tab to add some.</value>
   </data>
+  <data name="None" xml:space="preserve">
+    <value>None</value>
+  </data>
   <data name="OutputFolderLabel" xml:space="preserve">
     <value>Output Folder:</value>
   </data>
@@ -230,6 +239,9 @@
   </data>
   <data name="Paths" xml:space="preserve">
     <value>Paths: </value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
   </data>
   <data name="SessionNameLabel" xml:space="preserve">
     <value>Session Name:</value>

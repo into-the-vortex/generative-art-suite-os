@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace Vortex.GenerativeArtSuite.Create.Models
 {
@@ -14,11 +14,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models
 
         public string Path { get; }
 
+        [JsonIgnore]
         public List<string> Options { get; }
-
-        public string Follow(IEnumerable<string> existingPath)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

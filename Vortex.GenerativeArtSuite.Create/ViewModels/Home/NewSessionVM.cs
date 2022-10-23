@@ -42,6 +42,18 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
 
         public ICommand Create { get; }
 
+        public void Clear()
+        {
+            var reference = new SessionSettings();
+
+            Name = string.Empty;
+            OutputFolder = reference.OutputFolder;
+            NamePrefix = reference.NamePrefix;
+            DescriptionTemplate = reference.DescriptionTemplate;
+            BaseURI = reference.BaseURI;
+            CollectionSize = reference.CollectionSize;
+        }
+
         private bool CanCreate()
         {
             return validateName(name) &&
