@@ -30,13 +30,22 @@
                        VerticalAlignment="Center" />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type vms:NoneTraitVM}">
-                <Label Content="{x:Static strings:Strings.None}"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center" />
+            <DataTemplate DataType="{x:Type vms:TraitVM}">
+                <Grid>
+                    <Image Source="{Binding IconURI}" />
+                    <Label Margin="10"
+                           Content="{Binding Name}"
+                           VerticalAlignment="Top" />
+                    <Slider Margin="10"
+                            HorizontalAlignment="Stretch"
+                            Maximum="100"
+                            Minimum="0"
+                            VerticalAlignment="Bottom"
+                            Value="{Binding Weight}" />
+                </Grid>
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type vms:LayerTraitVM}">
+            <DataTemplate DataType="{x:Type vms:TraitsVM}">
                 <ScrollViewer Padding="10">
                     <ui:ItemsRepeater HorizontalAlignment="Stretch" ItemsSource="{Binding TraitVms}">
                         <ui:ItemsRepeater.Layout>

@@ -31,7 +31,7 @@ namespace Vortex.GenerativeArtSuite.Create
             containerRegistry.RegisterForNavigation<HomePage, HomeVM>(NavigationService.Home);
             containerRegistry.RegisterForNavigation<SessionPage, SessionVM>(NavigationService.Session);
             containerRegistry.RegisterForNavigation<LayersPage, LayersVM>(NavigationService.Layers);
-            containerRegistry.RegisterForNavigation<TraitsPage, TraitsVM>(NavigationService.Traits);
+            containerRegistry.RegisterForNavigation<TraitsPage, LayerSelectorVM>(NavigationService.Traits);
             containerRegistry.RegisterForNavigation<GeneratePage, GenerateVM>(NavigationService.Generate);
             containerRegistry.RegisterForNavigation<SettingsPage, SettingsVM>(NavigationService.Settings);
 

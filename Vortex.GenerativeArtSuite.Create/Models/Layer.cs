@@ -33,6 +33,10 @@ namespace Vortex.GenerativeArtSuite.Create.Models
             {
                 Traits.Insert(0, Trait.None(Paths.Variants()));
             }
+            else if (!Optional && Traits.FirstOrDefault()?.Name == Trait.NONENAME)
+            {
+                Traits.RemoveAt(0);
+            }
         }
 
         public void OnTraitsInvalidated()
