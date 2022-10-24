@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Input;
+using System.Xml.Linq;
 using DynamicData;
 using Prism.Commands;
 using Prism.Regions;
@@ -44,6 +45,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
             var param = new DialogParameters
             {
                 { nameof(LayerDialogVM.ExistingLayerNames), Layers.Select(l => l.Name).ToList() },
+                { nameof(LayerStagingArea), new LayerStagingArea(new()) },
             };
 
             dialogService.ShowDialog(DialogVM.CreateLayerDialog, param, AddCallback);
@@ -66,7 +68,6 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
             {
                 { nameof(DeleteLayerDialogVM.Message), string.Format(CultureInfo.CurrentCulture, Strings.DeleteLayerConfirmation, model.Name) },
                 { nameof(DeleteLayerDialogVM.Index), Session().Layers.IndexOf(model) },
-                { nameof(Layer), model },
             };
 
             dialogService.ShowDialog(DialogVM.DeleteLayerDialog, param, DeleteCallback);
@@ -85,10 +86,9 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
         private void EditCallback(IDialogResult dialogResult)
         {
             if (dialogResult.Result == ButtonResult.OK &&
-                dialogResult.Parameters.TryGetValue(nameof(EditLayerDialogVM.Name), out string name))
+                dialogResult.Parameters.TryGetValue(nameof(Layer), out Layer layer))
             {
-                var value = Layers.First(l => l.Name == name);
-                Layers.Replace(value, new LayerVM(value.Model, OnEdit, OnDelete));
+                Layers.Replace(Layers.First(l => l.Model == layer), new LayerVM(layer, OnEdit, OnDelete));
             }
         }
 

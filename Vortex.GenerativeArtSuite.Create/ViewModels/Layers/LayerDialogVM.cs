@@ -5,7 +5,9 @@ using System.Reactive.Linq;
 using System.Windows.Input;
 using Prism.Commands;
 using Prism.Services.Dialogs;
+using Vortex.GenerativeArtSuite.Common.Extensions;
 using Vortex.GenerativeArtSuite.Create.Models;
+using Vortex.GenerativeArtSuite.Create.Staging;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
@@ -14,6 +16,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
     {
         public const string ExistingLayerNames = nameof(ExistingLayerNames);
 
+        private LayerStagingArea? layerStagingArea;
         private List<string> existingLayerNames = new();
         private string path = string.Empty;
 
@@ -53,13 +56,57 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
 
         public ICommand Cancel { get; }
 
-        public abstract string Name { get; set; }
+        public string Name
+        {
+            get => layerStagingArea == null ? string.Empty : layerStagingArea.Name.Value;
+            set
+            {
+                if (layerStagingArea != null)
+                {
+                    layerStagingArea.Name.Value = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-        public abstract bool Optional { get; set; }
+        public bool Optional
+        {
+            get => layerStagingArea != null && layerStagingArea.Optional.Value;
+            set
+            {
+                if (layerStagingArea != null)
+                {
+                    layerStagingArea.Optional.Value = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-        public abstract bool IncludeInDNA { get; set; }
+        public bool IncludeInDNA
+        {
+            get => layerStagingArea != null && layerStagingArea.IncludeInDNA.Value;
+            set
+            {
+                if (layerStagingArea != null)
+                {
+                    layerStagingArea.IncludeInDNA.Value = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-        public abstract bool AffectedByLayerMask { get; set; }
+        public bool AffectedByLayerMask
+        {
+            get => layerStagingArea != null && layerStagingArea.AffectedByLayerMask.Value;
+            set
+            {
+                if (layerStagingArea != null)
+                {
+                    layerStagingArea.AffectedByLayerMask.Value = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public override void OnDialogOpened(IDialogParameters parameters)
         {
@@ -67,6 +114,26 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
             {
                 existingLayerNames = layerNames;
             }
+
+            if (parameters.TryGetValue(nameof(LayerStagingArea), out LayerStagingArea layerStagingArea))
+            {
+                this.layerStagingArea = layerStagingArea;
+                PathVMs.ConnectModelCollection(layerStagingArea.Paths, m => new PathSelectorVM(m, RemovePath));
+
+                OnPropertyChanged(string.Empty);
+            }
+        }
+
+        protected override IDialogParameters GetDialogParameters(string parameter)
+        {
+            var result = new DialogParameters();
+
+            if (parameter == OKAY)
+            {
+                result.Add(nameof(Layer), layerStagingArea?.Apply());
+            }
+
+            return result;
         }
 
         protected override ButtonResult GetButtonResult(string parameter)
@@ -85,13 +152,8 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
         protected virtual bool CanConfirm()
         {
             return !existingLayerNames.Contains(Name) &&
-                !string.IsNullOrWhiteSpace(Name);
-        }
-
-        protected void RemovePath(PathSelectorVM vm)
-        {
-            PathVMs.Remove(vm);
-            OnPropertyChanged(nameof(Confirm));
+                !string.IsNullOrWhiteSpace(Name) &&
+                layerStagingArea?.IsDirty() == true;
         }
 
         private void OnAddPath()
@@ -111,6 +173,12 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
             var existingPaths = PathVMs.Select(p => p.Model).SelectMany(p => p.Options);
 
             return possiblePath.Options.Count >= 2 && !existingPaths.Any(p => possiblePath.Options.Contains(p));
+        }
+
+        private void RemovePath(PathSelectorVM vm)
+        {
+            PathVMs.Remove(vm);
+            OnPropertyChanged(nameof(Confirm));
         }
     }
 }

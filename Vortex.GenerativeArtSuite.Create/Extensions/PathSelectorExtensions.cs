@@ -8,6 +8,11 @@ namespace Vortex.GenerativeArtSuite.Create.Extensions
     {
         public static List<string> Variants(this List<PathSelector> selectors)
         {
+            if (!selectors.Any())
+            {
+                return new();
+            }
+
             static List<string> recurse(List<string> partialPath, PathSelector ps)
             {
                 var result = new List<string>();

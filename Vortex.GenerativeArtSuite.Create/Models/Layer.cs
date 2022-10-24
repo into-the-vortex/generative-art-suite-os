@@ -6,6 +6,10 @@ namespace Vortex.GenerativeArtSuite.Create.Models
 {
     public sealed class Layer
     {
+        public Layer()
+        {
+        }
+
         public Layer(string name, bool optional, bool includeInDNA, bool affectedByLayerMask, List<PathSelector> paths)
         {
             Name = name;
