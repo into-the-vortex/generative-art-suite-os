@@ -150,8 +150,8 @@
   <data name="CreateSession" xml:space="preserve">
     <value>Create Session</value>
   </data>
-  <data name="DefaultVariant" xml:space="preserve">
-    <value>Default</value>
+  <data name="CreateTrait" xml:space="preserve">
+    <value>Create Trait</value>
   </data>
   <data name="DeleteLayer" xml:space="preserve">
     <value>Delete Layer</value>
@@ -167,6 +167,9 @@
   </data>
   <data name="EditLayer" xml:space="preserve">
     <value>Edit Layer</value>
+  </data>
+  <data name="EditTrait" xml:space="preserve">
+    <value>Edit Trait</value>
   </data>
   <data name="Generate" xml:space="preserve">
     <value>Generate</value>
@@ -254,6 +257,9 @@
   </data>
   <data name="Traits" xml:space="preserve">
     <value>Traits</value>
+  </data>
+  <data name="Weight" xml:space="preserve">
+    <value>Weight</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>

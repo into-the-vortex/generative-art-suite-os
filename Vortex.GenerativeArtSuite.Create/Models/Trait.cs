@@ -6,8 +6,10 @@ namespace Vortex.GenerativeArtSuite.Create.Models
     public class Trait
     {
         public const string NONENAME = "None";
+        public const string DEFAULTNAME = "Default";
+        public const int DEFAULTWEIGHT = 50;
 
-        public Trait(string name, string iconURI, double weight, List<TraitVariant> variants)
+        public Trait(string name, string iconURI, int weight, List<TraitVariant> variants)
         {
             Name = name;
             IconURI = iconURI;
@@ -19,23 +21,25 @@ namespace Vortex.GenerativeArtSuite.Create.Models
 
         public string IconURI { get; set; }
 
-        public double Weight { get; set; }
+        public int Weight { get; set; }
 
         public List<TraitVariant> Variants { get; set; }
 
-        public static Trait None(List<string> variants) => new(NONENAME, string.Empty, 1, CreateDefaults(variants));
+        public static Trait None(List<string> variants) => new(NONENAME, string.Empty, DEFAULTWEIGHT, CreateDefaults(variants));
+
+        public static Trait Default(List<string> variants) => new(string.Empty, string.Empty, DEFAULTWEIGHT, CreateDefaults(variants));
 
         public static List<TraitVariant> CreateDefaults(List<string> variants)
         {
             if (variants.Any())
             {
-                return variants.Select(v => new TraitVariant(v, string.Empty, string.Empty, 1)).ToList();
+                return variants.Select(v => new TraitVariant(v, string.Empty, string.Empty, DEFAULTWEIGHT)).ToList();
             }
             else
             {
                 return new List<TraitVariant>
                 {
-                    new TraitVariant(Strings.DefaultVariant, string.Empty, string.Empty, 1),
+                    new TraitVariant(DEFAULTNAME, string.Empty, string.Empty, DEFAULTWEIGHT),
                 };
             }
         }

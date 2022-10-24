@@ -1,9 +1,5 @@
-﻿using DynamicData.Kernel;
-using Prism.Services.Dialogs;
-using System.Xml.Linq;
-using System;
+﻿using Prism.Services.Dialogs;
 using Vortex.GenerativeArtSuite.Common.Extensions;
-using Vortex.GenerativeArtSuite.Create.Models;
 using Vortex.GenerativeArtSuite.Create.Staging;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers

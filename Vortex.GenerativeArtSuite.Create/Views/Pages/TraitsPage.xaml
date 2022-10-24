@@ -22,6 +22,7 @@
     <Grid>
         <Grid.Resources>
             <converters:EmptyToCollapsedConverter x:Key="EmptyToCollapsedConverter" />
+            <converters:FalseToHiddenConverter x:Key="FalseToHiddenConverter" />
 
             <DataTemplate DataType="{x:Type vms:NoLayersVM}">
                 <Label Content="{x:Static strings:Strings.NoLayers}"
@@ -33,20 +34,33 @@
             <DataTemplate DataType="{x:Type vms:TraitVM}">
                 <Grid>
                     <Image Source="{Binding IconURI}" />
-                    <Label Margin="10"
-                           Content="{Binding Name}"
-                           VerticalAlignment="Top" />
-                    <Slider Margin="10"
-                            HorizontalAlignment="Stretch"
-                            Maximum="100"
-                            Minimum="0"
-                            VerticalAlignment="Bottom"
-                            Value="{Binding Weight}" />
+
+                    <DockPanel Margin="10"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Top">
+                        <Label Content="{Binding Name}" VerticalAlignment="Center" />
+                        <Button HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Visibility="{Binding IsEditable, Converter={StaticResource FalseToHiddenConverter}}"
+                                Command="{Binding Delete}">
+                            <ui:SymbolIcon Symbol="Delete" />
+                        </Button>
+                    </DockPanel>
+                    <DockPanel Margin="10"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Bottom">
+                        <Label Content="{Binding WeightLabel}" VerticalAlignment="Center" />
+                        <Slider Margin="5,0,0,0"
+                                Maximum="100"
+                                Minimum="1"
+                                VerticalAlignment="Center"
+                                Value="{Binding Weight}" />
+                    </DockPanel>
                 </Grid>
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type vms:TraitsVM}">
-                <ScrollViewer Padding="10">
+                <ScrollViewer Padding="20">
                     <ui:ItemsRepeater HorizontalAlignment="Stretch" ItemsSource="{Binding TraitVms}">
                         <ui:ItemsRepeater.Layout>
                             <ui:UniformGridLayout ItemsJustification="Start"
@@ -84,12 +98,14 @@
                    FontWeight="Bold"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Center" />
+
             <ui:SimpleStackPanel Spacing="10"
                                  HorizontalAlignment="Right"
                                  Orientation="Horizontal"
                                  VerticalAlignment="Center"
                                  Visibility="{Binding Layers, Converter={StaticResource EmptyToCollapsedConverter}}">
                 <ComboBox SelectedItem="{Binding SelectedLayer}"
+                          VerticalAlignment="Center"
                           Width="300"
                           ItemsSource="{Binding Layers}" />
                 <Button HorizontalAlignment="Right"
@@ -97,14 +113,7 @@
                         Command="{Binding Add}">
                     <ui:SymbolIcon Symbol="Add" />
                 </Button>
-                <Button HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Command="{Binding MultiAdd}">
-                    <ui:SymbolIcon Symbol="BrowsePhotos" />
-                </Button>
             </ui:SimpleStackPanel>
-
-
         </DockPanel>
         <Separator Grid.Row="1" Padding="20,0" />
         <ContentControl Grid.Row="2"

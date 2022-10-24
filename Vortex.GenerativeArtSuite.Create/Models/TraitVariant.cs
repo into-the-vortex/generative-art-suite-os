@@ -2,7 +2,7 @@
 {
     public class TraitVariant
     {
-        public TraitVariant(string displayName, string imagePath, string maskPath, double weight)
+        public TraitVariant(string displayName, string imagePath, string maskPath, int weight)
         {
             DisplayName = displayName;
             ImagePath = imagePath;
@@ -16,6 +16,6 @@
 
         public string MaskPath { get; set; } = string.Empty;
 
-        public double Weight { get; set; }
+        public int Weight { get; set; }
     }
 }

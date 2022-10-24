@@ -160,11 +160,11 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Default.
+        ///   Looks up a localized string similar to Create Trait.
         /// </summary>
-        public static string DefaultVariant {
+        public static string CreateTrait {
             get {
-                return ResourceManager.GetString("DefaultVariant", resourceCulture);
+                return ResourceManager.GetString("CreateTrait", resourceCulture);
             }
         }
         
@@ -210,6 +210,15 @@ namespace Vortex.GenerativeArtSuite.Create {
         public static string EditLayer {
             get {
                 return ResourceManager.GetString("EditLayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Trait.
+        /// </summary>
+        public static string EditTrait {
+            get {
+                return ResourceManager.GetString("EditTrait", resourceCulture);
             }
         }
         
@@ -471,6 +480,15 @@ namespace Vortex.GenerativeArtSuite.Create {
         public static string Traits {
             get {
                 return ResourceManager.GetString("Traits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weight.
+        /// </summary>
+        public static string Weight {
+            get {
+                return ResourceManager.GetString("Weight", resourceCulture);
             }
         }
         

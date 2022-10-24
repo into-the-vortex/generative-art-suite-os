@@ -27,6 +27,8 @@ namespace Vortex.GenerativeArtSuite.Create.Models
 
         public List<Trait> Traits { get; } = new();
 
+        public Trait CreateTrait() => Trait.Default(Paths.Variants());
+
         public void OnOptionalChanged()
         {
             if (Optional && Traits.FirstOrDefault()?.Name != Trait.NONENAME)
