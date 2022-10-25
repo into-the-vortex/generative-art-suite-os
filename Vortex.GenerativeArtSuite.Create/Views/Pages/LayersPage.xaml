@@ -1,0 +1,125 @@
+﻿<Border x:Class="Vortex.GenerativeArtSuite.Create.Views.Pages.LayersPage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        xmlns:converters="clr-namespace:Vortex.GenerativeArtSuite.Common.Converters;assembly=Vortex.GenerativeArtSuite.Common"
+        xmlns:dd="urn:gong-wpf-dragdrop"
+        xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.Layers"
+        Margin="50"
+        Padding="0,10"
+        d:DataContext="{d:DesignInstance vms:LayersVM}"
+        d:DesignHeight="450"
+        d:DesignWidth="800"
+        Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+        BorderBrush="{DynamicResource SystemControlBackgroundBaseHighBrush}"
+        BorderThickness="1"
+        CornerRadius="10"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch">
+
+    <Border.Resources>
+        <converters:EmptyToCollapsedConverter x:Key="EmptyToCollapsedConverter" />
+
+        <DataTemplate x:Key="LayerSettingTemplate">
+            <Border Margin="5,0"
+                    Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                    BorderBrush="{DynamicResource SystemControlBackgroundBaseHighBrush}"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Stretch">
+                <Label Margin="5" Content="{Binding .}" />
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="LayerTemplate" DataType="{x:Type vms:LayerVM}">
+            <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                    BorderBrush="{DynamicResource SystemControlBackgroundBaseHighBrush}"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+                <ui:SimpleStackPanel Margin="5,0,5,5" Orientation="Vertical">
+                    <DockPanel HorizontalAlignment="Stretch">
+                        <Label Content="{Binding Name}"
+                               FontSize="20"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center" />
+                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                            <Button Margin="5" Command="{Binding Edit}">
+                                <ui:SymbolIcon Symbol="Edit" />
+                            </Button>
+                            <Button Margin="5" Command="{Binding Delete}">
+                                <ui:SymbolIcon Symbol="Delete" />
+                            </Button>
+                        </StackPanel>
+                    </DockPanel>
+                    <Separator />
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="{x:Static strings:Strings.Settings}" VerticalAlignment="Center" />
+                        <ItemsControl Margin="0,5"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Center"
+                                      ItemTemplate="{StaticResource LayerSettingTemplate}"
+                                      ItemsSource="{Binding Settings}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Visibility="{Binding Paths, Converter={StaticResource EmptyToCollapsedConverter}}">
+                        <Separator />
+                        <Label Content="{x:Static strings:Strings.Paths}" />
+                        <ItemsControl ItemsSource="{Binding Paths}" />
+                    </StackPanel>
+                </ui:SimpleStackPanel>
+            </Border>
+
+        </DataTemplate>
+
+    </Border.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" Margin="20,0,20,10">
+            <Label Content="{x:Static strings:Strings.Layers}"
+                   FontSize="32"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center" />
+            <Button HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Command="{Binding AddLayer}">
+                <ui:SymbolIcon Symbol="Add" />
+            </Button>
+        </DockPanel>
+        <Separator Grid.Row="1" Padding="20,0" />
+        <ScrollViewer Grid.Row="2"
+                      HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Visible">
+            <ItemsControl Padding="20,10,20,0"
+                          dd:DragDrop.IsDragSource="True"
+                          dd:DragDrop.IsDropTarget="True"
+                          HorizontalAlignment="Stretch"
+                          ItemTemplate="{StaticResource LayerTemplate}"
+                          ItemsSource="{Binding Layers}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ui:SimpleStackPanel Spacing="10" Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</Border>

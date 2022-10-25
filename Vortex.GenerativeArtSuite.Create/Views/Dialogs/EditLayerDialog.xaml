@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="Vortex.GenerativeArtSuite.Create.Views.Dialogs.EditLayerDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:controls="clr-namespace:Vortex.GenerativeArtSuite.Create.Controls"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.Layers"
+             d:DataContext="{d:DesignInstance vms:EditLayerDialogVM}"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+             Height="450"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch"
+             Width="800">
+    <prism:Dialog.WindowStyle>
+        <Style TargetType="Window">
+            <Setter Property="prism:Dialog.WindowStartupLocation" Value="CenterScreen" />
+            <Setter Property="ResizeMode" Value="NoResize" />
+            <Setter Property="ShowInTaskbar" Value="False" />
+            <Setter Property="SizeToContent" Value="WidthAndHeight" />
+        </Style>
+    </prism:Dialog.WindowStyle>
+
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+
+        <ui:SimpleStackPanel Spacing="10"
+                             Margin="50"
+                             HorizontalAlignment="Stretch"
+                             Orientation="Vertical"
+                             VerticalAlignment="Stretch">
+            <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.NameLabel}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+
+            <Separator />
+
+            <controls:EditLayerSettings />
+
+            <Separator />
+
+            <controls:EditLayerPaths />
+
+            <Separator />
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0"
+                        Margin="10,0,0,0"
+                        Content="{x:Static strings:Strings.Save}"
+                        HorizontalAlignment="Stretch"
+                        Command="{Binding Confirm}" />
+                <Button Grid.Column="1"
+                        Margin="10,0"
+                        Content="{x:Static strings:Strings.Cancel}"
+                        HorizontalAlignment="Stretch"
+                        Command="{Binding Cancel}" />
+            </Grid>
+
+        </ui:SimpleStackPanel>
+
+    </ScrollViewer>
+
+</UserControl>
