@@ -81,6 +81,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
                 {
                     traitStagingArea.Weight.Value = value;
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(WeightLabel));
                 }
             }
         }
@@ -130,7 +131,8 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
 
         protected virtual bool CanConfirm()
         {
-            return !existingTraitNames.Contains(Name) &&
+            return Name != Trait.NONENAME &&
+                !existingTraitNames.Contains(Name) &&
                 !string.IsNullOrWhiteSpace(Name) &&
                 File.Exists(IconURI) &&
                 VariantVMs.All(v => File.Exists(v.ImagePath));

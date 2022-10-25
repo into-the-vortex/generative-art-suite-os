@@ -10,6 +10,10 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Base
         public const string EditLayerDialog = nameof(EditLayerDialog);
         public const string DeleteLayerDialog = nameof(DeleteLayerDialog);
 
+        public const string CreateTraitDialog = nameof(CreateTraitDialog);
+        public const string EditTraitDialog = nameof(EditTraitDialog);
+        public const string DeleteTraitDialog = nameof(DeleteTraitDialog);
+
         public const string OKAY = "ok";
         public const string CANCEL = "cancel";
 

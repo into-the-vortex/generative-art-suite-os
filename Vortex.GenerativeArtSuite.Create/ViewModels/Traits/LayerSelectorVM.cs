@@ -1,19 +1,23 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
 using Prism.Regions;
+using Prism.Services.Dialogs;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
 {
     public class LayerSelectorVM : SessionAwareVM
     {
+        private readonly IDialogService dialogService;
         private object content;
         private string? selectedLayer;
 
-        public LayerSelectorVM()
+        public LayerSelectorVM(IDialogService dialogService)
         {
             content = new NoLayersVM();
+            this.dialogService = dialogService;
         }
 
         public ObservableCollection<string> Layers { get; } = new();
@@ -41,9 +45,12 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
                 {
                     content = value;
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(Add));
                 }
             }
         }
+
+        public ICommand? Add => Content is TraitsVM traitsVM ? traitsVM.Add : null;
 
         public override void OnNavigatedTo(NavigationContext navigationContext)
         {
@@ -71,7 +78,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
                 throw new InvalidOperationException();
             }
 
-            Content = new TraitsVM(layer);
+            Content = new TraitsVM(dialogService, layer);
         }
     }
 }

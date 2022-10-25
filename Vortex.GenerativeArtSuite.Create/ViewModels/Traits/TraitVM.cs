@@ -1,4 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
+using Prism.Commands;
 using Vortex.GenerativeArtSuite.Common.Extensions;
 using Vortex.GenerativeArtSuite.Common.ViewModels;
 using Vortex.GenerativeArtSuite.Create.Models;
@@ -7,10 +10,13 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
 {
     public class TraitVM : NotifyPropertyChanged, IViewModel<Trait>
     {
-        public TraitVM(Trait model)
+        public TraitVM(Trait model, Action<Trait> editCallback, Action<Trait> deleteCallback)
         {
             Model = model;
             Variants.ConnectModelCollection(model.Variants, (v) => new TraitVariantVM(v));
+
+            Edit = new DelegateCommand(() => editCallback(model), () => IsEditable);
+            Delete = new DelegateCommand(() => deleteCallback(model), () => IsEditable);
         }
 
         public string Name => Model.Name;
@@ -36,6 +42,10 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
         }
 
         public ObservableCollection<TraitVariantVM> Variants { get; } = new();
+
+        public ICommand Edit { get; }
+
+        public ICommand Delete { get; }
 
         public Trait Model { get; }
     }

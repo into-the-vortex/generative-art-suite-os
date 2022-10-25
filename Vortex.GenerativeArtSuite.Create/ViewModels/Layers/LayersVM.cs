@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Input;
-using System.Xml.Linq;
 using DynamicData;
 using Prism.Commands;
 using Prism.Regions;

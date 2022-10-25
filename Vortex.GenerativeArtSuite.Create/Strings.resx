@@ -159,6 +159,12 @@
   <data name="DeleteLayerConfirmation" xml:space="preserve">
     <value>Are you sure you want to delete the layer "{0}"?</value>
   </data>
+  <data name="DeleteTrait" xml:space="preserve">
+    <value>Delete Trait</value>
+  </data>
+  <data name="DeleteTraitConfirmation" xml:space="preserve">
+    <value>Are you sure you want to delete the trait "{0}"?</value>
+  </data>
   <data name="DescriptionLabel" xml:space="preserve">
     <value>Description:</value>
   </data>

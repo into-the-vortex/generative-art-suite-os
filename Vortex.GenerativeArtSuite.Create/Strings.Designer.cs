@@ -187,6 +187,24 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete Trait.
+        /// </summary>
+        public static string DeleteTrait {
+            get {
+                return ResourceManager.GetString("DeleteTrait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the trait &quot;{0}&quot;?.
+        /// </summary>
+        public static string DeleteTraitConfirmation {
+            get {
+                return ResourceManager.GetString("DeleteTraitConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Description:.
         /// </summary>
         public static string DescriptionLabel {

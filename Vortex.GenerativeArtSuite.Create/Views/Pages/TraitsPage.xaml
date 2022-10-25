@@ -10,7 +10,7 @@
         xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.Traits"
         Margin="50"
         Padding="0,10"
-        d:DataContext="{d:DesignInstance vms:TraitsVM}"
+        d:DataContext="{d:DesignInstance vms:LayerSelectorVM}"
         d:DesignHeight="450"
         d:DesignWidth="800"
         Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
