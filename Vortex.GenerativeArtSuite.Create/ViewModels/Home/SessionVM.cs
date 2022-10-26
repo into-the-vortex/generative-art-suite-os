@@ -19,7 +19,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
         public string? SelectedTag
         {
             get => selectedTag;
-            set => OnSelectedTagChanged(value);
+            set => SetProperty(ref selectedTag, value, OnSelectedTagChanged);
         }
 
         public override void OnNavigatedTo(NavigationContext navigationContext)
@@ -28,28 +28,22 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
             SelectedTag = NavigationService.Layers;
         }
 
-        private void OnSelectedTagChanged(string? tag)
+        private void OnSelectedTagChanged()
         {
-            if (tag is not null)
+            switch (SelectedTag)
             {
-                selectedTag = tag;
-                OnPropertyChanged(nameof(SelectedTag));
-
-                switch (tag)
-                {
-                    case NavigationService.Home:
-                        // TODO: Probably dialog this to make sure they want to save.
-                        fileSystem.SaveSession(Session());
-                        navigationService.GoHome();
-                        break;
-                    default:
-                        var parameters = new NavigationParameters
-                        {
-                            { nameof(Session), Session() },
-                        };
-                        navigationService.NavigateTo(tag, parameters);
-                        break;
-                }
+                case NavigationService.Home:
+                    // TODO: Probably dialog this to make sure they want to save.
+                    fileSystem.SaveSession(Session());
+                    navigationService.GoHome();
+                    break;
+                default:
+                    var parameters = new NavigationParameters
+                    {
+                        { nameof(Session), Session() },
+                    };
+                    navigationService.NavigateTo(SelectedTag, parameters);
+                    break;
             }
         }
     }

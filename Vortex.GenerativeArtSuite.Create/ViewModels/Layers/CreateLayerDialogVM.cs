@@ -13,27 +13,13 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
         public int Index
         {
             get => index;
-            set
-            {
-                if (index != value && value >= 0 && value <= maxIndex)
-                {
-                    index = value;
-                    OnPropertyChanged();
-                }
-            }
+            set => SetProperty(ref index, value >= 0 && value <= maxIndex ? value : index);
         }
 
         public int MaxIndex
         {
             get => maxIndex;
-            set
-            {
-                if (maxIndex != value)
-                {
-                    maxIndex = value;
-                    OnPropertyChanged();
-                }
-            }
+            set => SetProperty(ref maxIndex, value);
         }
 
         public override void OnDialogOpened(IDialogParameters parameters)

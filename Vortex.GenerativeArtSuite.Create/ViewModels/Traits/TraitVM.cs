@@ -2,13 +2,14 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Prism.Commands;
+using Prism.Mvvm;
 using Vortex.GenerativeArtSuite.Common.Extensions;
 using Vortex.GenerativeArtSuite.Common.ViewModels;
 using Vortex.GenerativeArtSuite.Create.Models;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
 {
-    public class TraitVM : NotifyPropertyChanged, IViewModel<Trait>
+    public class TraitVM : BindableBase, IViewModel<Trait>
     {
         public TraitVM(Trait model, Action<Trait> editCallback, Action<Trait> deleteCallback)
         {
@@ -35,8 +36,8 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
                 if (Model.Weight != value)
                 {
                     Model.Weight = value;
-                    OnPropertyChanged(nameof(Weight));
-                    OnPropertyChanged(nameof(WeightLabel));
+                    RaisePropertyChanged(nameof(Weight));
+                    RaisePropertyChanged(nameof(WeightLabel));
                 }
             }
         }

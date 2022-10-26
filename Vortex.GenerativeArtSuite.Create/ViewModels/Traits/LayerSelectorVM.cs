@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Prism.Regions;
@@ -11,12 +10,11 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
     public class LayerSelectorVM : SessionAwareVM
     {
         private readonly IDialogService dialogService;
-        private object content;
+        private TraitsVM? content;
         private string? selectedLayer;
 
         public LayerSelectorVM(IDialogService dialogService)
         {
-            content = new NoLayersVM();
             this.dialogService = dialogService;
         }
 
@@ -25,29 +23,13 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
         public string? SelectedLayer
         {
             get => selectedLayer;
-            set
-            {
-                if (selectedLayer != value)
-                {
-                    selectedLayer = value;
-                    OnPropertyChanged();
-                    UpdateContent();
-                }
-            }
+            set => SetProperty(ref selectedLayer, value, UpdateContent);
         }
 
-        public object Content
+        public TraitsVM? Content
         {
             get => content;
-            set
-            {
-                if (content != value)
-                {
-                    content = value;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(Add));
-                }
-            }
+            set => SetProperty(ref content, value, () => RaisePropertyChanged(nameof(Add)));
         }
 
         public ICommand? Add => Content is TraitsVM traitsVM ? traitsVM.Add : null;
@@ -58,27 +40,15 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
 
             Layers.Clear();
             Layers.AddRange(Session().Layers.Select(l => l.Name));
-            OnPropertyChanged(nameof(Layers));
+            RaisePropertyChanged(nameof(Layers));
 
             SelectedLayer = Layers.FirstOrDefault();
         }
 
         private void UpdateContent()
         {
-            if (selectedLayer is null)
-            {
-                Content = new NoLayersVM();
-                return;
-            }
-
-            var layer = Session().Layers.First(l => l.Name == selectedLayer);
-
-            if (layer is null)
-            {
-                throw new InvalidOperationException();
-            }
-
-            Content = new TraitsVM(dialogService, layer);
+            var layer = Session().Layers.FirstOrDefault(l => l.Name == selectedLayer);
+            Content = layer is not null ? new TraitsVM(dialogService, layer) : null;
         }
     }
 }

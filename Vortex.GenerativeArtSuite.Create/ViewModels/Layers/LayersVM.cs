@@ -66,7 +66,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
             var param = new DialogParameters
             {
                 { nameof(DeleteLayerDialogVM.Message), string.Format(CultureInfo.CurrentCulture, Strings.DeleteLayerConfirmation, model.Name) },
-                { nameof(DeleteLayerDialogVM.Index), Session().Layers.IndexOf(model) },
+                { nameof(DeleteDialogVM.Index), Session().Layers.IndexOf(model) },
             };
 
             dialogService.ShowDialog(DialogVM.DeleteLayerDialog, param, DeleteCallback);
@@ -93,7 +93,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
 
         private void DeleteCallback(IDialogResult dialogResult)
         {
-            if (dialogResult.Result == ButtonResult.OK && dialogResult.Parameters.TryGetValue(nameof(DeleteLayerDialogVM.Index), out int index))
+            if (dialogResult.Result == ButtonResult.OK && dialogResult.Parameters.TryGetValue(nameof(DeleteDialogVM.Index), out int index))
             {
                 Layers.RemoveAt(index);
             }

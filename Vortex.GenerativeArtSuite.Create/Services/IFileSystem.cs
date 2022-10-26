@@ -10,5 +10,11 @@ namespace Vortex.GenerativeArtSuite.Create.Services
         Session LoadSession(string name);
 
         void SaveSession(Session session);
+
+        string SelectFolder();
+
+        string SelectFile();
+
+        string[] SelectFiles();
     }
 }

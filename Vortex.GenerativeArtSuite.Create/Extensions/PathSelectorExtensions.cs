@@ -13,25 +13,10 @@ namespace Vortex.GenerativeArtSuite.Create.Extensions
                 return new();
             }
 
-            static List<string> recurse(List<string> partialPath, PathSelector ps)
-            {
-                var result = new List<string>();
-
-                foreach (var pp in partialPath)
-                {
-                    foreach (var word in ps.Options)
-                    {
-                        result.Add(string.Join(" - ", pp, word));
-                    }
-                }
-
-                return result;
-            }
-
             var variants = selectors.First().Options;
             foreach (var owner in selectors.Skip(1))
             {
-                variants = recurse(variants, owner);
+                variants = variants.SelectMany(pp => owner.Options.Select(word => string.Join(" - ", pp, word))).ToList();
             }
 
             return variants;

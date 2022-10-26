@@ -14,7 +14,8 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -33,8 +34,97 @@
         </ui:SimpleStackPanel>
 
         <Image Grid.Row="0"
-               Grid.Column="1"
+               Grid.Column="2"
+               Height="128"
+               HorizontalAlignment="Center"
+               Width="128"
                Source="{Binding IconURI}" />
 
+        <Button Grid.Row="0"
+                Grid.Column="2"
+                ui:ControlHelper.Header="{x:Static strings:Strings.NameLabel}"
+                Height="128"
+                HorizontalAlignment="Center"
+                Width="128"
+                Command="{Binding BrowseIcon}">
+            <StackPanel Orientation="Vertical">
+                <ui:SymbolIcon HorizontalAlignment="Center" Symbol="Add" />
+                <Label Content="Add Icon" HorizontalAlignment="Center" />
+            </StackPanel>
+
+        </Button>
+
+        <ui:SimpleStackPanel Grid.Row="1" Grid.ColumnSpan="3">
+            <Separator />
+            <ui:ItemsRepeater ItemsSource="{Binding VariantVMs}">
+                <ui:ItemsRepeater.Layout>
+                    <ui:UniformGridLayout ItemsJustification="SpaceAround" ItemsStretch="None" />
+                </ui:ItemsRepeater.Layout>
+                <ui:ItemsRepeater.ItemTemplate>
+                    <DataTemplate>
+                        <ui:SimpleStackPanel Spacing="10"
+                                             Margin="10"
+                                             Orientation="Vertical">
+                            <Label Grid.Row="0"
+                                   Grid.ColumnSpan="2"
+                                   Content="{Binding DisplayName}"
+                                   HorizontalAlignment="Center" />
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="10" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Image Grid.Column="0"
+                                       Height="128"
+                                       HorizontalAlignment="Center"
+                                       Width="128"
+                                       Source="{Binding ImagePath}" />
+
+                                <Button Grid.Column="0"
+                                        ui:ControlHelper.Header="{x:Static strings:Strings.NameLabel}"
+                                        Height="128"
+                                        HorizontalAlignment="Center"
+                                        Width="128">
+                                    <StackPanel Orientation="Vertical">
+                                        <ui:SymbolIcon HorizontalAlignment="Center" Symbol="Add" />
+                                        <Label Content="Add Variant" HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                </Button>
+
+                                <Image Grid.Column="2"
+                                       Height="128"
+                                       HorizontalAlignment="Center"
+                                       Width="128"
+                                       Source="{Binding ImagePath}" />
+
+                                <Button Grid.Column="2"
+                                        ui:ControlHelper.Header="{x:Static strings:Strings.NameLabel}"
+                                        Height="128"
+                                        HorizontalAlignment="Center"
+                                        Width="128">
+                                    <StackPanel Orientation="Vertical">
+                                        <ui:SymbolIcon HorizontalAlignment="Center" Symbol="Add" />
+                                        <Label Content="Add Mask" HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
+
+                            <DockPanel HorizontalAlignment="Stretch">
+                                <Label Content="{Binding WeightLabel}" VerticalAlignment="Center" />
+                                <Slider Margin="5,0,0,0"
+                                        Maximum="100"
+                                        Minimum="0"
+                                        VerticalAlignment="Center"
+                                        Value="{Binding Weight}" />
+                            </DockPanel>
+                        </ui:SimpleStackPanel>
+                    </DataTemplate>
+                </ui:ItemsRepeater.ItemTemplate>
+            </ui:ItemsRepeater>
+            <Separator />
+        </ui:SimpleStackPanel>
     </Grid>
 </UserControl>

@@ -1,9 +1,10 @@
-﻿using Vortex.GenerativeArtSuite.Common.ViewModels;
+﻿using Prism.Mvvm;
+using Vortex.GenerativeArtSuite.Common.ViewModels;
 using Vortex.GenerativeArtSuite.Create.Models;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
 {
-    public class TraitVariantVM : NotifyPropertyChanged, IViewModel<TraitVariant>
+    public class TraitVariantVM : BindableBase, IViewModel<TraitVariant>
     {
         public TraitVariantVM(TraitVariant model)
         {
@@ -17,10 +18,10 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
             get => Model.ImagePath;
             set
             {
-                if(Model.ImagePath != value)
+                if (Model.ImagePath != value)
                 {
                     Model.ImagePath = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -33,7 +34,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
                 if (Model.MaskPath != value)
                 {
                     Model.MaskPath = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -46,10 +47,13 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
                 if (Model.Weight != value)
                 {
                     Model.Weight = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged();
+                    RaisePropertyChanged(nameof(WeightLabel));
                 }
             }
         }
+
+        public string WeightLabel => $"{Strings.Weight} - {Weight:D3}";
 
         public TraitVariant Model { get; }
     }

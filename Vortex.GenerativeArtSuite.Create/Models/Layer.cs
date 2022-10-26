@@ -7,6 +7,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models
     public sealed class Layer
     {
         public Layer()
+            : this(string.Empty, false, true, true, new())
         {
         }
 
@@ -17,19 +18,20 @@ namespace Vortex.GenerativeArtSuite.Create.Models
             IncludeInDNA = includeInDNA;
             AffectedByLayerMask = affectedByLayerMask;
             Paths = paths;
+            Traits = new();
         }
 
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; }
 
         public bool Optional { get; set; }
 
-        public bool IncludeInDNA { get; set; } = true;
+        public bool IncludeInDNA { get; set; }
 
         public bool AffectedByLayerMask { get; set; } = true;
 
-        public List<PathSelector> Paths { get; } = new();
+        public List<PathSelector> Paths { get; }
 
-        public List<Trait> Traits { get; } = new();
+        public List<Trait> Traits { get; }
 
         public Trait CreateTrait() => Trait.Default(Paths.Variants());
 

@@ -1,14 +1,18 @@
 ﻿using System.Windows.Input;
 using Prism.Commands;
-using Vortex.GenerativeArtSuite.Common.ViewModels;
+using Prism.Mvvm;
 using Vortex.GenerativeArtSuite.Create.Models;
+using Vortex.GenerativeArtSuite.Create.Services;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Settings
 {
-    public class SessionSettingsVM : NotifyPropertyChanged
+    public class SessionSettingsVM : BindableBase
     {
-        public SessionSettingsVM(SessionSettings settings)
+        private readonly IFileSystem fileSystem;
+
+        public SessionSettingsVM(IFileSystem fileSystem, SessionSettings settings)
         {
+            this.fileSystem = fileSystem;
             Settings = settings;
             BrowseOutputFolder = new DelegateCommand(OnBrowseOutputFolder);
         }
@@ -21,7 +25,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Settings
                 if (Settings.OutputFolder != value)
                 {
                     Settings.OutputFolder = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -34,7 +38,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Settings
                 if (Settings.NamePrefix != value)
                 {
                     Settings.NamePrefix = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -47,7 +51,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Settings
                 if (Settings.DescriptionTemplate != value)
                 {
                     Settings.DescriptionTemplate = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -60,7 +64,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Settings
                 if (Settings.BaseURI != value)
                 {
                     Settings.BaseURI = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -73,7 +77,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Settings
                 if (Settings.CollectionSize != value)
                 {
                     Settings.CollectionSize = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -82,17 +86,9 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Settings
 
         protected SessionSettings Settings { get; }
 
-        private static string Browse()
-        {
-            var dialog = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog();
-            dialog.ShowDialog();
-
-            return dialog.SelectedPath;
-        }
-
         private void OnBrowseOutputFolder()
         {
-            OutputFolder = Browse();
+            OutputFolder = fileSystem.SelectFolder();
         }
     }
 }

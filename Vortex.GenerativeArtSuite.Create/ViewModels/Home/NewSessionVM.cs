@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using Prism.Commands;
 using Vortex.GenerativeArtSuite.Create.Models;
+using Vortex.GenerativeArtSuite.Create.Services;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Settings;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
@@ -11,8 +12,8 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
         private readonly Func<string, bool> validateName;
         private string name;
 
-        public NewSessionVM(Func<string, bool> validateName, Action<string, SessionSettings> onCreate)
-            : base(new SessionSettings())
+        public NewSessionVM(IFileSystem fileSystem, Func<string, bool> validateName, Action<string, SessionSettings> onCreate)
+            : base(fileSystem, new SessionSettings())
         {
             this.validateName = validateName;
 
@@ -30,14 +31,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
         public string Name
         {
             get => name;
-            set
-            {
-                if (name != value)
-                {
-                    name = value;
-                    OnPropertyChanged();
-                }
-            }
+            set => SetProperty(ref name, value);
         }
 
         public ICommand Create { get; }

@@ -22,14 +22,15 @@
     <Grid>
         <Grid.Resources>
             <converters:EmptyToCollapsedConverter x:Key="EmptyToCollapsedConverter" />
-            <converters:FalseToHiddenConverter x:Key="FalseToHiddenConverter" />
-
-            <DataTemplate DataType="{x:Type vms:NoLayersVM}">
-                <Label Content="{x:Static strings:Strings.NoLayers}"
-                       FontSize="20"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center" />
-            </DataTemplate>
+            <converters:NullToVisibilityConverter x:Key="NullToCollapsedConverter"
+                                                  OnNotNull="Visible"
+                                                  OnNull="Collapsed" />
+            <converters:NullToVisibilityConverter x:Key="NullToVisibleConverter"
+                                                  OnNotNull="Collapsed"
+                                                  OnNull="Visible" />
+            <converters:BooleanToVisibilityConverter x:Key="FalseToHiddenConverter"
+                                                     OnFalse="Hidden"
+                                                     OnTrue="Visible" />
 
             <DataTemplate DataType="{x:Type vms:TraitVM}">
                 <Grid>
@@ -57,31 +58,6 @@
                                 Value="{Binding Weight}" />
                     </DockPanel>
                 </Grid>
-            </DataTemplate>
-
-            <DataTemplate DataType="{x:Type vms:TraitsVM}">
-                <ScrollViewer Padding="20">
-                    <ui:ItemsRepeater HorizontalAlignment="Stretch" ItemsSource="{Binding TraitVms}">
-                        <ui:ItemsRepeater.Layout>
-                            <ui:UniformGridLayout ItemsJustification="Start"
-                                                  ItemsStretch="Uniform"
-                                                  MinItemHeight="250"
-                                                  MinItemWidth="250" />
-                        </ui:ItemsRepeater.Layout>
-                        <ui:ItemsRepeater.ItemTemplate>
-                            <DataTemplate>
-                                <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
-                                        BorderBrush="{DynamicResource SystemControlBackgroundBaseHighBrush}"
-                                        BorderThickness="1"
-                                        CornerRadius="10"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch">
-                                    <ContentControl Content="{Binding .}" />
-                                </Border>
-                            </DataTemplate>
-                        </ui:ItemsRepeater.ItemTemplate>
-                    </ui:ItemsRepeater>
-                </ScrollViewer>
             </DataTemplate>
 
         </Grid.Resources>
@@ -116,9 +92,37 @@
             </ui:SimpleStackPanel>
         </DockPanel>
         <Separator Grid.Row="1" Padding="20,0" />
-        <ContentControl Grid.Row="2"
-                        Content="{Binding Content}"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch" />
+        <Label Grid.Row="2"
+               Content="{x:Static strings:Strings.NoLayers}"
+               FontSize="20"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               Visibility="{Binding Content, Converter={StaticResource NullToVisibleConverter}}" />
+        <ScrollViewer Grid.Row="2"
+                      Padding="20"
+                      Visibility="{Binding Content, Converter={StaticResource NullToCollapsedConverter}}">
+            <ui:ItemsRepeater DataContext="{Binding Content}"
+                              HorizontalAlignment="Stretch"
+                              ItemsSource="{Binding TraitVms}">
+                <ui:ItemsRepeater.Layout>
+                    <ui:UniformGridLayout ItemsJustification="Start"
+                                          ItemsStretch="Uniform"
+                                          MinItemHeight="250"
+                                          MinItemWidth="250" />
+                </ui:ItemsRepeater.Layout>
+                <ui:ItemsRepeater.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                                BorderBrush="{DynamicResource SystemControlBackgroundBaseHighBrush}"
+                                BorderThickness="1"
+                                CornerRadius="10"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch">
+                            <ContentControl Content="{Binding .}" />
+                        </Border>
+                    </DataTemplate>
+                </ui:ItemsRepeater.ItemTemplate>
+            </ui:ItemsRepeater>
+        </ScrollViewer>
     </Grid>
 </Border>

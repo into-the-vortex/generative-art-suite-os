@@ -41,7 +41,6 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0"
-                        Margin="10,0,0,0"
                         Content="{x:Static strings:Strings.Save}"
                         HorizontalAlignment="Stretch"
                         Command="{Binding Confirm}" />

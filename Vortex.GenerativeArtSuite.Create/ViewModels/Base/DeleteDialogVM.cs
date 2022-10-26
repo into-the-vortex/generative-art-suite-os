@@ -24,14 +24,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Base
         public string Message
         {
             get => message;
-            set
-            {
-                if (message != value)
-                {
-                    message = value;
-                    OnPropertyChanged();
-                }
-            }
+            set => SetProperty(ref message, value);
         }
 
         public override void OnDialogOpened(IDialogParameters parameters)

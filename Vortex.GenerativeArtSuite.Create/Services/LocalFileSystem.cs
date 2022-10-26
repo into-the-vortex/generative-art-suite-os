@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows;
 using Newtonsoft.Json;
 using Vortex.GenerativeArtSuite.Create.Models;
 
@@ -49,22 +50,59 @@ namespace Vortex.GenerativeArtSuite.Create.Services
 
             if (!File.Exists(path))
             {
-                throw new ArgumentException("Session name does not exist", nameof(name));
+                throw new ArgumentException($"{name} does not refer to an existing session", nameof(name));
             }
 
-            return JsonConvert.DeserializeObject<Session>(File.ReadAllText(path)) ?? throw new ArgumentException("Session could not be loaded", nameof(name));
+            return JsonConvert.DeserializeObject<Session>(File.ReadAllText(path)) ?? throw new ArgumentException($"{name} could not be loaded", nameof(name));
         }
 
         public void SaveSession(Session session)
         {
-            var dir = Path.Combine(sessionsPath, session.Name);
-            if (!Directory.Exists(dir))
+            try
             {
-                Directory.CreateDirectory(dir);
-            }
+                var dir = Path.Combine(sessionsPath, session.Name);
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
 
-            var path = Path.Combine(dir, SESSIONFILE);
-            File.WriteAllText(path, JsonConvert.SerializeObject(session));
+                var path = Path.Combine(dir, SESSIONFILE);
+                File.WriteAllText(path, JsonConvert.SerializeObject(session));
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Unexpected error saving the session: " + e);
+            }
+        }
+
+        public string SelectFolder()
+        {
+            var dialog = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog();
+            dialog.ShowDialog();
+
+            return dialog.SelectedPath;
+        }
+
+        public string SelectFile()
+        {
+            var dialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog
+            {
+                Multiselect = false,
+            };
+            dialog.ShowDialog();
+
+            return dialog.FileName;
+        }
+
+        public string[] SelectFiles()
+        {
+            var dialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog
+            {
+                Multiselect = true,
+            };
+            dialog.ShowDialog();
+
+            return dialog.FileNames;
         }
     }
 }

@@ -48,40 +48,40 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
 
         public string Name
         {
-            get => traitStagingArea == null ? string.Empty : traitStagingArea.Name.Value;
+            get => traitStagingArea?.Name.Value ?? string.Empty;
             set
             {
                 if (traitStagingArea != null)
                 {
                     traitStagingArea.Name.Value = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged();
                 }
             }
         }
 
         public string IconURI
         {
-            get => traitStagingArea == null ? string.Empty : traitStagingArea.IconURI.Value;
+            get => traitStagingArea?.IconURI.Value ?? string.Empty;
             set
             {
                 if (traitStagingArea != null)
                 {
                     traitStagingArea.IconURI.Value = value;
-                    OnPropertyChanged();
+                    RaisePropertyChanged();
                 }
             }
         }
 
         public int Weight
         {
-            get => traitStagingArea == null ? 0 : traitStagingArea.Weight.Value;
+            get => traitStagingArea?.Weight.Value ?? 0;
             set
             {
                 if (traitStagingArea != null)
                 {
                     traitStagingArea.Weight.Value = value;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(WeightLabel));
+                    RaisePropertyChanged();
+                    RaisePropertyChanged(nameof(WeightLabel));
                 }
             }
         }
@@ -100,7 +100,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
                 this.traitStagingArea = traitStagingArea;
                 VariantVMs.ConnectModelCollection(traitStagingArea.Variants, m => new TraitVariantVM(m));
 
-                OnPropertyChanged(string.Empty);
+                RaisePropertyChanged(string.Empty);
             }
         }
 

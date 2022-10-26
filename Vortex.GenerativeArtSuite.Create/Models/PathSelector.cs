@@ -8,7 +8,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models
     {
         public PathSelector(string path)
         {
-            Options = new(path.Split("/").Select(o => o.Trim()).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct());
+            Options = path.Split("/").Select(o => o.Trim()).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList();
             Path = string.Join(" / ", Options);
         }
 

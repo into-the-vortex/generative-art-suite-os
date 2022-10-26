@@ -1,10 +1,10 @@
 ﻿using System;
+using Prism.Mvvm;
 using Prism.Services.Dialogs;
-using Vortex.GenerativeArtSuite.Common.ViewModels;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Base
 {
-    public abstract class DialogVM : NotifyPropertyChanged, IDialogAware
+    public abstract class DialogVM : BindableBase, IDialogAware
     {
         public const string CreateLayerDialog = nameof(CreateLayerDialog);
         public const string EditLayerDialog = nameof(EditLayerDialog);

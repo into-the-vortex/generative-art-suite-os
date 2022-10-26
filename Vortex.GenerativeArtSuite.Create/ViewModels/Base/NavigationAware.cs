@@ -1,9 +1,9 @@
-﻿using Prism.Regions;
-using Vortex.GenerativeArtSuite.Common.ViewModels;
+﻿using Prism.Mvvm;
+using Prism.Regions;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Base
 {
-    public abstract class NavigationAware : NotifyPropertyChanged, INavigationAware
+    public abstract class NavigationAware : BindableBase, INavigationAware
     {
         public virtual bool IsNavigationTarget(NavigationContext navigationContext)
         {

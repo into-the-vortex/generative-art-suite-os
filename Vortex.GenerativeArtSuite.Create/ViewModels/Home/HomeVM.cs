@@ -18,7 +18,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
             this.fileSystem = fileSystem;
             this.navigationService = navigationService;
 
-            NewSession = new NewSessionVM(NameIsValid, OpenNewSession);
+            NewSession = new NewSessionVM(fileSystem, NameIsValid, OpenNewSession);
             RecentSessions = new ObservableCollection<RecentSessionVM>();
         }
 
@@ -55,6 +55,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
                 return false;
             }
 
+            // Windows file system naming regex.
             var rg = new Regex(@"^(?!(?:CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(?:\.[^.]*)?$)[^<>:""\/\\|?*\x00-\x1F]*[^<>:""\/\\|?*\x00-\x1F\ .]$");
             return rg.IsMatch(name);
         }
