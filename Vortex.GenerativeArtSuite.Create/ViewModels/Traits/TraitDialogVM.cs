@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -7,6 +8,7 @@ using Prism.Commands;
 using Prism.Services.Dialogs;
 using Vortex.GenerativeArtSuite.Common.Extensions;
 using Vortex.GenerativeArtSuite.Create.Models;
+using Vortex.GenerativeArtSuite.Create.Services;
 using Vortex.GenerativeArtSuite.Create.Staging;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
 
@@ -16,31 +18,31 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
     {
         public const string ExistingTraitNames = nameof(ExistingTraitNames);
 
+        private readonly Action raiseConfirmChanged;
+        private readonly IFileSystem fileSystem;
         private TraitStagingArea? traitStagingArea;
         private List<string> existingTraitNames = new();
 
-        public TraitDialogVM()
+        public TraitDialogVM(IFileSystem fileSystem)
         {
+            this.fileSystem = fileSystem;
             var confirm = new DelegateCommand(() => CloseDialog(OKAY), CanConfirm);
+            raiseConfirmChanged = confirm.RaiseCanExecuteChanged;
 
-            VariantVMs.CollectionChanged += (s, e) =>
-            {
-                confirm.RaiseCanExecuteChanged();
-            };
-
-            PropertyChanged += (s, e) =>
-            {
-                confirm.RaiseCanExecuteChanged();
-            };
+            VariantVMs.CollectionChanged += (s, e) => raiseConfirmChanged();
+            PropertyChanged += (s, e) => raiseConfirmChanged();
 
             Confirm = confirm;
             BrowseIcon = new DelegateCommand(OnBrowseIcon);
+            ClearIcon = new DelegateCommand(OnClearIcon);
             Cancel = new DelegateCommand(() => CloseDialog(CANCEL), CanCloseDialog);
         }
 
         public ICommand Confirm { get; }
 
         public ICommand BrowseIcon { get; }
+
+        public ICommand ClearIcon { get; }
 
         public ICommand Cancel { get; }
 
@@ -59,12 +61,12 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
             }
         }
 
-        public string IconURI
+        public string? IconURI
         {
-            get => traitStagingArea?.IconURI.Value ?? string.Empty;
+            get => traitStagingArea?.IconURI.Value;
             set
             {
-                if (traitStagingArea != null)
+                if (traitStagingArea != null && (value is null || File.Exists(value)))
                 {
                     traitStagingArea.IconURI.Value = value;
                     RaisePropertyChanged();
@@ -98,7 +100,12 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
             if (parameters.TryGetValue(nameof(TraitStagingArea), out TraitStagingArea traitStagingArea))
             {
                 this.traitStagingArea = traitStagingArea;
-                VariantVMs.ConnectModelCollection(traitStagingArea.Variants, m => new TraitVariantVM(m));
+                VariantVMs.ConnectModelCollection(traitStagingArea.Variants, m => new TraitVariantVM(fileSystem, m));
+
+                foreach (var variant in VariantVMs)
+                {
+                    variant.PropertyChanged += (s, e) => raiseConfirmChanged();
+                }
 
                 RaisePropertyChanged(string.Empty);
             }
@@ -140,6 +147,12 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
 
         private void OnBrowseIcon()
         {
+            IconURI = fileSystem.SelectImageFile();
+        }
+
+        private void OnClearIcon()
+        {
+            IconURI = null;
         }
     }
 }

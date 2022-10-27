@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Input;
 using Prism.Regions;
 using Prism.Services.Dialogs;
+using Vortex.GenerativeArtSuite.Create.Services;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
@@ -10,12 +11,14 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
     public class LayerSelectorVM : SessionAwareVM
     {
         private readonly IDialogService dialogService;
+        private readonly IFileSystem fileSystem;
         private TraitsVM? content;
         private string? selectedLayer;
 
-        public LayerSelectorVM(IDialogService dialogService)
+        public LayerSelectorVM(IFileSystem fileSystem, IDialogService dialogService)
         {
             this.dialogService = dialogService;
+            this.fileSystem = fileSystem;
         }
 
         public ObservableCollection<string> Layers { get; } = new();
@@ -48,7 +51,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
         private void UpdateContent()
         {
             var layer = Session().Layers.FirstOrDefault(l => l.Name == selectedLayer);
-            Content = layer is not null ? new TraitsVM(dialogService, layer) : null;
+            Content = layer is not null ? new TraitsVM(fileSystem, dialogService, layer) : null;
         }
     }
 }

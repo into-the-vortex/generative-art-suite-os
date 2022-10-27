@@ -4,7 +4,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             xmlns:local="clr-namespace:Vortex.GenerativeArtSuite.Create.Controls"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:converts="clr-namespace:Vortex.GenerativeArtSuite.Common.Converters;assembly=Vortex.GenerativeArtSuite.Common"
              xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
              xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.Traits"
@@ -12,6 +13,14 @@
              d:DesignHeight="450"
              d:DesignWidth="800">
     <ui:SimpleStackPanel Spacing="10" Orientation="Vertical">
+        <ui:SimpleStackPanel.Resources>
+            <converts:NullToVisibilityConverter x:Key="NullToCollapsed"
+                                                OnNotNull="Visible"
+                                                OnNull="Collapsed" />
+            <converts:NullToVisibilityConverter x:Key="NullToVisible"
+                                                OnNotNull="Collapsed"
+                                                OnNull="Visible" />
+        </ui:SimpleStackPanel.Resources>
 
         <Grid>
             <Grid.ColumnDefinitions>
@@ -32,13 +41,24 @@
             <Image Grid.Column="2"
                    Height="128"
                    HorizontalAlignment="Center"
+                   Visibility="{Binding IconURI, Converter={StaticResource NullToCollapsed}}"
                    Width="128"
-                   Source="{Binding IconURI}" />
+                   Source="{Binding IconURI}">
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="MouseLeftButtonDown">
+                        <b:InvokeCommandAction Command="{Binding BrowseIcon}" />
+                    </b:EventTrigger>
+                    <b:EventTrigger EventName="MouseRightButtonDown">
+                        <b:InvokeCommandAction Command="{Binding ClearIcon}" />
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </Image>
 
             <Button Grid.Column="2"
                     ui:ControlHelper.Header="{x:Static strings:Strings.NameLabel}"
                     Height="128"
                     HorizontalAlignment="Center"
+                    Visibility="{Binding IconURI, Converter={StaticResource NullToVisible}}"
                     Width="128"
                     Command="{Binding BrowseIcon}">
                 <StackPanel Orientation="Vertical">
@@ -74,14 +94,26 @@
                             <Image Grid.Column="0"
                                    Height="128"
                                    HorizontalAlignment="Center"
+                                   Visibility="{Binding ImagePath, Converter={StaticResource NullToCollapsed}}"
                                    Width="128"
-                                   Source="{Binding ImagePath}" />
+                                   Source="{Binding ImagePath}">
+                                <b:Interaction.Triggers>
+                                    <b:EventTrigger EventName="MouseLeftButtonDown">
+                                        <b:InvokeCommandAction Command="{Binding BrowseImage}" />
+                                    </b:EventTrigger>
+                                    <b:EventTrigger EventName="MouseRightButtonDown">
+                                        <b:InvokeCommandAction Command="{Binding ClearImage}" />
+                                    </b:EventTrigger>
+                                </b:Interaction.Triggers>
+                            </Image>
 
                             <Button Grid.Column="0"
                                     ui:ControlHelper.Header="{x:Static strings:Strings.NameLabel}"
                                     Height="128"
                                     HorizontalAlignment="Center"
-                                    Width="128">
+                                    Visibility="{Binding ImagePath, Converter={StaticResource NullToVisible}}"
+                                    Width="128"
+                                    Command="{Binding BrowseImage}">
                                 <StackPanel Orientation="Vertical">
                                     <ui:SymbolIcon HorizontalAlignment="Center" Symbol="Add" />
                                     <Label Content="Add Variant" HorizontalAlignment="Center" />
@@ -91,14 +123,26 @@
                             <Image Grid.Column="2"
                                    Height="128"
                                    HorizontalAlignment="Center"
+                                   Visibility="{Binding MaskPath, Converter={StaticResource NullToCollapsed}}"
                                    Width="128"
-                                   Source="{Binding ImagePath}" />
+                                   Source="{Binding MaskPath}">
+                                <b:Interaction.Triggers>
+                                    <b:EventTrigger EventName="MouseLeftButtonDown">
+                                        <b:InvokeCommandAction Command="{Binding BrowseMask}" />
+                                    </b:EventTrigger>
+                                    <b:EventTrigger EventName="MouseRightButtonDown">
+                                        <b:InvokeCommandAction Command="{Binding ClearMask}" />
+                                    </b:EventTrigger>
+                                </b:Interaction.Triggers>
+                            </Image>
 
                             <Button Grid.Column="2"
                                     ui:ControlHelper.Header="{x:Static strings:Strings.NameLabel}"
                                     Height="128"
                                     HorizontalAlignment="Center"
-                                    Width="128">
+                                    Visibility="{Binding MaskPath, Converter={StaticResource NullToVisible}}"
+                                    Width="128"
+                                    Command="{Binding BrowseMask}">
                                 <StackPanel Orientation="Vertical">
                                     <ui:SymbolIcon HorizontalAlignment="Center" Symbol="Add" />
                                     <Label Content="Add Mask" HorizontalAlignment="Center" />

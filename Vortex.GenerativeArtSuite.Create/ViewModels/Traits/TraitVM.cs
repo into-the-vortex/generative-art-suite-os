@@ -6,15 +6,16 @@ using Prism.Mvvm;
 using Vortex.GenerativeArtSuite.Common.Extensions;
 using Vortex.GenerativeArtSuite.Common.ViewModels;
 using Vortex.GenerativeArtSuite.Create.Models;
+using Vortex.GenerativeArtSuite.Create.Services;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
 {
     public class TraitVM : BindableBase, IViewModel<Trait>
     {
-        public TraitVM(Trait model, Action<Trait> editCallback, Action<Trait> deleteCallback)
+        public TraitVM(IFileSystem fileSystem, Trait model, Action<Trait> editCallback, Action<Trait> deleteCallback)
         {
             Model = model;
-            Variants.ConnectModelCollection(model.Variants, (v) => new TraitVariantVM(v));
+            Variants.ConnectModelCollection(model.Variants, (v) => new TraitVariantVM(fileSystem, v));
 
             Edit = new DelegateCommand(() => editCallback(model), () => IsEditable);
             Delete = new DelegateCommand(() => deleteCallback(model), () => IsEditable);
@@ -22,7 +23,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
 
         public string Name => Model.Name;
 
-        public string IconURI => Model.IconURI;
+        public string? IconURI => Model.IconURI;
 
         public string WeightLabel => $"{Strings.Weight} - {Weight:D3}";
 

@@ -13,8 +13,6 @@ namespace Vortex.GenerativeArtSuite.Create.Services
 
         string SelectFolder();
 
-        string SelectFile();
-
-        string[] SelectFiles();
+        string SelectImageFile();
     }
 }

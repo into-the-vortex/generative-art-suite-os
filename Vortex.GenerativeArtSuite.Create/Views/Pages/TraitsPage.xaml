@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:converters="clr-namespace:Vortex.GenerativeArtSuite.Common.Converters;assembly=Vortex.GenerativeArtSuite.Common"
         xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
         xmlns:ui="http://schemas.modernwpf.com/2019"
@@ -31,35 +32,6 @@
             <converters:BooleanToVisibilityConverter x:Key="FalseToHiddenConverter"
                                                      OnFalse="Hidden"
                                                      OnTrue="Visible" />
-
-            <DataTemplate DataType="{x:Type vms:TraitVM}">
-                <Grid>
-                    <Image Source="{Binding IconURI}" />
-
-                    <DockPanel Margin="10"
-                               HorizontalAlignment="Stretch"
-                               VerticalAlignment="Top">
-                        <Label Content="{Binding Name}" VerticalAlignment="Center" />
-                        <Button HorizontalAlignment="Right"
-                                VerticalAlignment="Center"
-                                Visibility="{Binding IsEditable, Converter={StaticResource FalseToHiddenConverter}}"
-                                Command="{Binding Delete}">
-                            <ui:SymbolIcon Symbol="Delete" />
-                        </Button>
-                    </DockPanel>
-                    <DockPanel Margin="10"
-                               HorizontalAlignment="Stretch"
-                               VerticalAlignment="Bottom">
-                        <Label Content="{Binding WeightLabel}" VerticalAlignment="Center" />
-                        <Slider Margin="5,0,0,0"
-                                Maximum="100"
-                                Minimum="1"
-                                VerticalAlignment="Center"
-                                Value="{Binding Weight}" />
-                    </DockPanel>
-                </Grid>
-            </DataTemplate>
-
         </Grid.Resources>
 
         <Grid.RowDefinitions>
@@ -112,13 +84,49 @@
                 </ui:ItemsRepeater.Layout>
                 <ui:ItemsRepeater.ItemTemplate>
                     <DataTemplate>
-                        <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                        <Border Margin="10"
+                                Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
                                 BorderBrush="{DynamicResource SystemControlBackgroundBaseHighBrush}"
                                 BorderThickness="1"
                                 CornerRadius="10"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch">
-                            <ContentControl Content="{Binding .}" />
+                            <b:Interaction.Triggers>
+                                <b:EventTrigger EventName="MouseDown">
+                                    <b:InvokeCommandAction Command="{Binding Edit}" />
+                                </b:EventTrigger>
+                            </b:Interaction.Triggers>
+                            <Grid Margin="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="auto" />
+                                </Grid.RowDefinitions>
+
+                                <DockPanel Grid.Row="0">
+                                    <Label Content="{Binding Name}" VerticalAlignment="Center" />
+                                    <Button HorizontalAlignment="Right"
+                                            VerticalAlignment="Center"
+                                            Visibility="{Binding IsEditable, Converter={StaticResource FalseToHiddenConverter}}"
+                                            Command="{Binding Delete}">
+                                        <ui:SymbolIcon Symbol="Delete" />
+                                    </Button>
+                                </DockPanel>
+
+                                <Image Grid.Row="1"
+                                       Margin="0,10"
+                                       Stretch="Uniform"
+                                       Source="{Binding IconURI}" />
+
+                                <DockPanel Grid.Row="2">
+                                    <Label Content="{Binding WeightLabel}" VerticalAlignment="Center" />
+                                    <Slider Margin="5,0,0,0"
+                                            Maximum="100"
+                                            Minimum="1"
+                                            VerticalAlignment="Center"
+                                            Value="{Binding Weight}" />
+                                </DockPanel>
+                            </Grid>
                         </Border>
                     </DataTemplate>
                 </ui:ItemsRepeater.ItemTemplate>

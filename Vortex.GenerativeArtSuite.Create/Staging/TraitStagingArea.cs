@@ -10,7 +10,7 @@ namespace Vortex.GenerativeArtSuite.Create.Staging
         public TraitStagingArea(Trait model)
         {
             Name = new StagingProperty<string>(name => model.Name = name, () => model.Name);
-            IconURI = new StagingProperty<string>(optional => model.IconURI = optional, () => model.IconURI);
+            IconURI = new StagingProperty<string?>(optional => model.IconURI = optional, () => model.IconURI);
             Weight = new StagingProperty<int>(includeInDNA => model.Weight = includeInDNA, () => model.Weight);
             Variants = new StagingList<TraitVariant>(model.Variants);
             this.model = model;
@@ -18,7 +18,7 @@ namespace Vortex.GenerativeArtSuite.Create.Staging
 
         public StagingProperty<string> Name { get; }
 
-        public StagingProperty<string> IconURI { get; }
+        public StagingProperty<string?> IconURI { get; }
 
         public StagingProperty<int> Weight { get; }
 

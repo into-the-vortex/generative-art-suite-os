@@ -8,6 +8,7 @@ using Prism.Services.Dialogs;
 using Vortex.GenerativeArtSuite.Common.Extensions;
 using Vortex.GenerativeArtSuite.Common.ViewModels;
 using Vortex.GenerativeArtSuite.Create.Models;
+using Vortex.GenerativeArtSuite.Create.Services;
 using Vortex.GenerativeArtSuite.Create.Staging;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Layers;
@@ -17,14 +18,16 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
     public class TraitsVM : IViewModel<Layer>
     {
         private readonly IDialogService dialogService;
+        private readonly IFileSystem fileSystem;
 
-        public TraitsVM(IDialogService dialogService, Layer layer)
+        public TraitsVM(IFileSystem fileSystem, IDialogService dialogService, Layer layer)
         {
+            this.fileSystem = fileSystem;
             this.dialogService = dialogService;
 
             Model = layer;
             Add = new DelegateCommand(OnAdd);
-            TraitVms.ConnectModelCollection(layer.Traits, (t) => new TraitVM(t, OnEdit, OnDelete));
+            TraitVms.ConnectModelCollection(layer.Traits, (t) => new TraitVM(fileSystem, t, OnEdit, OnDelete));
         }
 
         public ICommand Add { get; }
@@ -49,7 +52,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
             if (dialogResult.Result == ButtonResult.OK &&
                 dialogResult.Parameters.TryGetValue(nameof(Trait), out Trait trait))
             {
-                TraitVms.Add(new TraitVM(trait, OnEdit, OnDelete));
+                TraitVms.Add(new TraitVM(fileSystem, trait, OnEdit, OnDelete));
             }
         }
 
@@ -69,7 +72,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
             if (dialogResult.Result == ButtonResult.OK &&
                 dialogResult.Parameters.TryGetValue(nameof(Trait), out Trait trait))
             {
-                TraitVms.Replace(TraitVms.First(l => l.Model == trait), new TraitVM(trait, OnEdit, OnDelete));
+                TraitVms.Replace(TraitVms.First(l => l.Model == trait), new TraitVM(fileSystem, trait, OnEdit, OnDelete));
             }
         }
 

@@ -83,26 +83,16 @@ namespace Vortex.GenerativeArtSuite.Create.Services
             return dialog.SelectedPath;
         }
 
-        public string SelectFile()
+        public string SelectImageFile()
         {
             var dialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog
             {
                 Multiselect = false,
+                Filter = "Image Files|*.BMP;*.JPEG;*.PNG;",
             };
             dialog.ShowDialog();
 
             return dialog.FileName;
-        }
-
-        public string[] SelectFiles()
-        {
-            var dialog = new Ookii.Dialogs.Wpf.VistaOpenFileDialog
-            {
-                Multiselect = true,
-            };
-            dialog.ShowDialog();
-
-            return dialog.FileNames;
         }
     }
 }
