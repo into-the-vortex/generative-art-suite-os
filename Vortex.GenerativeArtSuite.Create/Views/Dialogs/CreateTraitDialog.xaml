@@ -25,17 +25,20 @@
         </Style>
     </prism:Dialog.WindowStyle>
 
-    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+    <Grid>
+
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+            <controls:EditTrait Margin="50,20,50,70" />
+        </ScrollViewer>
 
         <ui:SimpleStackPanel Spacing="10"
-                             Margin="50,20"
-                             HorizontalAlignment="Stretch"
+                             Margin="50,0"
+                             Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
                              Orientation="Vertical"
-                             VerticalAlignment="Stretch">
+                             VerticalAlignment="Bottom">
 
-            <controls:EditTrait />
-
-            <Grid>
+            <Separator />
+            <Grid Margin="0,0,0,20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
@@ -50,9 +53,8 @@
                         HorizontalAlignment="Stretch"
                         Command="{Binding Cancel}" />
             </Grid>
-
         </ui:SimpleStackPanel>
 
-    </ScrollViewer>
+    </Grid>
 
 </UserControl>

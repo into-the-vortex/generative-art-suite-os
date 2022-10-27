@@ -11,120 +11,112 @@
              d:DataContext="{d:DesignInstance vms:TraitDialogVM}"
              d:DesignHeight="450"
              d:DesignWidth="800">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="20" />
-            <ColumnDefinition Width="auto" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+    <ui:SimpleStackPanel Spacing="10" Orientation="Vertical">
 
-        <ui:SimpleStackPanel Grid.Row="0"
-                             Grid.Column="0"
-                             Spacing="10">
-            <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.NameLabel}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
-            <Slider ui:ControlHelper.Header="{Binding WeightLabel}"
-                    Maximum="100"
-                    Minimum="1"
-                    VerticalAlignment="Center"
-                    Value="{Binding Weight}" />
-        </ui:SimpleStackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
 
-        <Image Grid.Row="0"
-               Grid.Column="2"
-               Height="128"
-               HorizontalAlignment="Center"
-               Width="128"
-               Source="{Binding IconURI}" />
+            <ui:SimpleStackPanel Grid.Column="0" Spacing="10">
+                <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.NameLabel}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                <Slider ui:ControlHelper.Header="{Binding WeightLabel}"
+                        Maximum="100"
+                        Minimum="1"
+                        VerticalAlignment="Center"
+                        Value="{Binding Weight}" />
+            </ui:SimpleStackPanel>
 
-        <Button Grid.Row="0"
-                Grid.Column="2"
-                ui:ControlHelper.Header="{x:Static strings:Strings.NameLabel}"
-                Height="128"
-                HorizontalAlignment="Center"
-                Width="128"
-                Command="{Binding BrowseIcon}">
-            <StackPanel Orientation="Vertical">
-                <ui:SymbolIcon HorizontalAlignment="Center" Symbol="Add" />
-                <Label Content="Add Icon" HorizontalAlignment="Center" />
-            </StackPanel>
+            <Image Grid.Column="2"
+                   Height="128"
+                   HorizontalAlignment="Center"
+                   Width="128"
+                   Source="{Binding IconURI}" />
 
-        </Button>
+            <Button Grid.Column="2"
+                    ui:ControlHelper.Header="{x:Static strings:Strings.NameLabel}"
+                    Height="128"
+                    HorizontalAlignment="Center"
+                    Width="128"
+                    Command="{Binding BrowseIcon}">
+                <StackPanel Orientation="Vertical">
+                    <ui:SymbolIcon HorizontalAlignment="Center" Symbol="Add" />
+                    <Label Content="Add Icon" HorizontalAlignment="Center" />
+                </StackPanel>
+            </Button>
+        </Grid>
 
-        <ui:SimpleStackPanel Grid.Row="1" Grid.ColumnSpan="3">
-            <Separator />
-            <ui:ItemsRepeater ItemsSource="{Binding VariantVMs}">
-                <ui:ItemsRepeater.Layout>
-                    <ui:UniformGridLayout ItemsJustification="SpaceAround" ItemsStretch="None" />
-                </ui:ItemsRepeater.Layout>
-                <ui:ItemsRepeater.ItemTemplate>
-                    <DataTemplate>
-                        <ui:SimpleStackPanel Spacing="10"
-                                             Margin="10"
-                                             Orientation="Vertical">
-                            <Label Grid.Row="0"
-                                   Grid.ColumnSpan="2"
-                                   Content="{Binding DisplayName}"
-                                   HorizontalAlignment="Center" />
+        <Separator />
 
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="10" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
+        <ui:ItemsRepeater ItemsSource="{Binding VariantVMs}">
+            <ui:ItemsRepeater.Layout>
+                <ui:UniformGridLayout ItemsJustification="SpaceAround" ItemsStretch="None" />
+            </ui:ItemsRepeater.Layout>
+            <ui:ItemsRepeater.ItemTemplate>
+                <DataTemplate>
+                    <ui:SimpleStackPanel Spacing="10"
+                                         Margin="10"
+                                         Orientation="Vertical">
+                        <Label Grid.Row="0"
+                               Grid.ColumnSpan="2"
+                               Content="{Binding DisplayName}"
+                               HorizontalAlignment="Center" />
 
-                                <Image Grid.Column="0"
-                                       Height="128"
-                                       HorizontalAlignment="Center"
-                                       Width="128"
-                                       Source="{Binding ImagePath}" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
 
-                                <Button Grid.Column="0"
-                                        ui:ControlHelper.Header="{x:Static strings:Strings.NameLabel}"
-                                        Height="128"
-                                        HorizontalAlignment="Center"
-                                        Width="128">
-                                    <StackPanel Orientation="Vertical">
-                                        <ui:SymbolIcon HorizontalAlignment="Center" Symbol="Add" />
-                                        <Label Content="Add Variant" HorizontalAlignment="Center" />
-                                    </StackPanel>
-                                </Button>
+                            <Image Grid.Column="0"
+                                   Height="128"
+                                   HorizontalAlignment="Center"
+                                   Width="128"
+                                   Source="{Binding ImagePath}" />
 
-                                <Image Grid.Column="2"
-                                       Height="128"
-                                       HorizontalAlignment="Center"
-                                       Width="128"
-                                       Source="{Binding ImagePath}" />
+                            <Button Grid.Column="0"
+                                    ui:ControlHelper.Header="{x:Static strings:Strings.NameLabel}"
+                                    Height="128"
+                                    HorizontalAlignment="Center"
+                                    Width="128">
+                                <StackPanel Orientation="Vertical">
+                                    <ui:SymbolIcon HorizontalAlignment="Center" Symbol="Add" />
+                                    <Label Content="Add Variant" HorizontalAlignment="Center" />
+                                </StackPanel>
+                            </Button>
 
-                                <Button Grid.Column="2"
-                                        ui:ControlHelper.Header="{x:Static strings:Strings.NameLabel}"
-                                        Height="128"
-                                        HorizontalAlignment="Center"
-                                        Width="128">
-                                    <StackPanel Orientation="Vertical">
-                                        <ui:SymbolIcon HorizontalAlignment="Center" Symbol="Add" />
-                                        <Label Content="Add Mask" HorizontalAlignment="Center" />
-                                    </StackPanel>
-                                </Button>
-                            </Grid>
+                            <Image Grid.Column="2"
+                                   Height="128"
+                                   HorizontalAlignment="Center"
+                                   Width="128"
+                                   Source="{Binding ImagePath}" />
 
-                            <DockPanel HorizontalAlignment="Stretch">
-                                <Label Content="{Binding WeightLabel}" VerticalAlignment="Center" />
-                                <Slider Margin="5,0,0,0"
-                                        Maximum="100"
-                                        Minimum="0"
-                                        VerticalAlignment="Center"
-                                        Value="{Binding Weight}" />
-                            </DockPanel>
-                        </ui:SimpleStackPanel>
-                    </DataTemplate>
-                </ui:ItemsRepeater.ItemTemplate>
-            </ui:ItemsRepeater>
-            <Separator />
-        </ui:SimpleStackPanel>
-    </Grid>
+                            <Button Grid.Column="2"
+                                    ui:ControlHelper.Header="{x:Static strings:Strings.NameLabel}"
+                                    Height="128"
+                                    HorizontalAlignment="Center"
+                                    Width="128">
+                                <StackPanel Orientation="Vertical">
+                                    <ui:SymbolIcon HorizontalAlignment="Center" Symbol="Add" />
+                                    <Label Content="Add Mask" HorizontalAlignment="Center" />
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+
+                        <DockPanel HorizontalAlignment="Stretch">
+                            <Label Content="{Binding WeightLabel}" VerticalAlignment="Center" />
+                            <Slider Margin="5,0,0,0"
+                                    Maximum="100"
+                                    Minimum="0"
+                                    VerticalAlignment="Center"
+                                    Value="{Binding Weight}" />
+                        </DockPanel>
+                    </ui:SimpleStackPanel>
+                </DataTemplate>
+            </ui:ItemsRepeater.ItemTemplate>
+        </ui:ItemsRepeater>
+    </ui:SimpleStackPanel>
 </UserControl>

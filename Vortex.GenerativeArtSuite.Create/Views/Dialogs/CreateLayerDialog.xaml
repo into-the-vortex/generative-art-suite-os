@@ -25,44 +25,51 @@
         </Style>
     </prism:Dialog.WindowStyle>
 
-    <Grid Margin="50,20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="auto" />
-        </Grid.RowDefinitions>
-        <ui:SimpleStackPanel Grid.Row="0"
-                             Spacing="10"
-                             HorizontalAlignment="Stretch"
-                             Orientation="Vertical">
+    <Grid>
 
-            <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.NameLabel}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.LayerIndex}" Text="{Binding Index, UpdateSourceTrigger=PropertyChanged}" />
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+            <ui:SimpleStackPanel Spacing="10"
+                                 Margin="50,20,50,80"
+                                 HorizontalAlignment="Stretch"
+                                 Orientation="Vertical"
+                                 VerticalAlignment="Stretch">
+                <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.NameLabel}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.LayerIndex}" Text="{Binding Index, UpdateSourceTrigger=PropertyChanged}" />
+
+                <Separator />
+
+                <controls:EditLayerSettings />
+
+                <Separator />
+
+                <controls:EditLayerPaths />
+
+            </ui:SimpleStackPanel>
+        </ScrollViewer>
+
+        <ui:SimpleStackPanel Spacing="10"
+                             Margin="50,0"
+                             Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                             Orientation="Vertical"
+                             VerticalAlignment="Bottom">
 
             <Separator />
-
-            <controls:EditLayerSettings />
-
-            <Separator />
-
-            <controls:EditLayerPaths />
-
-            <Separator />
+            <Grid Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0"
+                        Content="{x:Static strings:Strings.Create}"
+                        HorizontalAlignment="Stretch"
+                        Command="{Binding Confirm}" />
+                <Button Grid.Column="1"
+                        Margin="10,0,0,0"
+                        Content="{x:Static strings:Strings.Cancel}"
+                        HorizontalAlignment="Stretch"
+                        Command="{Binding Cancel}" />
+            </Grid>
         </ui:SimpleStackPanel>
 
-        <Grid Grid.Row="1" HorizontalAlignment="Stretch">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="0"
-                    Content="{x:Static strings:Strings.Create}"
-                    HorizontalAlignment="Stretch"
-                    Command="{Binding Confirm}" />
-            <Button Grid.Column="1"
-                    Margin="10,0,0,0"
-                    Content="{x:Static strings:Strings.Cancel}"
-                    HorizontalAlignment="Stretch"
-                    Command="{Binding Cancel}" />
-        </Grid>
     </Grid>
 </UserControl>
