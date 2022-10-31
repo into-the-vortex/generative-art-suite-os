@@ -8,12 +8,12 @@ namespace Vortex.GenerativeArtSuite.Common.Models
         /// Trait name
         /// </summary>
         [JsonProperty(PropertyName = "trait_type")]
-        public string Description { get; set; }
+        public string LayerName { get; set; }
 
         /// <summary>
         /// Trait value
         /// </summary>
         [JsonProperty(PropertyName = "value")]
-        public string Image { get; set; }
+        public string TraitName { get; set; }
     }
 }

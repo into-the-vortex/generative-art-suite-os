@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Vortex.GenerativeArtSuite.Create.Extensions;
 
 namespace Vortex.GenerativeArtSuite.Create.Models
 {
-    public class Trait
+    public class Trait : IWeighted
     {
         public const string NONENAME = "None";
         public const string DEFAULTVARIANTNAME = "Default";
@@ -42,6 +43,16 @@ namespace Vortex.GenerativeArtSuite.Create.Models
                     new TraitVariant(DEFAULTVARIANTNAME, null, null, DEFAULTWEIGHT),
                 };
             }
+        }
+
+        public TraitVariant SelectRandomVariant(List<string> currentPath)
+        {
+            if (Variants.FirstOrDefault(v => currentPath.Contains(v.DisplayName)) is TraitVariant path)
+            {
+                return path;
+            }
+
+            return Variants.SelectRandom();
         }
 
         public void OnVariantsChanged(List<string> variants)

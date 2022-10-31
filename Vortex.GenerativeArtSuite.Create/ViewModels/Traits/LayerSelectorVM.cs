@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Input;
 using Prism.Regions;
 using Prism.Services.Dialogs;
 using Vortex.GenerativeArtSuite.Create.Services;
@@ -32,10 +31,8 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
         public TraitsVM? Content
         {
             get => content;
-            set => SetProperty(ref content, value, () => RaisePropertyChanged(nameof(Add)));
+            set => SetProperty(ref content, value);
         }
-
-        public ICommand? Add => Content is TraitsVM traitsVM ? traitsVM.Add : null;
 
         public override void OnNavigatedTo(NavigationContext navigationContext)
         {

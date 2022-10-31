@@ -33,6 +33,11 @@ namespace Vortex.GenerativeArtSuite.Create.Models
 
         public List<Trait> Traits { get; }
 
+        public Trait SelectRandomTrait()
+        {
+            return Traits.SelectRandom();
+        }
+
         public Trait CreateTrait() => Trait.Default(Paths.Variants());
 
         public void OnOptionalChanged()

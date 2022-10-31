@@ -1,6 +1,6 @@
 ﻿namespace Vortex.GenerativeArtSuite.Create.Models
 {
-    public class TraitVariant
+    public class TraitVariant : IWeighted
     {
         public TraitVariant(string displayName, string? imagePath, string? maskPath, int weight)
         {

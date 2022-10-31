@@ -70,7 +70,7 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Base URI:.
+        ///   Looks up a localized string similar to Base URI.
         /// </summary>
         public static string BaseURILabel {
             get {
@@ -97,7 +97,16 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Collection Size:.
+        ///   Looks up a localized string similar to Character Builder.
+        /// </summary>
+        public static string CharacterBuilder {
+            get {
+                return ResourceManager.GetString("CharacterBuilder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Collection Size.
         /// </summary>
         public static string CollectionSizeLabel {
             get {
@@ -133,7 +142,7 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Created:.
+        ///   Looks up a localized string similar to Created.
         /// </summary>
         public static string Created {
             get {
@@ -205,7 +214,7 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Description:.
+        ///   Looks up a localized string similar to Description.
         /// </summary>
         public static string DescriptionLabel {
             get {
@@ -250,6 +259,15 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Generation failed to complete, unique DNA threshold was broken, try to add more traits or reduce the collection size..
+        /// </summary>
+        public static string GenerationFailureNotEnoughTraits {
+            get {
+                return ResourceManager.GetString("GenerationFailureNotEnoughTraits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Home.
         /// </summary>
         public static string Home {
@@ -259,7 +277,7 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Affected by Layer Mask:.
+        ///   Looks up a localized string similar to Affected by Layer Mask.
         /// </summary>
         public static string IsAffectedByMask {
             get {
@@ -286,7 +304,7 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Include in DNA:.
+        ///   Looks up a localized string similar to Include in DNA.
         /// </summary>
         public static string IsDNA {
             get {
@@ -313,7 +331,7 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is Optional:.
+        ///   Looks up a localized string similar to Is Optional.
         /// </summary>
         public static string IsOptional {
             get {
@@ -340,7 +358,7 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Layer Index:.
+        ///   Looks up a localized string similar to Layer Index.
         /// </summary>
         public static string LayerIndex {
             get {
@@ -358,7 +376,7 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Modified:.
+        ///   Looks up a localized string similar to Modified.
         /// </summary>
         public static string Modified {
             get {
@@ -367,7 +385,7 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name:.
+        ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string NameLabel {
             get {
@@ -376,7 +394,7 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Token Name Prefix:.
+        ///   Looks up a localized string similar to Token Name Prefix.
         /// </summary>
         public static string NamePrefixLabel {
             get {
@@ -421,7 +439,7 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Output Folder:.
+        ///   Looks up a localized string similar to Output Folder.
         /// </summary>
         public static string OutputFolderLabel {
             get {
@@ -448,11 +466,20 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Paths: .
+        ///   Looks up a localized string similar to Paths.
         /// </summary>
         public static string Paths {
             get {
                 return ResourceManager.GetString("Paths", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restart.
+        /// </summary>
+        public static string Restart {
+            get {
+                return ResourceManager.GetString("Restart", resourceCulture);
             }
         }
         
@@ -466,7 +493,7 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Session Name:.
+        ///   Looks up a localized string similar to Session Name.
         /// </summary>
         public static string SessionNameLabel {
             get {
@@ -484,11 +511,29 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Settings:.
+        ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start.
+        /// </summary>
+        public static string Start {
+            get {
+                return ResourceManager.GetString("Start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop.
+        /// </summary>
+        public static string Stop {
+            get {
+                return ResourceManager.GetString("Stop", resourceCulture);
             }
         }
         

@@ -52,6 +52,12 @@ namespace Vortex.GenerativeArtSuite.Common.Models
         /// Not shown on opensea, the generation timestamp.
         /// </summary>
         [JsonProperty(PropertyName = "date")]
-        public double Date { get; set; }
+        public long Date { get; set; }
+
+        /// <summary>
+        /// Not shown on opensea, the paths followed during generation.
+        /// </summary>
+        [JsonProperty(PropertyName = "paths")]
+        public List<string> Paths { get; set; }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using DynamicData;
 using Prism.Commands;
@@ -27,10 +29,13 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
 
             Model = layer;
             Add = new DelegateCommand(OnAdd);
+            Drop = new DelegateCommand<DragEventArgs>(OnDrop);
             TraitVms.ConnectModelCollection(layer.Traits, (t) => new TraitVM(fileSystem, t, OnEdit, OnDelete));
         }
 
         public ICommand Add { get; }
+
+        public ICommand Drop { get; }
 
         public ObservableCollection<TraitVM> TraitVms { get; } = new();
 
@@ -93,6 +98,34 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
                 dialogResult.Parameters.TryGetValue(nameof(DeleteDialogVM.Index), out int index))
             {
                 TraitVms.RemoveAt(index);
+            }
+        }
+
+        private void OnDrop(DragEventArgs args)
+        {
+            if (args.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])args.Data.GetData(DataFormats.FileDrop);
+
+                foreach(var file in files)
+                {
+                    var model = Model.CreateTrait();
+                    model.Name = Path.GetFileNameWithoutExtension(new FileInfo(file).Name);
+                    model.IconURI = file;
+
+                    if(model.Variants.Count == 1)
+                    {
+                        model.Variants[0].ImagePath = file;
+                    }
+
+                    var param = new DialogParameters
+                    {
+                        { nameof(TraitDialogVM.ExistingTraitNames), Model.Traits.Select(l => l.Name).ToList() },
+                        { nameof(TraitStagingArea), new TraitStagingArea(model) },
+                    };
+
+                    dialogService.ShowDialog(DialogVM.CreateTraitDialog, param, AddCallback);
+                }
             }
         }
     }

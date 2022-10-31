@@ -21,5 +21,13 @@ namespace Vortex.GenerativeArtSuite.Common.Extensions
 
             return true;
         }
+
+        public static void AddUnique<T>(this IList<T> collection, T item)
+        {
+            if (!collection.Contains(item))
+            {
+                collection.Add(item);
+            }
+        }
     }
 }
