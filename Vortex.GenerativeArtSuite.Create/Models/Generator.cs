@@ -5,17 +5,26 @@ using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Console = Vortex.GenerativeArtSuite.Common.Models.Console;
 
 namespace Vortex.GenerativeArtSuite.Create.Models
 {
     public static class Generator
     {
-        public static IGenerationProcess GenerateFor(Session session)
+        public static IGenerationProcess GenerateFor(Session session, Console console)
         {
             var enforcer = new UniqueDNAEnforcer();
             var process = new GenerationProcess();
 
             var toGenerate = (double)session.Settings.CollectionSize;
+
+            console.Log("one");
+            console.Warn("two");
+            console.Log("three");
+            console.Warn("four");
+            console.Error("five");
+            console.Error("six");
+            console.Error("seven");
 
             Task.Run(() =>
             {
@@ -33,7 +42,8 @@ namespace Vortex.GenerativeArtSuite.Create.Models
                     }
                     else if (failureThresholdMet)
                     {
-                        process.InvokeErrorFound(Strings.GenerationFailureNotEnoughTraits);
+                        console.Error(Strings.GenerationFailureNotEnoughTraits);
+                        process.InvokeErrorFound();
                         process.Cancel();
                     }
 
@@ -73,11 +83,13 @@ namespace Vortex.GenerativeArtSuite.Create.Models
 
             public event Action? ProcessComplete;
 
+            public event Action? ErrorFound;
+
             public event Action<double>? ProgressMade;
 
-            public event Action<string>? ErrorFound;
-
             public bool IsCancellationRequested => cts.IsCancellationRequested;
+
+            public DateTime Start { get; } = DateTime.Now;
 
             public void Cancel()
             {
@@ -94,9 +106,9 @@ namespace Vortex.GenerativeArtSuite.Create.Models
                 ProgressMade?.Invoke(progress);
             }
 
-            public void InvokeErrorFound(string error)
+            public void InvokeErrorFound()
             {
-                ErrorFound?.Invoke(error);
+                ErrorFound?.Invoke();
             }
         }
 

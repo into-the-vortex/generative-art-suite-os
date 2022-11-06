@@ -4,6 +4,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       mc:Ignorable="d"
+      xmlns:controls="clr-namespace:Vortex.GenerativeArtSuite.Common.Controls;assembly=Vortex.GenerativeArtSuite.Common"
       xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
       xmlns:ui="http://schemas.modernwpf.com/2019"
       xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.Generation"
@@ -14,12 +15,73 @@
       HorizontalAlignment="Stretch"
       VerticalAlignment="Stretch">
     <Grid.RowDefinitions>
-        <RowDefinition Height="*" />
-        <RowDefinition Height="50" />
         <RowDefinition Height="auto" />
+        <RowDefinition Height="50" />
+        <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
     <Border Grid.Row="0"
+            Padding="20"
+            Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+            BorderBrush="{DynamicResource SystemControlBackgroundBaseHighBrush}"
+            BorderThickness="1"
+            CornerRadius="10"
+            DataContext="{Binding GenerationVM}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0"
+                   Margin="20,0,20,10"
+                   Content="{x:Static strings:Strings.Generate}"
+                   FontSize="32"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center" />
+            <Separator Grid.Row="1" Padding="20,0" />
+            <ui:SimpleStackPanel Grid.Row="2"
+                                 Spacing="10"
+                                 Margin="0,10,0,0">
+                <DockPanel>
+                    <ui:SimpleStackPanel Spacing="10"
+                                         HorizontalAlignment="Left"
+                                         Orientation="Horizontal"
+                                         VerticalAlignment="Bottom">
+                        <Label Content="{Binding Elapsed}" />
+                        <Label Content="{Binding Remaining}" />
+                    </ui:SimpleStackPanel>
+                    <ui:SimpleStackPanel Spacing="10"
+                                         HorizontalAlignment="Right"
+                                         Orientation="Horizontal">
+                        <Button Content="{x:Static strings:Strings.Start}"
+                                HorizontalAlignment="Stretch"
+                                Command="{Binding StartGeneration}" />
+                        <Button Margin="10,0,0,0"
+                                Content="{x:Static strings:Strings.Stop}"
+                                HorizontalAlignment="Stretch"
+                                Command="{Binding StopGeneration}" />
+                        <Button Margin="10,0,0,0"
+                                Content="{x:Static strings:Strings.Restart}"
+                                HorizontalAlignment="Stretch"
+                                Command="{Binding RestartGeneration}" />
+                    </ui:SimpleStackPanel>
+                </DockPanel>
+                <ui:ProgressBar Height="10"
+                                ShowError="{Binding Error}"
+                                ShowPaused="{Binding Paused}"
+                                Value="{Binding Progress}" />
+                <controls:Console DataContext="{Binding ConsoleVM}" />
+            </ui:SimpleStackPanel>
+        </Grid>
+    </Border>
+
+    <Border Grid.Row="2"
             Padding="20"
             Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
             BorderBrush="{DynamicResource SystemControlBackgroundBaseHighBrush}"
@@ -50,54 +112,4 @@
         </Grid>
 
     </Border>
-
-    <Border Grid.Row="2"
-            Padding="20"
-            Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
-            BorderBrush="{DynamicResource SystemControlBackgroundBaseHighBrush}"
-            BorderThickness="1"
-            CornerRadius="10"
-            DataContext="{Binding GenerationVM}"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch">
-
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <Label Grid.Row="0"
-                   Margin="20,0,20,10"
-                   Content="{x:Static strings:Strings.Generate}"
-                   FontSize="32"
-                   FontWeight="Bold"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Center" />
-            <Separator Grid.Row="1" Padding="20,0" />
-            <ui:SimpleStackPanel Grid.Row="2"
-                                 Spacing="10"
-                                 Margin="0,10,0,0">
-                <Label>Progress:</Label>
-                <ui:ProgressBar Height="50" Value="{Binding Progress}" />
-                <Separator Grid.Row="1" Padding="20,0" />
-                <UniformGrid Rows="1">
-                    <Button Content="{x:Static strings:Strings.Start}"
-                            HorizontalAlignment="Stretch"
-                            Command="{Binding StartGeneration}" />
-                    <Button Margin="10,0,0,0"
-                            Content="{x:Static strings:Strings.Stop}"
-                            HorizontalAlignment="Stretch"
-                            Command="{Binding StopGeneration}" />
-                    <Button Margin="10,0,0,0"
-                            Content="{x:Static strings:Strings.Restart}"
-                            HorizontalAlignment="Stretch"
-                            Command="{Binding RestartGeneration}" />
-                </UniformGrid>
-            </ui:SimpleStackPanel>
-        </Grid>
-    </Border>
-
-
 </Grid>

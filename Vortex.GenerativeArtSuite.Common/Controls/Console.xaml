@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="Vortex.GenerativeArtSuite.Common.Controls.Console"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:local="clr-namespace:Vortex.GenerativeArtSuite.Common.Controls"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Common.ViewModels"
+             d:DataContext="{d:DesignInstance vms:ConsoleVM}"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type vms:InfoConsoleMessageVM}">
+            <Label Content="{Binding Message}" />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vms:WarnConsoleMessageVM}">
+            <Label Content="{Binding Message}" Foreground="Orange" />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vms:ErrorConsoleMessageVM}">
+            <Label Content="{Binding Message}" Foreground="Red" />
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <ItemsControl ItemsSource="{Binding Messages}" />
+</UserControl>

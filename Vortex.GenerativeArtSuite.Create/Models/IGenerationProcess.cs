@@ -6,9 +6,11 @@ namespace Vortex.GenerativeArtSuite.Create.Models
     {
         event Action? ProcessComplete;
 
+        event Action? ErrorFound;
+
         event Action<double>? ProgressMade;
 
-        event Action<string>? ErrorFound;
+        DateTime Start { get; }
 
         void Cancel();
     }

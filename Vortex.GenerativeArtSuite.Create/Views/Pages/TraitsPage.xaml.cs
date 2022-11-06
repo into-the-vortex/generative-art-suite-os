@@ -9,10 +9,5 @@
         {
             InitializeComponent();
         }
-
-        private void StackPanel_Drop(object sender, System.Windows.DragEventArgs e)
-        {
-            int a = 9;
-        }
     }
 }

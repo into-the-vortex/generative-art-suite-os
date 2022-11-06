@@ -180,6 +180,9 @@
   <data name="EditTrait" xml:space="preserve">
     <value>Edit Trait</value>
   </data>
+  <data name="Elapsed" xml:space="preserve">
+    <value>Elapsed</value>
+  </data>
   <data name="Generate" xml:space="preserve">
     <value>Generate</value>
   </data>
@@ -254,6 +257,9 @@
   </data>
   <data name="Paths" xml:space="preserve">
     <value>Paths</value>
+  </data>
+  <data name="Remaining" xml:space="preserve">
+    <value>Remaining</value>
   </data>
   <data name="Restart" xml:space="preserve">
     <value>Restart</value>
