@@ -36,9 +36,9 @@ namespace Vortex.GenerativeArtSuite.Create.Models
 
             var path = Path.Join(folder, $"{id}.png");
 
-            var bitmap = Generator.CreateImage(BuildOrder);
-            bitmap.Save(path, ImageFormat.Png);
-            bitmap.Dispose();
+            //var bitmap = ImageBuilder.Build(BuildOrder);
+            //bitmap.Save(path, ImageFormat.Png);
+            //bitmap.Dispose();
         }
 
         public void GenerateJson(int id, SessionSettings settings)

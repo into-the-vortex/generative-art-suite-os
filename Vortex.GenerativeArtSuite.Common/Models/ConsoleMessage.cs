@@ -14,6 +14,6 @@ namespace Vortex.GenerativeArtSuite.Common.Models
 
         public static ConsoleMessage Error(string message) => new() { Type = ConsoleMessageType.Error, Message = AddPrefixes(message) };
 
-        private static string AddPrefixes(string message) => $"[{DateTime.Now.ToShortDateString()}] : {message}";
+        private static string AddPrefixes(string message) => $"[{DateTime.Now:T}] : {message}";
     }
 }

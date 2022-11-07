@@ -2,48 +2,44 @@
 using System.Globalization;
 using System.Windows.Input;
 using Prism.Commands;
+using Vortex.GenerativeArtSuite.Common.Models;
 using Vortex.GenerativeArtSuite.Common.ViewModels;
 using Vortex.GenerativeArtSuite.Create.Models;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
-using Console = Vortex.GenerativeArtSuite.Common.Models.Console;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generation
 {
     public class GenerationVM : SessionAwareVM
     {
         private readonly Action refreshButtons;
-        private readonly Console console = new();
+        private readonly DebugConsole console = new();
 
         private IGenerationProcess? process;
         private Session? session;
         private double progress;
         private bool error;
         private bool paused;
-        private string elapsed;
-        private string remaining;
+        private bool running;
+        private string elapsed = string.Empty;
+        private string remaining = string.Empty;
 
         public GenerationVM()
         {
-            var start = new DelegateCommand(OnStart, CanStart);
-            var restart = new DelegateCommand(OnRestart, CanRestart);
+            var start = new DelegateCommand(OnStart);
             var stop = new DelegateCommand(OnStop, CanStop);
 
-            var timespan = TimeSpan.Zero;
-            elapsed = timespan.ToString("hh':'mm':'ss", CultureInfo.CurrentCulture);
-            remaining = timespan.ToString("hh':'mm':'ss", CultureInfo.CurrentCulture);
+            UpdateTimes();
 
             refreshButtons = new Action(() =>
             {
                 start.RaiseCanExecuteChanged();
-                restart.RaiseCanExecuteChanged();
                 stop.RaiseCanExecuteChanged();
             });
 
             StartGeneration = start;
-            RestartGeneration = restart;
             StopGeneration = stop;
 
-            ConsoleVM = new ConsoleVM(console, 3);
+            ConsoleVM = new DebugConsoleVM(console, 3);
         }
 
         public double Progress
@@ -61,7 +57,13 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generation
         public bool Paused
         {
             get => paused;
-            set => SetProperty(ref paused, value);
+            set => SetProperty(ref paused, value, () => process?.SetPaused(value));
+        }
+
+        public bool Running
+        {
+            get => running;
+            set => SetProperty(ref running, value);
         }
 
         public string Elapsed
@@ -76,11 +78,9 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generation
             set => SetProperty(ref remaining, $"{Strings.Remaining} {value}");
         }
 
-        public ConsoleVM ConsoleVM { get; }
+        public DebugConsoleVM ConsoleVM { get; }
 
         public ICommand StartGeneration { get; }
-
-        public ICommand RestartGeneration { get; }
 
         public ICommand StopGeneration { get; }
 
@@ -90,25 +90,30 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generation
             {
                 this.session = session;
 
-                // TODO: stuff
+                RemoveProcess();
+                refreshButtons();
+                UpdateTimes();
+                Reset();
             }
         }
 
         private void OnStart()
         {
-            CreateProcess();
-            refreshButtons();
-            UpdateTimes();
-            Reset();
+            if (process is null)
+            {
+                CreateProcess();
+                refreshButtons();
+                UpdateTimes();
+                Reset();
+
+                console.Clear();
+            }
+            else
+            {
+                Paused = !Paused;
+                Running = !paused;
+            }
         }
-
-        private bool CanStart() => process is null && session is not null;
-
-        private void OnRestart()
-        {
-        }
-
-        private bool CanRestart() => false;
 
         private void OnStop()
         {
@@ -119,11 +124,6 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generation
         }
 
         private bool CanStop() => process is not null;
-
-        private void OnSuccess()
-        {
-
-        }
 
         private void UpdateTimes()
         {
@@ -139,9 +139,24 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generation
                 var elapsed = DateTime.Now - process.Start;
                 Elapsed = elapsed.ToString("hh':'mm':'ss", CultureInfo.CurrentCulture);
 
-                var remaining = progress == 0 ? TimeSpan.MaxValue : (elapsed * (100 / progress));
+                var remaining = progress == 0 ? TimeSpan.MaxValue : elapsed / progress * (100 - progress);
                 Remaining = remaining.ToString("hh':'mm':'ss", CultureInfo.CurrentCulture);
             }
+        }
+
+        private void Reset()
+        {
+            Error = false;
+            Paused = false;
+            Progress = 0;
+        }
+
+        private void OnSuccess()
+        {
+            RemoveProcess();
+            refreshButtons();
+            UpdateTimes();
+            Reset();
         }
 
         private void OnProgress(double progress)
@@ -153,6 +168,10 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generation
         private void OnError()
         {
             Error = true;
+
+            RemoveProcess();
+            refreshButtons();
+            UpdateTimes();
         }
 
         private void CreateProcess()
@@ -163,6 +182,8 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generation
                 process.ProcessComplete += OnSuccess;
                 process.ProgressMade += OnProgress;
                 process.ErrorFound += OnError;
+
+                Running = true;
             }
         }
 
@@ -170,18 +191,12 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generation
         {
             if (process is not null)
             {
-                process.Cancel();
                 process.ProgressMade -= OnProgress;
                 process.ErrorFound -= OnError;
                 process = null;
-            }
-        }
 
-        private void Reset()
-        {
-            Error = false;
-            Paused = false;
-            Progress = 0;
+                Running = false;
+            }
         }
     }
 }

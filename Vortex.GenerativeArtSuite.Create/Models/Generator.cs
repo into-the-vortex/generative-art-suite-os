@@ -1,85 +1,102 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Console = Vortex.GenerativeArtSuite.Common.Models.Console;
+using Vortex.GenerativeArtSuite.Common.Models;
 
 namespace Vortex.GenerativeArtSuite.Create.Models
 {
     public static class Generator
     {
-        public static IGenerationProcess GenerateFor(Session session, Console console)
+        public static IGenerationProcess GenerateFor(Session session, DebugConsole console)
         {
-            var enforcer = new UniqueDNAEnforcer();
-            var process = new GenerationProcess();
-
-            var toGenerate = (double)session.Settings.CollectionSize;
-
-            console.Log("one");
-            console.Warn("two");
-            console.Log("three");
-            console.Warn("four");
-            console.Error("five");
-            console.Error("six");
-            console.Error("seven");
+            var process = new GenerationProcess(console);
 
             Task.Run(() =>
             {
-                while (enforcer.Count < toGenerate)
+                // TODO: either clean up the folder or restore the progress.
+                process.DefineUniqueTokens(session, console);
+
+
+
+                if (!process.IsCancellationRequested)
                 {
-                    var generation = session.CreateRandomGeneration();
-                    var (wasUnique, failureThresholdMet) = enforcer.TryRegisterUnique(generation.DNA);
-
-                    if (wasUnique)
-                    {
-                        generation.GenerateImage(enforcer.Count, session.Settings);
-                        generation.GenerateJson(enforcer.Count, session.Settings);
-
-                        process.InvokeProgressMade(enforcer.Count / toGenerate * 100);
-                    }
-                    else if (failureThresholdMet)
-                    {
-                        console.Error(Strings.GenerationFailureNotEnoughTraits);
-                        process.InvokeErrorFound();
-                        process.Cancel();
-                    }
-
-                    if (process.IsCancellationRequested)
-                    {
-                        break;
-                    }
+                    process.InvokeProcessComplete();
                 }
-
-                process.InvokeProcessComplete();
             });
 
             return process;
         }
 
-        public static Bitmap CreateImage(List<GenerationStep> steps)
+        private static List<Generation> DefineUniqueTokens(this GenerationProcess gp, Session session, DebugConsole console)
         {
-            var images = steps.Select(s => Image.FromFile(s.ImageURI));
-            var width = images.Max(i => i.Width);
-            var height = images.Max(i => i.Height);
+            var result = new List<Generation>();
 
-            var canvas = new Bitmap(width, height);
-            using(var g = Graphics.FromImage(canvas))
+            if (gp.IsCancellationRequested)
             {
-                foreach(var image in images)
-                {
-                    g.DrawImage(image, new Rectangle(0, 0, width, height));
-                }
+                return result;
             }
 
-            return canvas;
+            var usedDNA = new List<string>();
+            var currentDuplicateDNA = 0;
+            var maxDuplicateDNA = 100; // TODO: Get from setting.
+
+            console.Log($"Creating {session.Settings.CollectionSize} unique DNA sequences");
+
+            while (usedDNA.Count != session.Settings.CollectionSize)
+            {
+                gp.RespectPaused();
+
+                var attempt = session.CreateRandomGeneration();
+
+                if (usedDNA.Contains(attempt.DNA))
+                {
+                    currentDuplicateDNA++;
+
+                    if (currentDuplicateDNA > maxDuplicateDNA)
+                    {
+                        console.Error("Could not create enough unique DNA sequences, add more variety or try again.");
+                        gp.InvokeErrorFound();
+                    }
+                }
+                else
+                {
+                    result.Add(attempt);
+                    usedDNA.Add(attempt.DNA);
+                }
+
+                if (gp.IsCancellationRequested)
+                {
+                    break;
+                }
+
+                Thread.Sleep(1);
+                gp.InvokeProgressMade(usedDNA.Count / 10000.0 * 100);
+            }
+
+            if (result.Count == session.Settings.CollectionSize)
+            {
+                console.Log($"Successfully created {session.Settings.CollectionSize} unique DNA sequences");
+            }
+
+            return result;
         }
 
         private class GenerationProcess : IGenerationProcess
         {
-            private readonly CancellationTokenSource cts = new();
+            private readonly CancellationTokenSource processTokenSource = new();
+            private readonly ManualResetEvent pauseHandle = new(false);
+            private readonly DateTime start = DateTime.Now;
+            private readonly DebugConsole console;
+
+            private bool isPaused;
+            private DateTime lastPausePoint;
+            private TimeSpan pauseOffset;
+
+            public GenerationProcess(DebugConsole console)
+            {
+                this.console = console;
+            }
 
             public event Action? ProcessComplete;
 
@@ -87,17 +104,31 @@ namespace Vortex.GenerativeArtSuite.Create.Models
 
             public event Action<double>? ProgressMade;
 
-            public bool IsCancellationRequested => cts.IsCancellationRequested;
+            public DateTime Start => start + pauseOffset;
 
-            public DateTime Start { get; } = DateTime.Now;
+            public bool IsCancellationRequested => processTokenSource.IsCancellationRequested;
+
+            public CancellationToken Token => processTokenSource.Token;
 
             public void Cancel()
             {
-                cts.Cancel();
+                console.Log("Generation cancelled");
+
+                OnCancel();
+            }
+
+            public void RespectPaused()
+            {
+                if (isPaused)
+                {
+                    pauseHandle.WaitOne();
+                }
             }
 
             public void InvokeProcessComplete()
             {
+                OnCancel();
+
                 ProcessComplete?.Invoke();
             }
 
@@ -108,35 +139,31 @@ namespace Vortex.GenerativeArtSuite.Create.Models
 
             public void InvokeErrorFound()
             {
+                OnCancel();
+
                 ErrorFound?.Invoke();
             }
-        }
 
-        private class UniqueDNAEnforcer
-        {
-            private const int MAXFAILURES = 100;
-
-            private readonly ConcurrentBag<string> usedDNA = new();
-
-            private int failureCounter;
-
-            public int Count => usedDNA.Count;
-
-            public (bool wasUnique, bool failureThresholdMet) TryRegisterUnique(string dna)
+            public void SetPaused(bool paused)
             {
-                bool wasUnique = true;
+                isPaused = paused;
 
-                if (usedDNA.Contains(dna))
+                if (paused)
                 {
-                    Interlocked.Increment(ref failureCounter);
-                    wasUnique = false;
+                    pauseHandle.Reset();
+                    lastPausePoint = DateTime.Now;
                 }
                 else
                 {
-                    usedDNA.Add(dna);
+                    pauseHandle.Set();
+                    pauseOffset += DateTime.Now - lastPausePoint;
                 }
+            }
 
-                return (wasUnique, failureCounter >= MAXFAILURES);
+            private void OnCancel()
+            {
+                pauseHandle.Set();
+                processTokenSource.Cancel();
             }
         }
     }

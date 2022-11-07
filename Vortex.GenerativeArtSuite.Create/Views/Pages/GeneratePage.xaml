@@ -5,6 +5,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       mc:Ignorable="d"
       xmlns:controls="clr-namespace:Vortex.GenerativeArtSuite.Common.Controls;assembly=Vortex.GenerativeArtSuite.Common"
+      xmlns:converters="clr-namespace:Vortex.GenerativeArtSuite.Common.Converters;assembly=Vortex.GenerativeArtSuite.Common"
       xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
       xmlns:ui="http://schemas.modernwpf.com/2019"
       xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.Generation"
@@ -14,6 +15,15 @@
       d:DesignWidth="800"
       HorizontalAlignment="Stretch"
       VerticalAlignment="Stretch">
+    <Grid.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="FalseToVisible"
+                                                 OnFalse="Visible"
+                                                 OnTrue="Collapsed" />
+        <converters:BooleanToVisibilityConverter x:Key="TrueToVisible"
+                                                 OnFalse="Collapsed"
+                                                 OnTrue="Visible" />
+    </Grid.Resources>
+
     <Grid.RowDefinitions>
         <RowDefinition Height="auto" />
         <RowDefinition Height="50" />
@@ -59,17 +69,15 @@
                     <ui:SimpleStackPanel Spacing="10"
                                          HorizontalAlignment="Right"
                                          Orientation="Horizontal">
-                        <Button Content="{x:Static strings:Strings.Start}"
-                                HorizontalAlignment="Stretch"
-                                Command="{Binding StartGeneration}" />
-                        <Button Margin="10,0,0,0"
-                                Content="{x:Static strings:Strings.Stop}"
-                                HorizontalAlignment="Stretch"
-                                Command="{Binding StopGeneration}" />
-                        <Button Margin="10,0,0,0"
-                                Content="{x:Static strings:Strings.Restart}"
-                                HorizontalAlignment="Stretch"
-                                Command="{Binding RestartGeneration}" />
+                        <Button HorizontalAlignment="Stretch" Command="{Binding StartGeneration}">
+                            <Grid>
+                                <ui:SymbolIcon Symbol="Play" Visibility="{Binding Running, Converter={StaticResource FalseToVisible}}" />
+                                <ui:SymbolIcon Symbol="Pause" Visibility="{Binding Running, Converter={StaticResource TrueToVisible}}" />
+                            </Grid>
+                        </Button>
+                        <Button HorizontalAlignment="Stretch" Command="{Binding StopGeneration}">
+                            <ui:SymbolIcon Symbol="Stop" />
+                        </Button>
                     </ui:SimpleStackPanel>
                 </DockPanel>
                 <ui:ProgressBar Height="10"

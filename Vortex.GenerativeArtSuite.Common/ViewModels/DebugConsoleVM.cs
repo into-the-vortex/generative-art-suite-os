@@ -4,13 +4,13 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using Vortex.GenerativeArtSuite.Common.Models;
-using Console = Vortex.GenerativeArtSuite.Common.Models.Console;
+using DebugConsole = Vortex.GenerativeArtSuite.Common.Models.DebugConsole;
 
 namespace Vortex.GenerativeArtSuite.Common.ViewModels
 {
-    public class ConsoleVM
+    public class DebugConsoleVM
     {
-        public ConsoleVM(Console model, int maxDisplay = 5)
+        public DebugConsoleVM(DebugConsole model, int maxDisplay = 5)
         {
             Messages = new(model.Select(m => CreateVM(m)));
             model.CollectionChanged += (s, e) =>
