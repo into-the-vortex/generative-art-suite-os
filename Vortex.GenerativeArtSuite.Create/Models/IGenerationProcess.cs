@@ -12,6 +12,8 @@ namespace Vortex.GenerativeArtSuite.Create.Models
 
         DateTime Start { get; }
 
+        void RespectCheckpoint();
+
         void SetPaused(bool paused);
 
         void Cancel();

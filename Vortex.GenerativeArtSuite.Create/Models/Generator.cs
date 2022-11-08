@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Vortex.GenerativeArtSuite.Common.Models;
@@ -8,20 +10,35 @@ namespace Vortex.GenerativeArtSuite.Create.Models
 {
     public static class Generator
     {
+        private const double WEIGHTSUNIQUE = 0.000025;
+        private const double WEIGHTJSON = 0.000365;
+        private const double WEIGHTIMAGE = 0.999610;
+
         public static IGenerationProcess GenerateFor(Session session, DebugConsole console)
         {
-            var process = new GenerationProcess(console);
+            var process = new GenerationProcess(console, session.Settings.CollectionSize);
 
             Task.Run(() =>
             {
-                // TODO: either clean up the folder or restore the progress.
-                process.DefineUniqueTokens(session, console);
-
-
-
-                if (!process.IsCancellationRequested)
+                try
                 {
-                    process.InvokeProcessComplete();
+                    // TODO: either clean up the folder or restore the progress.
+                    var toGenerate = process.DefineUniqueTokens(session, console);
+
+                    Task.WaitAll(process.CreateFiles(toGenerate, session.Settings), process.Token);
+
+                    if (!process.IsCancellationRequested)
+                    {
+                        process.InvokeProcessComplete();
+                    }
+                }
+                catch (OperationCanceledException)
+                {
+                    console.Warn("Generation cancelled");
+                }
+                catch (Exception e)
+                {
+                    console.Error(e.Message);
                 }
             });
 
@@ -45,7 +62,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models
 
             while (usedDNA.Count != session.Settings.CollectionSize)
             {
-                gp.RespectPaused();
+                gp.RespectCheckpoint();
 
                 var attempt = session.CreateRandomGeneration();
 
@@ -65,13 +82,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models
                     usedDNA.Add(attempt.DNA);
                 }
 
-                if (gp.IsCancellationRequested)
-                {
-                    break;
-                }
-
-                Thread.Sleep(1);
-                gp.InvokeProgressMade(usedDNA.Count / 10000.0 * 100);
+                gp.ProgressBy(WEIGHTSUNIQUE);
             }
 
             if (result.Count == session.Settings.CollectionSize)
@@ -82,20 +93,51 @@ namespace Vortex.GenerativeArtSuite.Create.Models
             return result;
         }
 
+        private static Task[] CreateFiles(this GenerationProcess gp, List<Generation> toGenerate, SessionSettings settings)
+        {
+            return toGenerate.Select((tg, index) => Task.Run(
+                () =>
+            {
+                try
+                {
+                    var id = index + 1;
+
+                    gp.RespectCheckpoint();
+                    tg.GenerateJson(gp, id, settings);
+                    gp.ProgressBy(WEIGHTJSON);
+
+                    gp.RespectCheckpoint();
+                    tg.GenerateImage(gp, id, settings);
+                    gp.ProgressBy(WEIGHTIMAGE);
+
+                    gp.Console.Log($"Successfully created asset #{id}");
+                }
+                catch (OperationCanceledException)
+                {
+                }
+                catch (Exception e)
+                {
+                    gp.Console.Error(e.Message);
+                }
+            }, gp.Token)).ToArray();
+        }
+
         private class GenerationProcess : IGenerationProcess
         {
             private readonly CancellationTokenSource processTokenSource = new();
             private readonly ManualResetEvent pauseHandle = new(false);
             private readonly DateTime start = DateTime.Now;
-            private readonly DebugConsole console;
+            private readonly double maxProgress;
 
+            private double progress;
             private bool isPaused;
             private DateTime lastPausePoint;
             private TimeSpan pauseOffset;
 
-            public GenerationProcess(DebugConsole console)
+            public GenerationProcess(DebugConsole console, double maxProgress)
             {
-                this.console = console;
+                Console = console;
+                this.maxProgress = maxProgress;
             }
 
             public event Action? ProcessComplete;
@@ -103,6 +145,8 @@ namespace Vortex.GenerativeArtSuite.Create.Models
             public event Action? ErrorFound;
 
             public event Action<double>? ProgressMade;
+
+            public DebugConsole Console { get; }
 
             public DateTime Start => start + pauseOffset;
 
@@ -112,34 +156,36 @@ namespace Vortex.GenerativeArtSuite.Create.Models
 
             public void Cancel()
             {
-                console.Log("Generation cancelled");
-
-                OnCancel();
+                pauseHandle.Set();
+                processTokenSource.Cancel();
             }
 
-            public void RespectPaused()
+            public void RespectCheckpoint()
             {
                 if (isPaused)
                 {
                     pauseHandle.WaitOne();
                 }
+
+                Token.ThrowIfCancellationRequested();
             }
 
             public void InvokeProcessComplete()
             {
-                OnCancel();
-
+                Cancel();
+                Console.Log("Generation successful");
                 ProcessComplete?.Invoke();
             }
 
-            public void InvokeProgressMade(double progress)
+            public void ProgressBy(double weight)
             {
-                ProgressMade?.Invoke(progress);
+                progress += weight;
+                ProgressMade?.Invoke(progress / maxProgress * 100);
             }
 
             public void InvokeErrorFound()
             {
-                OnCancel();
+                Cancel();
 
                 ErrorFound?.Invoke();
             }
@@ -158,12 +204,6 @@ namespace Vortex.GenerativeArtSuite.Create.Models
                     pauseHandle.Set();
                     pauseOffset += DateTime.Now - lastPausePoint;
                 }
-            }
-
-            private void OnCancel()
-            {
-                pauseHandle.Set();
-                processTokenSource.Cancel();
             }
         }
     }

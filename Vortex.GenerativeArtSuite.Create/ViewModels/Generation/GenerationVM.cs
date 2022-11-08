@@ -117,6 +117,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generation
 
         private void OnStop()
         {
+            process?.Cancel();
             RemoveProcess();
             refreshButtons();
             UpdateTimes();

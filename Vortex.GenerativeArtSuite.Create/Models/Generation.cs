@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Newtonsoft.Json;
 using Vortex.GenerativeArtSuite.Common.Models;
 
@@ -26,31 +27,41 @@ namespace Vortex.GenerativeArtSuite.Create.Models
 
         public List<string> ChosenPaths { get; }
 
-        public void GenerateImage(int id, SessionSettings settings)
+        public void GenerateImage(IGenerationProcess process, int id, SessionSettings settings)
         {
+            process.RespectCheckpoint();
+
             var folder = Path.Join(settings.OutputFolder, IMAGEPATH);
             if (!Directory.Exists(folder))
             {
                 Directory.CreateDirectory(folder);
             }
 
+            process.RespectCheckpoint();
+
             var path = Path.Join(folder, $"{id}.png");
 
-            //var bitmap = ImageBuilder.Build(BuildOrder);
-            //bitmap.Save(path, ImageFormat.Png);
-            //bitmap.Dispose();
+            using (var bitmap = ImageBuilder.Build(process, BuildOrder))
+            {
+                process.RespectCheckpoint();
+                bitmap.Save(path, ImageFormat.Png);
+                process.RespectCheckpoint();
+            }
         }
 
-        public void GenerateJson(int id, SessionSettings settings)
+        public void GenerateJson(IGenerationProcess process, int id, SessionSettings settings)
         {
+            process.RespectCheckpoint();
+
             var folder = Path.Join(settings.OutputFolder, JSONPATH);
             if (!Directory.Exists(folder))
             {
                 Directory.CreateDirectory(folder);
             }
 
-            var path = Path.Join(folder, $"{id}.json");
+            process.RespectCheckpoint();
 
+            var path = Path.Join(folder, $"{id}.json");
             var metadata = new ERC721Metadata
             {
                 Attributes = BuildOrder.Select(build => build.Trait),
@@ -64,6 +75,8 @@ namespace Vortex.GenerativeArtSuite.Create.Models
                 Name = $"{settings.NamePrefix} #{id}",
                 Paths = ChosenPaths,
             };
+
+            process.RespectCheckpoint();
 
             File.WriteAllText(path, JsonConvert.SerializeObject(metadata, Formatting.Indented));
         }
