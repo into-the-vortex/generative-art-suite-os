@@ -1,20 +1,20 @@
-﻿using Vortex.GenerativeArtSuite.Create.Models;
+﻿using Prism.Mvvm;
+using Vortex.GenerativeArtSuite.Create.Services;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generation
 {
-    public class CharacterBuilderVM
+    public class CharacterBuilderVM : BindableBase
     {
-        private Session? session;
+        private readonly ISessionProvider sessionProvider;
 
-        public void ConnectSession(Session session)
+        public CharacterBuilderVM(ISessionProvider sessionProvider)
         {
-            if (this.session != session)
-            {
-                this.session = session;
-
-                // TODO: stuff
-            }
+            this.sessionProvider = sessionProvider;
         }
 
+        public void Reset()
+        {
+
+        }
     }
 }

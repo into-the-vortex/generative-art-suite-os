@@ -1,20 +1,25 @@
-﻿using Prism.Regions;
+﻿using Vortex.GenerativeArtSuite.Create.Services;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generation
 {
     public class GenerateVM : SessionAwareVM
     {
-        public CharacterBuilderVM CharacterBuilderVM { get; } = new();
-
-        public GenerationVM GenerationVM { get; } = new();
-
-        public override void OnNavigatedTo(NavigationContext navigationContext)
+        public GenerateVM(ISessionProvider sessionProvider, INavigationLock navigationLock)
+            : base(sessionProvider)
         {
-            base.OnNavigatedTo(navigationContext);
+            CharacterBuilderVM = new(sessionProvider);
+            GenerationVM = new(sessionProvider, navigationLock);
+        }
 
-            CharacterBuilderVM.ConnectSession(Session());
-            GenerationVM.ConnectSession(Session());
+        public CharacterBuilderVM CharacterBuilderVM { get; }
+
+        public GenerationVM GenerationVM { get; }
+
+        protected override void ResetOnSessionChanged()
+        {
+            CharacterBuilderVM.Reset();
+            GenerationVM.Reset();
         }
     }
 }

@@ -1,13 +1,11 @@
 ﻿using Prism.Regions;
-using Vortex.GenerativeArtSuite.Create.Models;
+using System.ComponentModel;
 
 namespace Vortex.GenerativeArtSuite.Create.Services
 {
-    public interface INavigationService
+    public interface INavigationService : INotifyPropertyChanged
     {
-        void GoHome();
-
-        void OpenSession(Session session);
+        string? CurrentView { get; set; }
 
         void NavigateTo(string? tag, NavigationParameters? parameters = null);
     }

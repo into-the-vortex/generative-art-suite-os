@@ -1,31 +1,44 @@
 ﻿using System;
+using Newtonsoft.Json;
 using Prism.Regions;
-using Vortex.GenerativeArtSuite.Create.Models;
+using Vortex.GenerativeArtSuite.Create.Services;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Base
 {
-    public abstract class SessionAwareVM : NavigationAware
+    public abstract class SessionAwareVM : NavigationAwareVM, IConfirmNavigationRequest
     {
-        private Session? currentSession;
+        private readonly ISessionProvider sessionProvider;
+        private string lastSeenSession = string.Empty;
+
+        public SessionAwareVM(ISessionProvider sessionProvider)
+        {
+            this.sessionProvider = sessionProvider;
+        }
+
+        public void ConfirmNavigationRequest(NavigationContext navigationContext, Action<bool> continuationCallback)
+        {
+            bool okay = true;
+
+            if(navigationContext.Uri.OriginalString == NavigationService.Home)
+            {
+                sessionProvider.SaveSession();
+            }
+
+            continuationCallback(okay);
+        }
 
         public override void OnNavigatedTo(NavigationContext navigationContext)
         {
             base.OnNavigatedTo(navigationContext);
 
-            if (navigationContext.Parameters[nameof(Session)] is Session session)
+            var dirtyComparison = JsonConvert.SerializeObject(sessionProvider.Session());
+            if (lastSeenSession != dirtyComparison)
             {
-                currentSession = session;
+                lastSeenSession = dirtyComparison;
+                ResetOnSessionChanged();
             }
         }
 
-        protected Session Session()
-        {
-            if (currentSession is null)
-            {
-                throw new InvalidOperationException("Session is not set");
-            }
-
-            return currentSession;
-        }
+        protected abstract void ResetOnSessionChanged();
     }
 }

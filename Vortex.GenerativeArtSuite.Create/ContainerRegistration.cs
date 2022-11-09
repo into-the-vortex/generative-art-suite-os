@@ -24,12 +24,13 @@ namespace Vortex.GenerativeArtSuite.Create
             containerRegistry.RegisterSingleton<IFileSystem, LocalFileSystem>();
             containerRegistry.RegisterSingleton<IRegionManager, RegionManager>();
             containerRegistry.RegisterSingleton<INavigationService, NavigationService>();
+            containerRegistry.RegisterSingleton<INavigationLock, NavigationLock>();
 
+            containerRegistry.RegisterManySingleton<SessionManager>(typeof(ISessionManager), typeof(ISessionProvider));
             containerRegistry.RegisterSingleton<ChangeThemeVM>();
             containerRegistry.RegisterSingleton<MainWindowVM>();
 
             containerRegistry.RegisterForNavigation<HomePage, HomeVM>(NavigationService.Home);
-            containerRegistry.RegisterForNavigation<SessionPage, SessionVM>(NavigationService.Session);
             containerRegistry.RegisterForNavigation<LayersPage, LayersVM>(NavigationService.Layers);
             containerRegistry.RegisterForNavigation<TraitsPage, LayerSelectorVM>(NavigationService.Traits);
             containerRegistry.RegisterForNavigation<GeneratePage, GenerateVM>(NavigationService.Generate);

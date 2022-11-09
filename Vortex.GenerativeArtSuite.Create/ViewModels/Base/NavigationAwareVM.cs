@@ -3,7 +3,7 @@ using Prism.Regions;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Base
 {
-    public abstract class NavigationAware : BindableBase, INavigationAware
+    public abstract class NavigationAwareVM : BindableBase, INavigationAware
     {
         public virtual bool IsNavigationTarget(NavigationContext navigationContext)
         {

@@ -1,13 +1,13 @@
-﻿using Prism.Mvvm;
+﻿using System;
+using System.Collections.Generic;
+using Prism.Mvvm;
 using Prism.Regions;
-using Vortex.GenerativeArtSuite.Create.Models;
 
 namespace Vortex.GenerativeArtSuite.Create.Services
 {
     internal class NavigationService : BindableBase, INavigationService
     {
         public const string MainRegion = nameof(MainRegion);
-        public const string SessionRegion = nameof(SessionRegion);
 
         public const string Home = nameof(Home);
         public const string Session = nameof(Session);
@@ -17,7 +17,6 @@ namespace Vortex.GenerativeArtSuite.Create.Services
         public const string Settings = nameof(Settings);
 
         private readonly IRegionManager regionManager;
-        private IRegion? sessionRegion;
         private IRegion? mainRegion;
         private string? currentView;
 
@@ -42,28 +41,14 @@ namespace Vortex.GenerativeArtSuite.Create.Services
             mainRegion.RequestNavigate(Home, OnNavigation);
         }
 
-        public void OpenSession(Session session)
-        {
-            if (mainRegion is null && !TryGetMainRegion())
-            {
-                return;
-            }
-
-            var parameters = new NavigationParameters
-            {
-                { nameof(Session), session },
-            };
-            mainRegion.RequestNavigate(Session, OnNavigation, parameters);
-        }
-
         public void NavigateTo(string? tag, NavigationParameters? parameters = null)
         {
-            if (tag is null || (sessionRegion is null && !TryGetSessionRegion()))
+            if (tag is null || (mainRegion is null && !TryGetMainRegion()))
             {
                 return;
             }
 
-            sessionRegion.RequestNavigate(tag, OnNavigation, parameters);
+            mainRegion.RequestNavigate(tag, OnNavigation, parameters);
         }
 
         private bool TryGetMainRegion()
@@ -77,17 +62,6 @@ namespace Vortex.GenerativeArtSuite.Create.Services
             return mainRegion != null;
         }
 
-        private bool TryGetSessionRegion()
-        {
-            if (sessionRegion is null && regionManager.Regions.ContainsRegionWithName(SessionRegion))
-            {
-                sessionRegion = regionManager.Regions[SessionRegion];
-                sessionRegion.NavigationService.Navigated += NavigationService_Navigated;
-            }
-
-            return sessionRegion != null;
-        }
-
         private void NavigationService_Navigated(object? sender, RegionNavigationEventArgs e)
         {
             UpdateCurrentView(e.NavigationContext);
@@ -95,7 +69,14 @@ namespace Vortex.GenerativeArtSuite.Create.Services
 
         private void OnNavigation(NavigationResult e)
         {
-            UpdateCurrentView(e.Context);
+            if (e.Result == true)
+            {
+                UpdateCurrentView(e.Context);
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
         }
 
         private void UpdateCurrentView(NavigationContext e)

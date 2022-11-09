@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -22,8 +21,9 @@ namespace Vortex.GenerativeArtSuite.Create.Models
             {
                 try
                 {
-                    // TODO: either clean up the folder or restore the progress.
                     var toGenerate = process.DefineUniqueTokens(session, console);
+
+                    ImageBuilder.BuildCache(session);
 
                     Task.WaitAll(process.CreateFiles(toGenerate, session.Settings), process.Token);
 

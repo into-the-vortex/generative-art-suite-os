@@ -8,14 +8,18 @@ using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
 {
-    public class HomeVM : NavigationAware
+    public class HomeVM : NavigationAwareVM
     {
         private readonly IFileSystem fileSystem;
+        private readonly ISessionManager sessionManager;
+        private readonly INavigationLock navigationLock;
         private readonly INavigationService navigationService;
 
-        public HomeVM(IFileSystem fileSystem, INavigationService navigationService)
+        public HomeVM(IFileSystem fileSystem, ISessionManager sessionManager, INavigationLock navigationLock, INavigationService navigationService)
         {
             this.fileSystem = fileSystem;
+            this.sessionManager = sessionManager;
+            this.navigationLock = navigationLock;
             this.navigationService = navigationService;
 
             NewSession = new NewSessionVM(fileSystem, NameIsValid, OpenNewSession);
@@ -33,19 +37,27 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
             NewSession.Clear();
             RecentSessions.Clear();
             RecentSessions.AddRange(fileSystem.RecentSessions().Select(s => new RecentSessionVM(s, OpenRecentSession)));
+
+            navigationLock.Capture();
+        }
+
+        public override void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+            base.OnNavigatedFrom(navigationContext);
+
+            navigationLock.Release();
         }
 
         private void OpenNewSession(string name, SessionSettings sessionSettings)
         {
-            var session = new Session(name, sessionSettings);
-            fileSystem.SaveSession(session);
-            navigationService.OpenSession(session);
+            sessionManager.CreateNewSession(name, sessionSettings);
+            navigationService.NavigateTo(NavigationService.Layers);
         }
 
         private void OpenRecentSession(string name)
         {
-            var session = fileSystem.LoadSession(name);
-            navigationService.OpenSession(session);
+            sessionManager.OpenExistingSession(name);
+            navigationService.NavigateTo(NavigationService.Layers);
         }
 
         private bool NameIsValid(string name)

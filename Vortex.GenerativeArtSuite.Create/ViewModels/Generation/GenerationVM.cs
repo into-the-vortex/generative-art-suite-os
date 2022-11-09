@@ -2,29 +2,34 @@
 using System.Globalization;
 using System.Windows.Input;
 using Prism.Commands;
+using Prism.Mvvm;
 using Vortex.GenerativeArtSuite.Common.Models;
 using Vortex.GenerativeArtSuite.Common.ViewModels;
 using Vortex.GenerativeArtSuite.Create.Models;
-using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
+using Vortex.GenerativeArtSuite.Create.Services;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generation
 {
-    public class GenerationVM : SessionAwareVM
+    public class GenerationVM : BindableBase
     {
-        private readonly Action refreshButtons;
+        private readonly ISessionProvider sessionProvider;
+        private readonly INavigationLock navigationLock;
         private readonly DebugConsole console = new();
+        private readonly Action refreshButtons;
 
-        private IGenerationProcess? process;
-        private Session? session;
-        private double progress;
-        private bool error;
-        private bool paused;
-        private bool running;
-        private string elapsed = string.Empty;
         private string remaining = string.Empty;
+        private string elapsed = string.Empty;
+        private IGenerationProcess? process;
+        private double progress;
+        private bool running;
+        private bool paused;
+        private bool error;
 
-        public GenerationVM()
+        public GenerationVM(ISessionProvider sessionProvider, INavigationLock navigationLock)
         {
+            this.sessionProvider = sessionProvider;
+            this.navigationLock = navigationLock;
+
             var start = new DelegateCommand(OnStart);
             var stop = new DelegateCommand(OnStop, CanStop);
 
@@ -84,29 +89,19 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generation
 
         public ICommand StopGeneration { get; }
 
-        public void ConnectSession(Session session)
+        public void Reset()
         {
-            if (this.session != session)
-            {
-                this.session = session;
-
-                RemoveProcess();
-                refreshButtons();
-                UpdateTimes();
-                Reset();
-            }
+            ResetDisplay();
+            console.Clear();
         }
 
         private void OnStart()
         {
             if (process is null)
             {
+                navigationLock.Capture();
                 CreateProcess();
-                refreshButtons();
-                UpdateTimes();
                 Reset();
-
-                console.Clear();
             }
             else
             {
@@ -119,9 +114,9 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generation
         {
             process?.Cancel();
             RemoveProcess();
-            refreshButtons();
-            UpdateTimes();
-            Reset();
+            ResetDisplay();
+
+            navigationLock.Release();
         }
 
         private bool CanStop() => process is not null;
@@ -145,18 +140,9 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generation
             }
         }
 
-        private void Reset()
-        {
-            Error = false;
-            Paused = false;
-            Progress = 0;
-        }
-
         private void OnSuccess()
         {
             RemoveProcess();
-            refreshButtons();
-            UpdateTimes();
             Reset();
         }
 
@@ -173,19 +159,18 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generation
             RemoveProcess();
             refreshButtons();
             UpdateTimes();
+
+            navigationLock.Release();
         }
 
         private void CreateProcess()
         {
-            if (session is not null)
-            {
-                process = Generator.GenerateFor(session, console);
-                process.ProcessComplete += OnSuccess;
-                process.ProgressMade += OnProgress;
-                process.ErrorFound += OnError;
+            process = Generator.GenerateFor(sessionProvider.Session(), console);
+            process.ProcessComplete += OnSuccess;
+            process.ProgressMade += OnProgress;
+            process.ErrorFound += OnError;
 
-                Running = true;
-            }
+            Running = true;
         }
 
         private void RemoveProcess()
@@ -198,6 +183,15 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generation
 
                 Running = false;
             }
+        }
+
+        private void ResetDisplay()
+        {
+            refreshButtons();
+            UpdateTimes();
+            Error = false;
+            Paused = false;
+            Progress = 0;
         }
     }
 }

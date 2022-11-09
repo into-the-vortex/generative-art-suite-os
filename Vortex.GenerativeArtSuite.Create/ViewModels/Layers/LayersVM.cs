@@ -6,10 +6,10 @@ using System.Reactive.Linq;
 using System.Windows.Input;
 using DynamicData;
 using Prism.Commands;
-using Prism.Regions;
 using Prism.Services.Dialogs;
 using Vortex.GenerativeArtSuite.Common.Extensions;
 using Vortex.GenerativeArtSuite.Create.Models;
+using Vortex.GenerativeArtSuite.Create.Services;
 using Vortex.GenerativeArtSuite.Create.Staging;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
 
@@ -18,11 +18,15 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
     public class LayersVM : SessionAwareVM
     {
         private readonly IDialogService dialogService;
-        private IDisposable? layerListner;
+        private readonly ISessionProvider sessionProvider;
+        private IDisposable? layerListener;
 
-        public LayersVM(IDialogService dialogService)
+        public LayersVM(IDialogService dialogService, ISessionProvider sessionProvider)
+            : base(sessionProvider)
         {
             this.dialogService = dialogService;
+            this.sessionProvider = sessionProvider;
+
             Layers = new();
             AddLayer = new DelegateCommand(OnAdd);
         }
@@ -31,12 +35,10 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
 
         public ICommand AddLayer { get; }
 
-        public override void OnNavigatedTo(NavigationContext navigationContext)
+        protected override void ResetOnSessionChanged()
         {
-            base.OnNavigatedTo(navigationContext);
-
-            layerListner?.Dispose();
-            layerListner = Layers.ConnectModelCollection(Session().Layers, (l) => new LayerVM(l, OnEdit, OnDelete));
+            layerListener?.Dispose();
+            layerListener = Layers.ConnectModelCollection(sessionProvider.Session().Layers, (l) => new LayerVM(l, OnEdit, OnDelete));
         }
 
         private void OnAdd()
@@ -66,7 +68,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
             var param = new DialogParameters
             {
                 { nameof(DeleteLayerDialogVM.Message), string.Format(CultureInfo.CurrentCulture, Strings.DeleteLayerConfirmation, model.Name) },
-                { nameof(DeleteDialogVM.Index), Session().Layers.IndexOf(model) },
+                { nameof(DeleteDialogVM.Index), sessionProvider.Session().Layers.IndexOf(model) },
             };
 
             dialogService.ShowDialog(DialogVM.DeleteLayerDialog, param, DeleteCallback);

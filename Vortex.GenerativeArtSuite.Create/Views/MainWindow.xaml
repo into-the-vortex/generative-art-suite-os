@@ -9,6 +9,7 @@
         xmlns:converters="clr-namespace:Vortex.GenerativeArtSuite.Common.Converters;assembly=Vortex.GenerativeArtSuite.Common"
         xmlns:prism="http://prismlibrary.com/"
         xmlns:services="clr-namespace:Vortex.GenerativeArtSuite.Create.Services"
+        xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels"
         Title="MainWindow"
@@ -32,6 +33,31 @@
         <Style x:Key="AppTitleBarButtonStyle" TargetType="ui:TitleBarButton">
             <Setter Property="IsActive" Value="{Binding IsActive, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
         </Style>
+        <x:Array x:Key="MenuItems" Type="ui:NavigationViewItem">
+            <ui:NavigationViewItem Content="{x:Static strings:Strings.Home}"
+                                   Icon="Home"
+                                   IsEnabled="{Binding AllowNavigation}"
+                                   Tag="{x:Static services:NavigationService.Home}"
+                                   ToolTipService.ToolTip="{x:Static strings:Strings.Home}" />
+
+            <ui:NavigationViewItem Content="{x:Static strings:Strings.Layers}"
+                                   Icon="ShowBcc"
+                                   IsEnabled="{Binding AllowNavigation}"
+                                   Tag="{x:Static services:NavigationService.Layers}"
+                                   ToolTipService.ToolTip="{x:Static strings:Strings.Layers}" />
+
+            <ui:NavigationViewItem Content="{x:Static strings:Strings.Traits}"
+                                   Icon="BrowsePhotos"
+                                   IsEnabled="{Binding AllowNavigation}"
+                                   Tag="{x:Static services:NavigationService.Traits}"
+                                   ToolTipService.ToolTip="{x:Static strings:Strings.Traits}" />
+
+            <ui:NavigationViewItem Content="{x:Static strings:Strings.Generate}"
+                                   Icon="Play"
+                                   IsEnabled="{Binding AllowNavigation}"
+                                   Tag="{x:Static services:NavigationService.Generate}"
+                                   ToolTipService.ToolTip="{x:Static strings:Strings.Generate}" />
+        </x:Array>
     </Window.Resources>
 
     <Grid>
@@ -77,6 +103,11 @@
         </Grid>
 
         <!--  Content  -->
-        <ContentControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static services:NavigationService.MainRegion}" />
+        <controls:NavigationView Grid.Row="1"
+                                 IsSettingsVisible="{Binding AllowNavigation}"
+                                 MenuItemsSource="{StaticResource MenuItems}"
+                                 SelectedTag="{Binding SelectedTag, Mode=TwoWay}">
+            <ContentControl prism:RegionManager.RegionName="{x:Static services:NavigationService.MainRegion}" />
+        </controls:NavigationView>
     </Grid>
 </Window>
