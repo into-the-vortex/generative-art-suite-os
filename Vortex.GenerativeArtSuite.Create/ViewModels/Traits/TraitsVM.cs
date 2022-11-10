@@ -85,7 +85,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
         {
             var param = new DialogParameters
             {
-                { nameof(DeleteDialogVM.Message), string.Format(CultureInfo.CurrentCulture, Strings.DeleteTraitConfirmation, model.Name) },
+                { nameof(YesNoDialogVM.Message), string.Format(CultureInfo.CurrentCulture, Strings.DeleteTraitConfirmation, model.Name) },
                 { nameof(DeleteDialogVM.Index), Model.Traits.IndexOf(model) },
             };
 

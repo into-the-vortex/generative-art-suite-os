@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Vortex.GenerativeArtSuite.Common.Controls;
 using Vortex.GenerativeArtSuite.Common.Models;
 
 namespace Vortex.GenerativeArtSuite.Create.Models
@@ -34,7 +35,6 @@ namespace Vortex.GenerativeArtSuite.Create.Models
                 }
                 catch (OperationCanceledException)
                 {
-                    console.Warn("Generation cancelled");
                 }
                 catch (Exception e)
                 {
@@ -154,12 +154,6 @@ namespace Vortex.GenerativeArtSuite.Create.Models
 
             public CancellationToken Token => processTokenSource.Token;
 
-            public void Cancel()
-            {
-                pauseHandle.Set();
-                processTokenSource.Cancel();
-            }
-
             public void RespectCheckpoint()
             {
                 if (isPaused)
@@ -170,24 +164,29 @@ namespace Vortex.GenerativeArtSuite.Create.Models
                 Token.ThrowIfCancellationRequested();
             }
 
+            public void Cancel()
+            {
+                CancelInternal();
+                Console.Warn("Generation cancelled");
+            }
+
             public void InvokeProcessComplete()
             {
-                Cancel();
+                CancelInternal();
                 Console.Log("Generation successful");
                 ProcessComplete?.Invoke();
+            }
+
+            public void InvokeErrorFound()
+            {
+                CancelInternal();
+                ErrorFound?.Invoke();
             }
 
             public void ProgressBy(double weight)
             {
                 progress += weight;
                 ProgressMade?.Invoke(progress / maxProgress * 100);
-            }
-
-            public void InvokeErrorFound()
-            {
-                Cancel();
-
-                ErrorFound?.Invoke();
             }
 
             public void SetPaused(bool paused)
@@ -204,6 +203,12 @@ namespace Vortex.GenerativeArtSuite.Create.Models
                     pauseHandle.Set();
                     pauseOffset += DateTime.Now - lastPausePoint;
                 }
+            }
+
+            private void CancelInternal()
+            {
+                pauseHandle.Set();
+                processTokenSource.Cancel();
             }
         }
     }

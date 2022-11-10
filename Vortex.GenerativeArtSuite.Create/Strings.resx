@@ -183,6 +183,12 @@
   <data name="Elapsed" xml:space="preserve">
     <value>Elapsed</value>
   </data>
+  <data name="ExitNoSave" xml:space="preserve">
+    <value>Exit without saving</value>
+  </data>
+  <data name="ExitSave" xml:space="preserve">
+    <value>Save and exit</value>
+  </data>
   <data name="Generate" xml:space="preserve">
     <value>Generate</value>
   </data>
@@ -266,6 +272,12 @@
   </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>
+  </data>
+  <data name="SaveQuestion" xml:space="preserve">
+    <value>Your session has been changed, would you like to save your changes before going home?</value>
+  </data>
+  <data name="SaveSession" xml:space="preserve">
+    <value>Save Session</value>
   </data>
   <data name="SessionNameLabel" xml:space="preserve">
     <value>Session Name</value>

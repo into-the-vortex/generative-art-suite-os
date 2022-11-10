@@ -259,6 +259,24 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exit without saving.
+        /// </summary>
+        public static string ExitNoSave {
+            get {
+                return ResourceManager.GetString("ExitNoSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save and exit.
+        /// </summary>
+        public static string ExitSave {
+            get {
+                return ResourceManager.GetString("ExitSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Generate.
         /// </summary>
         public static string Generate {
@@ -507,6 +525,24 @@ namespace Vortex.GenerativeArtSuite.Create {
         public static string Save {
             get {
                 return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your session has been changed, would you like to save your changes before going home?.
+        /// </summary>
+        public static string SaveQuestion {
+            get {
+                return ResourceManager.GetString("SaveQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Session.
+        /// </summary>
+        public static string SaveSession {
+            get {
+                return ResourceManager.GetString("SaveSession", resourceCulture);
             }
         }
         

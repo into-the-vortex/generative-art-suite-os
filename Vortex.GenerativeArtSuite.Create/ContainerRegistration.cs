@@ -43,6 +43,8 @@ namespace Vortex.GenerativeArtSuite.Create
             containerRegistry.RegisterDialog<CreateTraitDialog, CreateTraitDialogVM>(DialogVM.CreateTraitDialog);
             containerRegistry.RegisterDialog<EditTraitDialog, EditTraitDialogVM>(DialogVM.EditTraitDialog);
             containerRegistry.RegisterDialog<DeleteTraitDialog, DeleteTraitDialogVM>(DialogVM.DeleteTraitDialog);
+
+            containerRegistry.RegisterDialog<ConfirmSaveDialog, ConfirmSaveDialogVM>(DialogVM.ConfirmSaveDialog);
         }
     }
 }

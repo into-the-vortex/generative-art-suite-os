@@ -22,7 +22,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Layers
         private IDisposable? layerListener;
 
         public LayersVM(IDialogService dialogService, ISessionProvider sessionProvider)
-            : base(sessionProvider)
+            : base(sessionProvider, dialogService)
         {
             this.dialogService = dialogService;
             this.sessionProvider = sessionProvider;

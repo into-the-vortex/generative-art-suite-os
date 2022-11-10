@@ -9,12 +9,13 @@ namespace Vortex.GenerativeArtSuite.Create.Staging
 
         public LayerStagingArea(Layer model)
         {
+            this.model = model;
+
             Name = new StagingProperty<string>(name => model.Name = name, () => model.Name);
             Optional = new StagingProperty<bool>(optional => model.Optional = optional, () => model.Optional, onApply: model.OnOptionalChanged);
             IncludeInDNA = new StagingProperty<bool>(includeInDNA => model.IncludeInDNA = includeInDNA, () => model.IncludeInDNA);
             AffectedByLayerMask = new StagingProperty<bool>(affectedByLayerMask => model.AffectedByLayerMask = affectedByLayerMask, () => model.AffectedByLayerMask);
             Paths = new StagingList<PathSelector>(model.Paths, onApply: model.OnTraitsInvalidated);
-            this.model = model;
         }
 
         public StagingProperty<string> Name { get; }

@@ -1,4 +1,5 @@
-﻿using Vortex.GenerativeArtSuite.Create.Models;
+﻿using Prism.Services.Dialogs;
+using Vortex.GenerativeArtSuite.Create.Models;
 using Vortex.GenerativeArtSuite.Create.Services;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
 
@@ -10,8 +11,8 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Settings
         private readonly IFileSystem fileSystem;
         private SessionSettingsVM settings;
 
-        public SettingsVM(ISessionProvider sessionProvider, IFileSystem fileSystem, SessionSettings settings)
-            : base(sessionProvider)
+        public SettingsVM(ISessionProvider sessionProvider, IDialogService dialogService, IFileSystem fileSystem, SessionSettings settings)
+            : base(sessionProvider, dialogService)
         {
             this.sessionProvider = sessionProvider;
             this.fileSystem = fileSystem;

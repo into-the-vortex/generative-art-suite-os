@@ -1,12 +1,13 @@
-﻿using Vortex.GenerativeArtSuite.Create.Services;
+﻿using Prism.Services.Dialogs;
+using Vortex.GenerativeArtSuite.Create.Services;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generation
 {
     public class GenerateVM : SessionAwareVM
     {
-        public GenerateVM(ISessionProvider sessionProvider, INavigationLock navigationLock)
-            : base(sessionProvider)
+        public GenerateVM(IDialogService dialogService, ISessionProvider sessionProvider, INavigationLock navigationLock)
+            : base(sessionProvider, dialogService)
         {
             CharacterBuilderVM = new(sessionProvider);
             GenerationVM = new(sessionProvider, navigationLock);

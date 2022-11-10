@@ -1,4 +1,5 @@
-﻿using Vortex.GenerativeArtSuite.Create.Models;
+﻿using System;
+using Vortex.GenerativeArtSuite.Create.Models;
 
 namespace Vortex.GenerativeArtSuite.Create.Services
 {
@@ -7,5 +8,9 @@ namespace Vortex.GenerativeArtSuite.Create.Services
         void SaveSession();
 
         Session Session();
+
+        bool CanSaveSession();
+
+        bool RequiresReset(Type viewer);
     }
 }

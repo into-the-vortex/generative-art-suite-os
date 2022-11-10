@@ -15,7 +15,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
         private string? selectedLayer;
 
         public LayerSelectorVM(IFileSystem fileSystem, IDialogService dialogService, ISessionProvider sessionProvider)
-            : base(sessionProvider)
+            : base(sessionProvider, dialogService)
         {
             this.fileSystem = fileSystem;
             this.dialogService = dialogService;

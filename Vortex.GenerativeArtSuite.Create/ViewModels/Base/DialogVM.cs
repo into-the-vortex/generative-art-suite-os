@@ -14,6 +14,8 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Base
         public const string EditTraitDialog = nameof(EditTraitDialog);
         public const string DeleteTraitDialog = nameof(DeleteTraitDialog);
 
+        public const string ConfirmSaveDialog = nameof(ConfirmSaveDialog);
+
         public const string OKAY = "ok";
         public const string CANCEL = "cancel";
 
@@ -42,8 +44,11 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Base
             RequestClose?.Invoke(dialogResult);
         }
 
-        protected abstract ButtonResult GetButtonResult(string parameter);
+        protected virtual IDialogParameters GetDialogParameters(string parameter)
+        {
+            return new DialogParameters();
+        }
 
-        protected abstract IDialogParameters GetDialogParameters(string parameter);
+        protected abstract ButtonResult GetButtonResult(string parameter);
     }
 }

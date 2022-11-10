@@ -1,44 +1,54 @@
-﻿using System;
-using Newtonsoft.Json;
-using Prism.Regions;
+﻿using Prism.Regions;
+using Prism.Services.Dialogs;
 using Vortex.GenerativeArtSuite.Create.Services;
+using Vortex.GenerativeArtSuite.Create.ViewModels.Layers;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Base
 {
-    public abstract class SessionAwareVM : NavigationAwareVM, IConfirmNavigationRequest
+    public abstract class SessionAwareVM : NavigationAwareVM
     {
         private readonly ISessionProvider sessionProvider;
-        private string lastSeenSession = string.Empty;
+        private readonly IDialogService dialogService;
 
-        public SessionAwareVM(ISessionProvider sessionProvider)
+        public SessionAwareVM(ISessionProvider sessionProvider, IDialogService dialogService)
         {
             this.sessionProvider = sessionProvider;
-        }
-
-        public void ConfirmNavigationRequest(NavigationContext navigationContext, Action<bool> continuationCallback)
-        {
-            bool okay = true;
-
-            if(navigationContext.Uri.OriginalString == NavigationService.Home)
-            {
-                sessionProvider.SaveSession();
-            }
-
-            continuationCallback(okay);
+            this.dialogService = dialogService;
         }
 
         public override void OnNavigatedTo(NavigationContext navigationContext)
         {
             base.OnNavigatedTo(navigationContext);
 
-            var dirtyComparison = JsonConvert.SerializeObject(sessionProvider.Session());
-            if (lastSeenSession != dirtyComparison)
+            if (sessionProvider.RequiresReset(GetType()))
             {
-                lastSeenSession = dirtyComparison;
                 ResetOnSessionChanged();
             }
         }
 
+        public override void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+            base.OnNavigatedFrom(navigationContext);
+
+            if (navigationContext.Uri.OriginalString == NavigationService.Home && sessionProvider.CanSaveSession())
+            {
+                var param = new DialogParameters
+                {
+                    { nameof(DeleteLayerDialogVM.Message), Strings.SaveQuestion },
+                };
+
+                dialogService.ShowDialog(DialogVM.ConfirmSaveDialog, param, ConfirmSaveCallback);
+            }
+        }
+
         protected abstract void ResetOnSessionChanged();
+
+        private void ConfirmSaveCallback(IDialogResult dialogResult)
+        {
+            if(dialogResult.Result == ButtonResult.OK)
+            {
+                sessionProvider.SaveSession();
+            }
+        }
     }
 }
