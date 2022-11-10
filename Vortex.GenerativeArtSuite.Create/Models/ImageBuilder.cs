@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Vortex.GenerativeArtSuite.Create.Models
 {
@@ -8,37 +11,57 @@ namespace Vortex.GenerativeArtSuite.Create.Models
     {
         private static readonly Dictionary<string, Image> Images = new();
 
+        private static CancellationTokenSource cancellationTokenSource = new();
+        private static Task? cacheBuild;
+
         public static void BuildCache(Session session)
         {
-            foreach (var image in Images)
-            {
-                image.Value.Dispose();
-            }
+            cancellationTokenSource.Cancel();
+            WaitForCacheBuild();
 
-            Images.Clear();
-
-            foreach (var layer in session.Layers)
+            cancellationTokenSource = new();
+            cacheBuild = Task.Run(() =>
             {
-                foreach (var trait in layer.Traits)
+                try
                 {
-                    foreach (var variant in trait.Variants)
+                    foreach (var image in Images)
                     {
-                        if (variant.ImagePath is not null)
-                        {
-                            Images[variant.ImagePath] = Image.FromFile(variant.ImagePath);
-                        }
+                        image.Value.Dispose();
+                    }
 
-                        if (variant.MaskPath is not null)
+                    Images.Clear();
+
+                    foreach (var layer in session.Layers)
+                    {
+                        foreach (var trait in layer.Traits)
                         {
-                            Images[variant.MaskPath] = Image.FromFile(variant.MaskPath);
+                            foreach (var variant in trait.Variants)
+                            {
+                                if (variant.ImagePath is not null)
+                                {
+                                    Images[variant.ImagePath] = Image.FromFile(variant.ImagePath);
+                                }
+
+                                if (variant.MaskPath is not null)
+                                {
+                                    Images[variant.MaskPath] = Image.FromFile(variant.MaskPath);
+                                }
+
+                                cancellationTokenSource.Token.ThrowIfCancellationRequested();
+                            }
                         }
                     }
                 }
-            }
+                catch (OperationCanceledException)
+                {
+                }
+            });
         }
 
-        public static Bitmap Build(IGenerationProcess process, List<GenerationStep> steps)
+        public static Bitmap Build(IRespectCheckpoint checkpoint, List<GenerationStep> steps)
         {
+            WaitForCacheBuild();
+
             // TODO: Masking
             var images = steps.Select(s => Images[s.ImageURI]);
 
@@ -62,7 +85,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models
             {
                 foreach (var image in images)
                 {
-                    process.RespectCheckpoint();
+                    checkpoint.RespectCheckpoint();
 
                     lock (image)
                     {
@@ -72,6 +95,13 @@ namespace Vortex.GenerativeArtSuite.Create.Models
             }
 
             return canvas;
+        }
+
+        private static void WaitForCacheBuild()
+        {
+            cacheBuild?.Wait();
+            cacheBuild?.Dispose();
+            cacheBuild = null;
         }
     }
 }

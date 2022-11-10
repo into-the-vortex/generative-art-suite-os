@@ -8,7 +8,7 @@ using Vortex.GenerativeArtSuite.Common.ViewModels;
 using Vortex.GenerativeArtSuite.Create.Models;
 using Vortex.GenerativeArtSuite.Create.Services;
 
-namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generation
+namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generating
 {
     public class GenerationVM : BindableBase
     {
@@ -143,7 +143,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generation
         private void OnSuccess()
         {
             RemoveProcess();
-            Reset();
+            ResetDisplay();
         }
 
         private void OnProgress(double progress)
@@ -177,6 +177,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generation
         {
             if (process is not null)
             {
+                process.ProcessComplete -= OnSuccess;
                 process.ProgressMade -= OnProgress;
                 process.ErrorFound -= OnError;
                 process = null;

@@ -10,15 +10,15 @@ namespace Vortex.GenerativeArtSuite.Create.Models
 {
     public class Generation
     {
-        private const string IMAGEPATH = "images";
-        private const string JSONPATH = "json";
-
-        public Generation(string dna, List<GenerationStep> buildOrder, List<string> chosenPaths)
+        public Generation(int id, string dna, List<GenerationStep> buildOrder, List<string> chosenPaths)
         {
+            Id = id;
             DNA = dna;
             BuildOrder = buildOrder;
             ChosenPaths = chosenPaths;
         }
+
+        public int Id { get; }
 
         public string DNA { get; }
 
@@ -26,58 +26,42 @@ namespace Vortex.GenerativeArtSuite.Create.Models
 
         public List<string> ChosenPaths { get; }
 
-        public void GenerateImage(IGenerationProcess process, int id, SessionSettings settings)
+        public void SaveGeneratedImage(IRespectCheckpoint checkpoint, string path)
         {
-            process.RespectCheckpoint();
+            checkpoint.RespectCheckpoint();
 
-            var folder = Path.Join(settings.OutputFolder, IMAGEPATH);
-            if (!Directory.Exists(folder))
+            using (var bitmap = ImageBuilder.Build(checkpoint, BuildOrder))
             {
-                Directory.CreateDirectory(folder);
-            }
+                checkpoint.RespectCheckpoint();
 
-            process.RespectCheckpoint();
+                bitmap.Save(Path.Join(path, $"{Id}.png"), ImageFormat.Png);
 
-            var path = Path.Join(folder, $"{id}.png");
-
-            using (var bitmap = ImageBuilder.Build(process, BuildOrder))
-            {
-                process.RespectCheckpoint();
-                bitmap.Save(path, ImageFormat.Png);
-                process.RespectCheckpoint();
+                checkpoint.RespectCheckpoint();
             }
         }
 
-        public void GenerateJson(IGenerationProcess process, int id, SessionSettings settings)
+        public void SaveGeneratedMetadata(IRespectCheckpoint checkpoint, string path, SessionSettings settings)
         {
-            process.RespectCheckpoint();
-
-            var folder = Path.Join(settings.OutputFolder, JSONPATH);
-            if (!Directory.Exists(folder))
-            {
-                Directory.CreateDirectory(folder);
-            }
-
-            process.RespectCheckpoint();
-
-            var path = Path.Join(folder, $"{id}.json");
             var metadata = new ERC721Metadata
             {
                 Attributes = BuildOrder.Select(build => build.Trait),
+                Compiler = "Vortex Labs",
                 // TODO: This time only works in c#, js for example would have a stroke
                 Date = DateTime.Now.ToFileTime(),
                 Description = settings.DescriptionTemplate,
                 Dna = DNA,
                 ExternalUrl = "TODO",
-                Id = id,
-                Image = Path.Join(settings.BaseURI, $"{id}.png"),
-                Name = $"{settings.NamePrefix} #{id}",
+                Id = Id,
+                Image = Path.Join(settings.BaseURI, $"{Id}.png"),
+                Name = $"{settings.NamePrefix} #{Id}",
                 Paths = ChosenPaths,
             };
 
-            process.RespectCheckpoint();
+            checkpoint.RespectCheckpoint();
 
-            File.WriteAllText(path, JsonConvert.SerializeObject(metadata, Formatting.Indented));
+            File.WriteAllText(Path.Join(path, $"{Id}"), JsonConvert.SerializeObject(metadata, Formatting.Indented));
+
+            checkpoint.RespectCheckpoint();
         }
     }
 }

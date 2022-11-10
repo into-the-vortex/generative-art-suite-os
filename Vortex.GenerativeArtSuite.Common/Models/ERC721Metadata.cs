@@ -31,7 +31,7 @@ namespace Vortex.GenerativeArtSuite.Common.Models
         public string Name { get; set; }
 
         /// <summary>
-        /// These are the attributes for the item, which will show up on the OpenSea page for the item. (see below)
+        /// These are the attributes for the item, which will show up on the OpenSea page for the item.
         /// </summary>
         [JsonProperty(PropertyName = "attributes")]
         public IEnumerable<ERC721Trait> Attributes { get; set; }
@@ -53,6 +53,12 @@ namespace Vortex.GenerativeArtSuite.Common.Models
         /// </summary>
         [JsonProperty(PropertyName = "date")]
         public long Date { get; set; }
+
+        /// <summary>
+        /// Not shown on opensea, the generation compiler.
+        /// </summary>
+        [JsonProperty(PropertyName = "compiler")]
+        public string Compiler { get; set; }
 
         /// <summary>
         /// Not shown on opensea, the paths followed during generation.

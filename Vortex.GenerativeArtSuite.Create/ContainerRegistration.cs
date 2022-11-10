@@ -5,7 +5,7 @@ using Vortex.GenerativeArtSuite.Common.ViewModels;
 using Vortex.GenerativeArtSuite.Create.Services;
 using Vortex.GenerativeArtSuite.Create.ViewModels;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
-using Vortex.GenerativeArtSuite.Create.ViewModels.Generation;
+using Vortex.GenerativeArtSuite.Create.ViewModels.Generating;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Home;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Layers;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Settings;

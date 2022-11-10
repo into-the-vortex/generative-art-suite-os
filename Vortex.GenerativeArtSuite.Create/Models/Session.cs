@@ -1,5 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Security.Policy;
+using System.Text;
 using Vortex.GenerativeArtSuite.Common.Extensions;
 
 namespace Vortex.GenerativeArtSuite.Create.Models
@@ -19,7 +25,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models
 
         public List<Layer> Layers { get; }
 
-        public Generation CreateRandomGeneration()
+        public Generation CreateRandomGeneration(int nextId)
         {
             var dna = string.Empty;
             var buildOrder = new List<GenerationStep>();
@@ -50,7 +56,17 @@ namespace Vortex.GenerativeArtSuite.Create.Models
                 }
             }
 
-            return new Generation(dna.Trim(), buildOrder, chosenPaths);
+            return new Generation(nextId, Hash(dna.Trim()), buildOrder, chosenPaths);
+        }
+
+        private static string Hash(string dna)
+        {
+            using (HashAlgorithm algorithm = SHA256.Create())
+            {
+                return string.Concat(
+                    algorithm.ComputeHash(Encoding.UTF8.GetBytes(dna))
+                    .Select(item => item.ToString("x2", CultureInfo.InvariantCulture)));
+            }
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Vortex.GenerativeArtSuite.Create.Models
 {
-    public interface IGenerationProcess
+    public interface IGenerationProcess : IRespectCheckpoint
     {
         event Action? ProcessComplete;
 
@@ -11,8 +11,6 @@ namespace Vortex.GenerativeArtSuite.Create.Models
         event Action<double>? ProgressMade;
 
         DateTime Start { get; }
-
-        void RespectCheckpoint();
 
         void SetPaused(bool paused);
 

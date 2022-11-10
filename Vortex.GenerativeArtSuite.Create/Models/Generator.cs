@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Vortex.GenerativeArtSuite.Common.Controls;
 using Vortex.GenerativeArtSuite.Common.Models;
 
 namespace Vortex.GenerativeArtSuite.Create.Models
@@ -23,8 +22,6 @@ namespace Vortex.GenerativeArtSuite.Create.Models
                 try
                 {
                     var toGenerate = process.DefineUniqueTokens(session, console);
-
-                    ImageBuilder.BuildCache(session);
 
                     Task.WaitAll(process.CreateFiles(toGenerate, session.Settings), process.Token);
 
@@ -64,7 +61,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models
             {
                 gp.RespectCheckpoint();
 
-                var attempt = session.CreateRandomGeneration();
+                var attempt = session.CreateRandomGeneration(usedDNA.Count + 1);
 
                 if (usedDNA.Contains(attempt.DNA))
                 {
@@ -95,22 +92,20 @@ namespace Vortex.GenerativeArtSuite.Create.Models
 
         private static Task[] CreateFiles(this GenerationProcess gp, List<Generation> toGenerate, SessionSettings settings)
         {
-            return toGenerate.Select((tg, index) => Task.Run(
+            return toGenerate.Select(tg => Task.Run(
                 () =>
             {
                 try
                 {
-                    var id = index + 1;
-
                     gp.RespectCheckpoint();
-                    tg.GenerateJson(gp, id, settings);
+                    tg.SaveGeneratedMetadata(gp, settings.JsonOutputFolder(), settings);
                     gp.ProgressBy(WEIGHTJSON);
 
                     gp.RespectCheckpoint();
-                    tg.GenerateImage(gp, id, settings);
+                    tg.SaveGeneratedImage(gp, settings.ImageOutputFolder());
                     gp.ProgressBy(WEIGHTIMAGE);
 
-                    gp.Console.Log($"Successfully created asset #{id}");
+                    gp.Console.Log($"Successfully created asset #{tg.Id}");
                 }
                 catch (OperationCanceledException)
                 {
