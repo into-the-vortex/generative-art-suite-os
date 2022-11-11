@@ -173,18 +173,31 @@
 
                 <!--  Right  -->
 
-                <ui:SimpleStackPanel Grid.Row="0"
-                                     Grid.Column="4"
-                                     Spacing="10"
-                                     HorizontalAlignment="Right"
-                                     Orientation="Horizontal">
-                    <Button Command="{Binding Save}">
-                        <ui:SymbolIcon Symbol="Save" />
-                    </Button>
-                    <Button Command="{Binding Randomise}">
-                        <ui:SymbolIcon Symbol="Refresh" />
-                    </Button>
-                </ui:SimpleStackPanel>
+                <DockPanel Grid.Row="0"
+                           Grid.Column="2"
+                           Grid.ColumnSpan="3">
+                    <ItemsControl HorizontalAlignment="Stretch" ItemsSource="{Binding PathCollections}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <ComboBox MinWidth="200"
+                                          SelectedItem="{Binding SelectedOption}"
+                                          ItemsSource="{Binding Options}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <ui:SimpleStackPanel Spacing="10"
+                                         HorizontalAlignment="Right"
+                                         Orientation="Horizontal"
+                                         VerticalAlignment="Top">
+                        <Button Command="{Binding Save}">
+                            <ui:SymbolIcon Symbol="Save" />
+                        </Button>
+                        <Button Command="{Binding Randomise}">
+                            <ui:SymbolIcon Symbol="Refresh" />
+                        </Button>
+                    </ui:SimpleStackPanel>
+                </DockPanel>
 
                 <Separator Grid.Row="1"
                            Grid.Column="2"
