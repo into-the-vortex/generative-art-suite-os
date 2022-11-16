@@ -18,7 +18,8 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits.Base
                 fileSystem,
                 () => traitStagingArea.IconURI.Value,
                 val => traitStagingArea.IconURI.Value = val,
-                raiseCanExecuteChanged);
+                raiseCanExecuteChanged,
+                Strings.AddIcon);
 
             PropertyChanged += (s, e) =>
             {

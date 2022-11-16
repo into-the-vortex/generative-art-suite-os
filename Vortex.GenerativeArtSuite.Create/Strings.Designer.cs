@@ -61,6 +61,33 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Icon.
+        /// </summary>
+        public static string AddIcon {
+            get {
+                return ResourceManager.GetString("AddIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Mask.
+        /// </summary>
+        public static string AddMask {
+            get {
+                return ResourceManager.GetString("AddMask", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Trait.
+        /// </summary>
+        public static string AddTrait {
+            get {
+                return ResourceManager.GetString("AddTrait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to GAS - Create.
         /// </summary>
         public static string AppName {

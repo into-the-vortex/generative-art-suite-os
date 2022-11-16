@@ -48,7 +48,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
                 Date = DateTime.Now.ToFileTime(),
                 Description = settings.DescriptionTemplate,
                 Dna = DNA,
-                ExternalUrl = "TODO",
+                ExternalUrl = null, // TODO: From settings?
                 Id = Id,
                 Image = Path.Join(settings.BaseURI, $"{Id}.png"),
                 Name = $"{settings.NamePrefix} #{Id}",

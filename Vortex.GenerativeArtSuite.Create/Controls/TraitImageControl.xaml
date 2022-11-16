@@ -37,7 +37,7 @@
                 Command="{Binding BrowseImage}">
             <StackPanel Orientation="Vertical">
                 <ui:SymbolIcon HorizontalAlignment="Center" Symbol="Add" />
-                <Label Content="Add Icon" HorizontalAlignment="Center" />
+                <Label Content="{Binding AddPrompt}" HorizontalAlignment="Center" />
             </StackPanel>
         </Button>
     </Grid>

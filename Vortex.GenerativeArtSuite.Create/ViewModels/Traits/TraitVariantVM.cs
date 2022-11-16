@@ -17,13 +17,15 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
                 fileSystem,
                 () => model.TraitURI,
                 val => model.TraitURI = val,
-                raiseCanExecuteChanged);
+                raiseCanExecuteChanged,
+                Strings.AddTrait);
 
             Mask = new TraitImageVM(
                 fileSystem,
                 () => model.MaskURI,
                 val => model.MaskURI = val,
-                raiseCanExecuteChanged);
+                raiseCanExecuteChanged,
+                Strings.AddMask);
 
             Model = model;
         }

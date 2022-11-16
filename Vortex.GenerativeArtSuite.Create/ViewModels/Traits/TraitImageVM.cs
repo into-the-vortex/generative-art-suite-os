@@ -12,12 +12,13 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
         private readonly Action<string> set;
         private readonly Func<string> get;
 
-        public TraitImageVM(IFileSystem fileSystem, Func<string> get, Action<string> set, Action raiseCanExecuteChanged)
+        public TraitImageVM(IFileSystem fileSystem, Func<string> get, Action<string> set, Action raiseCanExecuteChanged, string addPrompt)
         {
             this.fileSystem = fileSystem;
             this.get = get;
             this.set = set;
 
+            AddPrompt = addPrompt;
             BrowseImage = new DelegateCommand(OnBrowse);
             ClearImage = new DelegateCommand(OnClear);
 
@@ -26,6 +27,8 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
                 raiseCanExecuteChanged();
             };
         }
+
+        public string AddPrompt { get; }
 
         public string URI
         {
