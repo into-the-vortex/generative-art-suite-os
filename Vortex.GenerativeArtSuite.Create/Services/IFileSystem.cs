@@ -14,5 +14,7 @@ namespace Vortex.GenerativeArtSuite.Create.Services
         string SelectFolder();
 
         string SelectImageFile();
+
+        string SaveFile(string filter, string defaultExt);
     }
 }

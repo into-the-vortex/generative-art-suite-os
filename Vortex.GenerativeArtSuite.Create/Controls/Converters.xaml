@@ -4,7 +4,18 @@
 
     <converters:PixelsToGridLengthConverter x:Key="PixelsToGridLengthConverter" />
 
-    <converters:EmptyToCollapsedConverter x:Key="EmptyToCollapsedConverter" />
+    <converters:CollectionToVisibilityConverter x:Key="EmptyToCollapsedConverter"
+                                                OnEmpty="Collapsed"
+                                                OnNotEmpty="Visible" />
+
+
+    <converters:CollectionToVisibilityConverter x:Key="EmptyToVisibleConverter"
+                                                OnEmpty="Visible"
+                                                OnNotEmpty="Collapsed" />
+
+    <converters:BooleanToVisibilityConverter x:Key="FalseToVisibleConverter"
+                                             OnFalse="Visible"
+                                             OnTrue="Collapsed" />
 
     <converters:BooleanToVisibilityConverter x:Key="FalseToCollapsedConverter"
                                              OnFalse="Collapsed"

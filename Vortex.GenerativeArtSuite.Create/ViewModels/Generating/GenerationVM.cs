@@ -144,6 +144,8 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generating
         {
             RemoveProcess();
             ResetDisplay();
+
+            navigationLock.Release();
         }
 
         private void OnProgress(double progress)

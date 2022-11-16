@@ -101,5 +101,18 @@ namespace Vortex.GenerativeArtSuite.Create.Services
 
             return dialog.FileName;
         }
+
+        public string SaveFile(string filter, string defaultExt)
+        {
+            var dialog = new Ookii.Dialogs.Wpf.VistaSaveFileDialog
+            {
+                Filter = filter,
+                AddExtension = true,
+                DefaultExt = defaultExt,
+            };
+            dialog.ShowDialog();
+
+            return dialog.FileName;
+        }
     }
 }

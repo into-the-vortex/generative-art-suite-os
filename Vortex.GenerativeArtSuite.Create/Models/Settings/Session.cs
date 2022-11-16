@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -101,9 +100,25 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Settings
             return new Generation(nextId, Hash(dna.Trim()), buildOrder);
         }
 
-        public bool CanGenerate()
+        public Generation CreateGeneration(int nextId, List<GenerationStep> steps)
         {
-            return GetTraitURIs().All(uri => File.Exists(uri));
+            var dna = string.Empty;
+            var buildOrder = new List<GenerationStep>();
+
+            foreach (var step in steps)
+            {
+                var layer = Layers.First(l => l.Name == step.Trait.LayerName);
+                var trait = layer.Traits.First(t => t.Name == step.Trait.TraitName);
+
+                if (layer.IncludeInDNA)
+                {
+                    dna += $"{layer.Name} = {trait.Name} ";
+                }
+
+                buildOrder.Add(trait.CreateGenerationStep(layer, buildOrder));
+            }
+
+            return new Generation(nextId, Hash(dna.Trim()), buildOrder);
         }
 
         public List<string> GetIconURIs()

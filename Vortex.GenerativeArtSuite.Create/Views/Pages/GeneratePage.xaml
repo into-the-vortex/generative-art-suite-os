@@ -16,21 +16,6 @@
       d:DesignWidth="800"
       HorizontalAlignment="Stretch"
       VerticalAlignment="Stretch">
-    <Grid.Resources>
-        <converters:BooleanToVisibilityConverter x:Key="FalseToVisible"
-                                                 OnFalse="Visible"
-                                                 OnTrue="Collapsed" />
-        <converters:BooleanToVisibilityConverter x:Key="TrueToVisible"
-                                                 OnFalse="Collapsed"
-                                                 OnTrue="Visible" />
-        <converters:NullToVisibilityConverter x:Key="NullToCollapsed"
-                                              OnNotNull="Visible"
-                                              OnNull="Collapsed" />
-        <converters:NullToVisibilityConverter x:Key="NullToVisible"
-                                              OnNotNull="Collapsed"
-                                              OnNull="Visible" />
-    </Grid.Resources>
-
     <Grid.RowDefinitions>
         <RowDefinition Height="auto" />
         <RowDefinition Height="50" />
@@ -71,8 +56,8 @@
                                          Orientation="Horizontal">
                         <Button HorizontalAlignment="Stretch" Command="{Binding StartGeneration}">
                             <Grid>
-                                <ui:SymbolIcon Symbol="Play" Visibility="{Binding Running, Converter={StaticResource FalseToVisible}}" />
-                                <ui:SymbolIcon Symbol="Pause" Visibility="{Binding Running, Converter={StaticResource TrueToVisible}}" />
+                                <ui:SymbolIcon Symbol="Play" Visibility="{Binding Running, Converter={StaticResource FalseToVisibleConverter}}" />
+                                <ui:SymbolIcon Symbol="Pause" Visibility="{Binding Running, Converter={StaticResource FalseToCollapsedConverter}}" />
                             </Grid>
                         </Button>
                         <Button HorizontalAlignment="Stretch" Command="{Binding StopGeneration}">
@@ -143,17 +128,21 @@
                            Grid.Column="0"
                            Padding="20,0" />
 
-                <ScrollViewer Grid.Row="3" Grid.Column="0">
-                    <ui:ItemsRepeater HorizontalAlignment="Stretch" ItemsSource="{Binding Traits}">
+                <ScrollViewer Grid.Row="3"
+                              Grid.Column="0"
+                              HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Hidden">
+                    <ui:ItemsRepeater HorizontalAlignment="Stretch"
+                                      ScrollViewer.CanContentScroll="True"
+                                      ItemsSource="{Binding Traits}">
                         <ui:ItemsRepeater.Layout>
                             <ui:UniformGridLayout ItemsJustification="Start"
-                                                  ItemsStretch="Fill"
                                                   MinItemHeight="100"
                                                   MinItemWidth="100" />
                         </ui:ItemsRepeater.Layout>
                         <ui:ItemsRepeater.ItemTemplate>
                             <DataTemplate>
-                                <Button Margin="0"
+                                <Button Margin="2.5"
                                         Padding="0"
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="Stretch"
@@ -162,6 +151,7 @@
                                         <Image Source="{Binding Icon}" />
                                         <TextBlock Grid.Column="0"
                                                    Margin="10,0"
+                                                   HorizontalAlignment="Center"
                                                    TextTrimming="CharacterEllipsis"
                                                    TextWrapping="NoWrap"
                                                    VerticalAlignment="Center"
@@ -179,16 +169,6 @@
                 <DockPanel Grid.Row="0"
                            Grid.Column="2"
                            Grid.ColumnSpan="3">
-                    <ItemsControl HorizontalAlignment="Stretch" ItemsSource="{Binding PathCollections}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <ComboBox MinWidth="200"
-                                          SelectedItem="{Binding SelectedOption}"
-                                          ItemsSource="{Binding Options}" />
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-
                     <ui:SimpleStackPanel Spacing="10"
                                          HorizontalAlignment="Right"
                                          Orientation="Horizontal"
@@ -210,10 +190,12 @@
                 <Image Grid.Row="3"
                        Grid.Column="2"
                        Stretch="Uniform"
-                       Visibility="{Binding Image, Converter={StaticResource NullToCollapsed}}"
+                       Visibility="{Binding Image, Converter={StaticResource NullOrEmptyToCollapsedConverter}}"
                        Source="{Binding Image}" />
 
-                <ScrollViewer Grid.Row="3" Grid.Column="4">
+                <ScrollViewer Grid.Row="3"
+                              Grid.Column="4"
+                              Visibility="{Binding Image, Converter={StaticResource EmptyToCollapsedConverter}}">
                     <TextBlock TextWrapping="Wrap" Text="{Binding Json}" />
                 </ScrollViewer>
 
@@ -224,7 +206,7 @@
                                  HorizontalAlignment="Stretch"
                                  IsActive="True"
                                  VerticalAlignment="Stretch"
-                                 Visibility="{Binding Image, Converter={StaticResource NullToVisible}}" />
+                                 Visibility="{Binding Image, Converter={StaticResource EmptyToVisibleConverter}}" />
             </Grid>
         </Grid>
 

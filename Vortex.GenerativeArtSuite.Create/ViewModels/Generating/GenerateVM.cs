@@ -9,12 +9,12 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generating
     {
         private readonly ISessionProvider sessionProvider;
 
-        public GenerateVM(IDialogService dialogService, ISessionProvider sessionProvider, INavigationLock navigationLock)
+        public GenerateVM(IDialogService dialogService, ISessionProvider sessionProvider, INavigationLock navigationLock, IFileSystem fileSystem)
             : base(sessionProvider, dialogService)
         {
             this.sessionProvider = sessionProvider;
 
-            CharacterBuilderVM = new(sessionProvider);
+            CharacterBuilderVM = new(sessionProvider, fileSystem);
             GenerationVM = new(sessionProvider, navigationLock);
         }
 
