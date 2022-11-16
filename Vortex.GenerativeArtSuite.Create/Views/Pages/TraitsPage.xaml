@@ -95,15 +95,25 @@
                                     <RowDefinition Height="auto" />
                                 </Grid.RowDefinitions>
 
-                                <DockPanel Grid.Row="0">
-                                    <Label Content="{Binding Name}" VerticalAlignment="Center" />
-                                    <Button HorizontalAlignment="Right"
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0"
+                                               Margin="10,0"
+                                               FontSize="20"
+                                               TextTrimming="CharacterEllipsis"
+                                               TextWrapping="NoWrap"
+                                               VerticalAlignment="Center"
+                                               Text="{Binding Name}" />
+                                    <Button Grid.Column="1"
                                             VerticalAlignment="Center"
                                             Visibility="{Binding IsEditable, Converter={StaticResource FalseToHiddenConverter}}"
                                             Command="{Binding Delete}">
                                         <ui:SymbolIcon Symbol="Delete" />
                                     </Button>
-                                </DockPanel>
+                                </Grid>
 
                                 <Image Grid.Row="1"
                                        Margin="0,10"

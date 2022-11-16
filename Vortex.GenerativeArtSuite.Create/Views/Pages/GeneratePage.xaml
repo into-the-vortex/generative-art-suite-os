@@ -160,9 +160,12 @@
                                         Command="{Binding OnClick}">
                                     <Grid>
                                         <Image Source="{Binding Icon}" />
-                                        <Label Content="{Binding Name}"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center" />
+                                        <TextBlock Grid.Column="0"
+                                                   Margin="10,0"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   TextWrapping="NoWrap"
+                                                   VerticalAlignment="Center"
+                                                   Text="{Binding Name}" />
                                     </Grid>
                                 </Button>
                             </DataTemplate>

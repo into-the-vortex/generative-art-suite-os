@@ -40,13 +40,19 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
                 <ui:SimpleStackPanel Orientation="Vertical">
-                    <DockPanel HorizontalAlignment="Stretch">
-                        <Label Margin="10,0"
-                               Content="{Binding Name}"
-                               FontSize="20"
-                               HorizontalAlignment="Left"
-                               VerticalAlignment="Center" />
-                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Margin="10,0"
+                                   FontSize="20"
+                                   TextTrimming="CharacterEllipsis"
+                                   TextWrapping="NoWrap"
+                                   VerticalAlignment="Center"
+                                   Text="{Binding Name}" />
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
                             <Button Margin="5" Command="{Binding Edit}">
                                 <ui:SymbolIcon Symbol="Edit" />
                             </Button>
@@ -54,7 +60,7 @@
                                 <ui:SymbolIcon Symbol="Delete" />
                             </Button>
                         </StackPanel>
-                    </DockPanel>
+                    </Grid>
                     <Separator />
                     <StackPanel Orientation="Horizontal">
                         <ItemsControl Margin="10,10"
