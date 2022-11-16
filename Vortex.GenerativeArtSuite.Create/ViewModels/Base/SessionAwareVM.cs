@@ -1,7 +1,6 @@
 ﻿using Prism.Regions;
 using Prism.Services.Dialogs;
 using Vortex.GenerativeArtSuite.Create.Services;
-using Vortex.GenerativeArtSuite.Create.ViewModels.Layers;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Base
 {
@@ -34,7 +33,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Base
             {
                 var param = new DialogParameters
                 {
-                    { nameof(DeleteLayerDialogVM.Message), Strings.SaveQuestion },
+                    { nameof(YesNoDialogVM.Message), Strings.SaveQuestion },
                 };
 
                 dialogService.ShowDialog(DialogVM.ConfirmSaveDialog, param, ConfirmSaveCallback);

@@ -216,6 +216,15 @@
   <data name="IsDNAOn" xml:space="preserve">
     <value>Trait makes the token unique</value>
   </data>
+  <data name="IsDrawn" xml:space="preserve">
+    <value>Draw Traits</value>
+  </data>
+  <data name="IsDrawnOff" xml:space="preserve">
+    <value>Traits are not drawn</value>
+  </data>
+  <data name="IsDrawnOn" xml:space="preserve">
+    <value>Traits are drawn</value>
+  </data>
   <data name="IsOptional" xml:space="preserve">
     <value>Is Optional</value>
   </data>
@@ -257,12 +266,6 @@
   </data>
   <data name="OutputFolderPlaceholder" xml:space="preserve">
     <value>C:\Users\Account\Documents\Vortex\SessionNameOutput</value>
-  </data>
-  <data name="PathPlaceholder" xml:space="preserve">
-    <value>PathA / PathB (Must be unique, is case sensative)</value>
-  </data>
-  <data name="Paths" xml:space="preserve">
-    <value>Paths</value>
   </data>
   <data name="Remaining" xml:space="preserve">
     <value>Remaining</value>

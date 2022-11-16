@@ -8,7 +8,7 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
              xmlns:ui="http://schemas.modernwpf.com/2019"
-             xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.Layers"
+             xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.Layers.Edit"
              d:DataContext="{d:DesignInstance vms:EditLayerDialogVM}"
              prism:ViewModelLocator.AutoWireViewModel="True"
              Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
@@ -26,24 +26,58 @@
     </prism:Dialog.WindowStyle>
 
     <Grid>
-
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-            <ui:SimpleStackPanel Spacing="10"
-                                 Margin="50,20,50,80"
-                                 HorizontalAlignment="Stretch"
-                                 Orientation="Vertical"
-                                 VerticalAlignment="Stretch">
-                <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.NameLabel}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+            <Grid Margin="50,20,50,100">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-                <Separator />
+                <!--  Left  -->
 
-                <controls:EditLayerSettings />
+                <TextBox Grid.Row="0"
+                         Grid.ColumnSpan="3"
+                         ui:ControlHelper.Header="{x:Static strings:Strings.NameLabel}"
+                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
 
-                <Separator />
+                <controls:LayerDependencyControl Grid.Row="2"
+                                                 Grid.Column="0"
+                                                 Visibility="{Binding CanHaveDependencies, Converter={StaticResource FalseToCollapsedConverter}}" />
 
-                <controls:EditLayerPaths />
+                <!--  Right  -->
 
-            </ui:SimpleStackPanel>
+                <ui:SimpleStackPanel Grid.Row="2"
+                                     Grid.Column="2"
+                                     Spacing="10"
+                                     Orientation="Vertical">
+                    <ui:ToggleSwitch ui:ControlHelper.Header="{x:Static strings:Strings.IsDNA}"
+                                     HorizontalAlignment="Left"
+                                     IsOn="{Binding IncludeInDNA}"
+                                     OffContent="{x:Static strings:Strings.IsDNAOff}"
+                                     OnContent="{x:Static strings:Strings.IsDNAOn}" />
+
+                    <ui:ToggleSwitch ui:ControlHelper.Header="{x:Static strings:Strings.IsAffectedByMask}"
+                                     HorizontalAlignment="Left"
+                                     IsOn="{Binding AffectedByLayerMask}"
+                                     OffContent="{x:Static strings:Strings.IsAffectedByMaskOff}"
+                                     OnContent="{x:Static strings:Strings.IsAffectedByMaskOn}"
+                                     Visibility="{Binding Drawn, Converter={StaticResource FalseToCollapsedConverter}}" />
+
+                    <ui:ToggleSwitch ui:ControlHelper.Header="{x:Static strings:Strings.IsOptional}"
+                                     HorizontalAlignment="Left"
+                                     IsOn="{Binding Optional}"
+                                     OffContent="{x:Static strings:Strings.IsOptionalOff}"
+                                     OnContent="{x:Static strings:Strings.IsOptionalOn}"
+                                     Visibility="{Binding Drawn, Converter={StaticResource FalseToCollapsedConverter}}" />
+                </ui:SimpleStackPanel>
+
+            </Grid>
         </ScrollViewer>
 
         <ui:SimpleStackPanel Spacing="10"
@@ -51,15 +85,14 @@
                              Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
                              Orientation="Vertical"
                              VerticalAlignment="Bottom">
-
             <Separator />
-            <Grid Margin="0,0,0,20">
+            <Grid Margin="0,20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0"
-                        Content="{x:Static strings:Strings.Save}"
+                        Content="{x:Static strings:Strings.Confirm}"
                         HorizontalAlignment="Stretch"
                         Command="{Binding Confirm}" />
                 <Button Grid.Column="1"
@@ -71,5 +104,4 @@
         </ui:SimpleStackPanel>
 
     </Grid>
-
 </UserControl>

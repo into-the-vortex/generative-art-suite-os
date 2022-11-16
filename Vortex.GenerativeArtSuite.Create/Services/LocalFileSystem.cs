@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using Newtonsoft.Json;
-using Vortex.GenerativeArtSuite.Create.Models;
+using Vortex.GenerativeArtSuite.Create.Models.Settings;
 
 namespace Vortex.GenerativeArtSuite.Create.Services
 {
@@ -53,7 +53,10 @@ namespace Vortex.GenerativeArtSuite.Create.Services
                 throw new ArgumentException($"{name} does not refer to an existing session", nameof(name));
             }
 
-            return JsonConvert.DeserializeObject<Session>(File.ReadAllText(path)) ?? throw new ArgumentException($"{name} could not be loaded", nameof(name));
+            return JsonConvert.DeserializeObject<Session>(File.ReadAllText(path), new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Objects,
+            }) ?? throw new ArgumentException($"{name} could not be loaded", nameof(name));
         }
 
         public void SaveSession(Session session)
@@ -67,7 +70,11 @@ namespace Vortex.GenerativeArtSuite.Create.Services
                 }
 
                 var path = Path.Combine(dir, SESSIONFILE);
-                File.WriteAllText(path, JsonConvert.SerializeObject(session));
+                File.WriteAllText(path, JsonConvert.SerializeObject(session, new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.Objects,
+                    TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
+                }));
             }
             catch (Exception e)
             {

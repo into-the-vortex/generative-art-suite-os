@@ -1,5 +1,5 @@
-﻿using Prism.Regions;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using Prism.Regions;
 
 namespace Vortex.GenerativeArtSuite.Create.Services
 {

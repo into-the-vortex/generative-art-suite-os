@@ -8,8 +8,14 @@ using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Generating;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Home;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Layers;
+using Vortex.GenerativeArtSuite.Create.ViewModels.Layers.Create;
+using Vortex.GenerativeArtSuite.Create.ViewModels.Layers.Delete;
+using Vortex.GenerativeArtSuite.Create.ViewModels.Layers.Edit;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Settings;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Traits;
+using Vortex.GenerativeArtSuite.Create.ViewModels.Traits.Create;
+using Vortex.GenerativeArtSuite.Create.ViewModels.Traits.Delete;
+using Vortex.GenerativeArtSuite.Create.ViewModels.Traits.Edit;
 using Vortex.GenerativeArtSuite.Create.Views.Dialogs;
 using Vortex.GenerativeArtSuite.Create.Views.Pages;
 

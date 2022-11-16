@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -9,7 +8,8 @@ using System.Windows.Input;
 using DynamicData;
 using Prism.Commands;
 using Prism.Mvvm;
-using Vortex.GenerativeArtSuite.Create.Models;
+using Vortex.GenerativeArtSuite.Create.Models.Generating;
+using Vortex.GenerativeArtSuite.Create.Models.Traits;
 using Vortex.GenerativeArtSuite.Create.Services;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generating
@@ -61,31 +61,9 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generating
 
         public ObservableCollection<CharacterTraitVM> Traits { get; } = new();
 
-        public ObservableCollection<CharacterPathSelectorVM> PathCollections { get; } = new();
-
         public void Reset()
         {
             generation = sessionProvider.Session().CreateRandomGeneration(0);
-
-            var used = new List<string>();
-            PathCollections.Clear();
-            foreach (var layer in sessionProvider.Session().Layers.Where(l => l.Paths.Any()))
-            {
-                foreach (var paths in layer.Paths)
-                {
-                    var con = string.Concat(paths.Options.OrderByDescending(p => p));
-                    if (!used.Contains(con))
-                    {
-                        PathCollections.Add(new CharacterPathSelectorVM(
-                            used.Count,
-                            generation.ChosenPaths[used.Count],
-                            paths.Options,
-                            OnPathChanged));
-
-                        used.Add(con);
-                    }
-                }
-            }
 
             Layers.Clear();
             Layers.AddRange(sessionProvider.Session().Layers.Select(l => l.Name));
@@ -115,10 +93,6 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generating
         }
 
         private void OnTraitClicked(Trait trait)
-        {
-        }
-
-        private void OnPathChanged(int index, string value)
         {
         }
 

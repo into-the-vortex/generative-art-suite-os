@@ -5,7 +5,7 @@ using Prism.Commands;
 using Prism.Mvvm;
 using Vortex.GenerativeArtSuite.Common.Models;
 using Vortex.GenerativeArtSuite.Common.ViewModels;
-using Vortex.GenerativeArtSuite.Create.Models;
+using Vortex.GenerativeArtSuite.Create.Models.Generating;
 using Vortex.GenerativeArtSuite.Create.Services;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generating

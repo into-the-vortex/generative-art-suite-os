@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-        xmlns:converters="clr-namespace:Vortex.GenerativeArtSuite.Common.Converters;assembly=Vortex.GenerativeArtSuite.Common"
         xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.Traits"
@@ -21,19 +20,6 @@
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch">
     <Grid>
-        <Grid.Resources>
-            <converters:EmptyToCollapsedConverter x:Key="EmptyToCollapsedConverter" />
-            <converters:NullToVisibilityConverter x:Key="NullToCollapsedConverter"
-                                                  OnNotNull="Visible"
-                                                  OnNull="Collapsed" />
-            <converters:NullToVisibilityConverter x:Key="NullToVisibleConverter"
-                                                  OnNotNull="Collapsed"
-                                                  OnNull="Visible" />
-            <converters:BooleanToVisibilityConverter x:Key="FalseToHiddenConverter"
-                                                     OnFalse="Hidden"
-                                                     OnTrue="Visible" />
-        </Grid.Resources>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
@@ -81,7 +67,7 @@
             </b:Interaction.Triggers>
             <ui:ItemsRepeater DataContext="{Binding Content}"
                               HorizontalAlignment="Stretch"
-                              ItemsSource="{Binding TraitVms}">
+                              ItemsSource="{Binding TraitIconVMs}">
                 <ui:ItemsRepeater.Layout>
                     <ui:UniformGridLayout ItemsJustification="Start"
                                           ItemsStretch="Uniform"

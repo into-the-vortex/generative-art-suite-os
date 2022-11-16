@@ -10,14 +10,12 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
     {
         private readonly IDialogService dialogService;
         private readonly ISessionProvider sessionProvider;
-        private readonly IFileSystem fileSystem;
-        private TraitsVM? content;
+        private LayerTraitsVM? content;
         private string? selectedLayer;
 
         public LayerSelectorVM(IFileSystem fileSystem, IDialogService dialogService, ISessionProvider sessionProvider)
             : base(sessionProvider, dialogService)
         {
-            this.fileSystem = fileSystem;
             this.dialogService = dialogService;
             this.sessionProvider = sessionProvider;
         }
@@ -30,7 +28,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
             set => SetProperty(ref selectedLayer, value, UpdateContent);
         }
 
-        public TraitsVM? Content
+        public LayerTraitsVM? Content
         {
             get => content;
             set => SetProperty(ref content, value);
@@ -48,7 +46,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
         private void UpdateContent()
         {
             var layer = sessionProvider.Session().Layers.FirstOrDefault(l => l.Name == selectedLayer);
-            Content = layer is not null ? new TraitsVM(fileSystem, dialogService, layer) : null;
+            Content = layer is not null ? new LayerTraitsVM(sessionProvider, dialogService, layer) : null;
         }
     }
 }

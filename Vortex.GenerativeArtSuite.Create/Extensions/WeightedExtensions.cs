@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DynamicData;
-using Vortex.GenerativeArtSuite.Create.Models;
+using Vortex.GenerativeArtSuite.Create.Models.Traits;
 
 namespace Vortex.GenerativeArtSuite.Create.Extensions
 {

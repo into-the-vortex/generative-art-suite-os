@@ -1,0 +1,32 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:Vortex.GenerativeArtSuite.Common.Converters;assembly=Vortex.GenerativeArtSuite.Common">
+
+    <converters:PixelsToGridLengthConverter x:Key="PixelsToGridLengthConverter" />
+
+    <converters:EmptyToCollapsedConverter x:Key="EmptyToCollapsedConverter" />
+
+    <converters:BooleanToVisibilityConverter x:Key="FalseToCollapsedConverter"
+                                             OnFalse="Collapsed"
+                                             OnTrue="Visible" />
+
+    <converters:BooleanToVisibilityConverter x:Key="FalseToHiddenConverter"
+                                             OnFalse="Hidden"
+                                             OnTrue="Visible" />
+
+    <converters:NullToVisibilityConverter x:Key="NullToCollapsedConverter"
+                                          OnNotNull="Visible"
+                                          OnNull="Collapsed" />
+
+    <converters:NullToVisibilityConverter x:Key="NullToVisibleConverter"
+                                          OnNotNull="Collapsed"
+                                          OnNull="Visible" />
+
+    <converters:NullOrEmptyToVisibilityConverter x:Key="NullOrEmptyToCollapsedConverter"
+                                                 OnNotNull="Visible"
+                                                 OnNull="Collapsed" />
+
+    <converters:NullOrEmptyToVisibilityConverter x:Key="NullOrEmptyToVisibleConverter"
+                                                 OnNotNull="Collapsed"
+                                                 OnNull="Visible" />
+</ResourceDictionary>

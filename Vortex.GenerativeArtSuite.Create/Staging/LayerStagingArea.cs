@@ -1,56 +1,42 @@
-﻿using Vortex.GenerativeArtSuite.Common.Staging;
-using Vortex.GenerativeArtSuite.Create.Models;
+﻿using System;
+using Vortex.GenerativeArtSuite.Common.Staging;
+using Vortex.GenerativeArtSuite.Create.Models.Layers;
 
 namespace Vortex.GenerativeArtSuite.Create.Staging
 {
-    public class LayerStagingArea
+    public abstract class LayerStagingArea
     {
         private readonly Layer model;
 
-        public LayerStagingArea(Layer model)
+        protected LayerStagingArea(Layer model, Action onDependencyChanged)
         {
             this.model = model;
 
-            Name = new StagingProperty<string>(name => model.Name = name, () => model.Name);
-            Optional = new StagingProperty<bool>(optional => model.Optional = optional, () => model.Optional, onApply: model.OnOptionalChanged);
+            Name = new StagingProperty<string>(name => model.Name = name, () => model.Name, onDependencyChanged);
             IncludeInDNA = new StagingProperty<bool>(includeInDNA => model.IncludeInDNA = includeInDNA, () => model.IncludeInDNA);
-            AffectedByLayerMask = new StagingProperty<bool>(affectedByLayerMask => model.AffectedByLayerMask = affectedByLayerMask, () => model.AffectedByLayerMask);
-            Paths = new StagingList<PathSelector>(model.Paths, onApply: model.OnTraitsInvalidated);
+            Dependencies = new StagingList<Dependency>(model.Dependencies, onDependencyChanged);
         }
 
         public StagingProperty<string> Name { get; }
 
-        public StagingProperty<bool> Optional { get; }
-
         public StagingProperty<bool> IncludeInDNA { get; }
 
-        public StagingProperty<bool> AffectedByLayerMask { get; }
+        public StagingList<Dependency> Dependencies { get; }
 
-        public StagingList<PathSelector> Paths { get; }
-
-        public static bool CanApply()
-        {
-            return true;
-        }
-
-        public Layer Apply()
+        public virtual Layer Apply()
         {
             Name.Apply();
-            Optional.Apply();
             IncludeInDNA.Apply();
-            AffectedByLayerMask.Apply();
-            Paths.Apply();
+            Dependencies.Apply();
 
             return model;
         }
 
-        public bool IsDirty()
+        public virtual bool IsDirty()
         {
             return Name.IsDirty ||
-                Optional.IsDirty ||
                 IncludeInDNA.IsDirty ||
-                AffectedByLayerMask.IsDirty ||
-                Paths.IsDirty;
+                Dependencies.IsDirty;
         }
     }
 }

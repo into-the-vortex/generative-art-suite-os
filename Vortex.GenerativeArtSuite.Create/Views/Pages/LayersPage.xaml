@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        xmlns:converters="clr-namespace:Vortex.GenerativeArtSuite.Common.Converters;assembly=Vortex.GenerativeArtSuite.Common"
         xmlns:dd="urn:gong-wpf-dragdrop"
         xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
         xmlns:ui="http://schemas.modernwpf.com/2019"
@@ -22,11 +21,8 @@
         VerticalAlignment="Stretch">
 
     <Border.Resources>
-        <converters:EmptyToCollapsedConverter x:Key="EmptyToCollapsedConverter" />
-
         <DataTemplate x:Key="LayerSettingTemplate">
-            <Border Margin="5,0"
-                    Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+            <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
                     BorderBrush="{DynamicResource SystemControlBackgroundBaseHighBrush}"
                     BorderThickness="1"
                     CornerRadius="10"
@@ -43,9 +39,10 @@
                     CornerRadius="10"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
-                <ui:SimpleStackPanel Margin="5,0,5,5" Orientation="Vertical">
+                <ui:SimpleStackPanel Orientation="Vertical">
                     <DockPanel HorizontalAlignment="Stretch">
-                        <Label Content="{Binding Name}"
+                        <Label Margin="10,0"
+                               Content="{Binding Name}"
                                FontSize="20"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Center" />
@@ -60,23 +57,21 @@
                     </DockPanel>
                     <Separator />
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="{x:Static strings:Strings.Settings}" VerticalAlignment="Center" />
-                        <ItemsControl Margin="0,5"
+                        <ItemsControl Margin="10,10"
                                       HorizontalAlignment="Stretch"
                                       VerticalAlignment="Center"
                                       ItemTemplate="{StaticResource LayerSettingTemplate}"
                                       ItemsSource="{Binding Settings}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Horizontal" />
+                                    <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal" />
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                         </ItemsControl>
                     </StackPanel>
-                    <StackPanel Orientation="Vertical" Visibility="{Binding Paths, Converter={StaticResource EmptyToCollapsedConverter}}">
+                    <StackPanel Orientation="Vertical" Visibility="{Binding Dependencies, Converter={StaticResource EmptyToCollapsedConverter}}">
                         <Separator />
-                        <Label Content="{x:Static strings:Strings.Paths}" />
-                        <ItemsControl ItemsSource="{Binding Paths}" />
+                        <ItemsControl Margin="10,10" ItemsSource="{Binding Dependencies}" />
                     </StackPanel>
                 </ui:SimpleStackPanel>
             </Border>
@@ -109,6 +104,7 @@
                       HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Visible">
             <ItemsControl Padding="20,10,20,0"
+                          dd:DragDrop.DropHandler="{Binding}"
                           dd:DragDrop.IsDragSource="True"
                           dd:DragDrop.IsDropTarget="True"
                           HorizontalAlignment="Stretch"

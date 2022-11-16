@@ -4,11 +4,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             xmlns:controls="clr-namespace:Vortex.GenerativeArtSuite.Create.Controls"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
              xmlns:ui="http://schemas.modernwpf.com/2019"
-             xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.Traits"
+             xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.Traits.Edit"
              d:DataContext="{d:DesignInstance vms:EditTraitDialogVM}"
              prism:ViewModelLocator.AutoWireViewModel="True"
              Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
@@ -26,9 +25,8 @@
     </prism:Dialog.WindowStyle>
 
     <Grid>
-
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-            <controls:EditTrait Margin="50,20,50,70" />
+            <ContentControl Margin="50,20,50,100" Content="{Binding TraitVM}" />
         </ScrollViewer>
 
         <ui:SimpleStackPanel Spacing="10"
@@ -36,15 +34,14 @@
                              Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
                              Orientation="Vertical"
                              VerticalAlignment="Bottom">
-
             <Separator />
-            <Grid Margin="0,0,0,20">
+            <Grid Margin="0,20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0"
-                        Content="{x:Static strings:Strings.Save}"
+                        Content="{x:Static strings:Strings.Confirm}"
                         HorizontalAlignment="Stretch"
                         Command="{Binding Confirm}" />
                 <Button Grid.Column="1"
@@ -54,7 +51,6 @@
                         Command="{Binding Cancel}" />
             </Grid>
         </ui:SimpleStackPanel>
-
     </Grid>
 
 </UserControl>

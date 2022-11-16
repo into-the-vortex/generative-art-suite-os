@@ -358,6 +358,33 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Draw Traits.
+        /// </summary>
+        public static string IsDrawn {
+            get {
+                return ResourceManager.GetString("IsDrawn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Traits are not drawn.
+        /// </summary>
+        public static string IsDrawnOff {
+            get {
+                return ResourceManager.GetString("IsDrawnOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Traits are drawn.
+        /// </summary>
+        public static string IsDrawnOn {
+            get {
+                return ResourceManager.GetString("IsDrawnOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is Optional.
         /// </summary>
         public static string IsOptional {
@@ -480,24 +507,6 @@ namespace Vortex.GenerativeArtSuite.Create {
         public static string OutputFolderPlaceholder {
             get {
                 return ResourceManager.GetString("OutputFolderPlaceholder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to PathA / PathB (Must be unique, is case sensative).
-        /// </summary>
-        public static string PathPlaceholder {
-            get {
-                return ResourceManager.GetString("PathPlaceholder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Paths.
-        /// </summary>
-        public static string Paths {
-            get {
-                return ResourceManager.GetString("Paths", resourceCulture);
             }
         }
         

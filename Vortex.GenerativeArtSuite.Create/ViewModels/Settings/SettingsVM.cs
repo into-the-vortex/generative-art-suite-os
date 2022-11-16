@@ -1,5 +1,5 @@
 ﻿using Prism.Services.Dialogs;
-using Vortex.GenerativeArtSuite.Create.Models;
+using Vortex.GenerativeArtSuite.Create.Models.Settings;
 using Vortex.GenerativeArtSuite.Create.Services;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
 

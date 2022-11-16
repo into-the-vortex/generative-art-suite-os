@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 using Prism.Commands;
-using Vortex.GenerativeArtSuite.Create.Models;
+using Vortex.GenerativeArtSuite.Create.Models.Settings;
 using Vortex.GenerativeArtSuite.Create.Services;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Settings;
 

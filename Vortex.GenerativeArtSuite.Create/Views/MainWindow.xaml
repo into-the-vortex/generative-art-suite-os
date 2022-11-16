@@ -6,7 +6,6 @@
         mc:Ignorable="d"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:controls="clr-namespace:Vortex.GenerativeArtSuite.Common.Controls;assembly=Vortex.GenerativeArtSuite.Common"
-        xmlns:converters="clr-namespace:Vortex.GenerativeArtSuite.Common.Converters;assembly=Vortex.GenerativeArtSuite.Common"
         xmlns:prism="http://prismlibrary.com/"
         xmlns:services="clr-namespace:Vortex.GenerativeArtSuite.Create.Services"
         xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
@@ -29,7 +28,6 @@
     </b:Interaction.Triggers>
 
     <Window.Resources>
-        <converters:PixelsToGridLengthConverter x:Key="PixelsToGridLength" />
         <Style x:Key="AppTitleBarButtonStyle" TargetType="ui:TitleBarButton">
             <Setter Property="IsActive" Value="{Binding IsActive, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
         </Style>
@@ -83,11 +81,11 @@
             </Grid.Style>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="{Binding Path=(ui:TitleBar.SystemOverlayLeftInset), Converter={StaticResource PixelsToGridLength}, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
+                <ColumnDefinition Width="{Binding Path=(ui:TitleBar.SystemOverlayLeftInset), Converter={StaticResource PixelsToGridLengthConverter}, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="{Binding Path=(ui:TitleBar.SystemOverlayRightInset), Converter={StaticResource PixelsToGridLength}, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
+                <ColumnDefinition Width="{Binding Path=(ui:TitleBar.SystemOverlayRightInset), Converter={StaticResource PixelsToGridLengthConverter}, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Column="1"

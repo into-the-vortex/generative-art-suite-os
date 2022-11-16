@@ -1,0 +1,39 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Vortex.GenerativeArtSuite.Create.Controls"
+                    xmlns:ui="http://schemas.modernwpf.com/2019"
+                    xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.Traits">
+
+    <DataTemplate DataType="{x:Type vms:PathingTraitVM}">
+        <controls:TraitSettings />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vms:DrawnTraitVM}">
+        <ui:SimpleStackPanel Spacing="10" Orientation="Vertical">
+            <controls:TraitSettings />
+            <Separator />
+            <controls:TraitVariant HorizontalAlignment="Center" />
+        </ui:SimpleStackPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vms:DependencyTraitVM}">
+        <ui:SimpleStackPanel Spacing="10" Orientation="Vertical">
+            <controls:TraitSettings />
+            <Separator />
+            <ui:ItemsRepeater ItemsSource="{Binding VariantVMs}">
+                <ui:ItemsRepeater.Layout>
+                    <ui:UniformGridLayout ItemsJustification="SpaceAround" ItemsStretch="None" />
+                </ui:ItemsRepeater.Layout>
+                <ui:ItemsRepeater.ItemTemplate>
+                    <DataTemplate>
+                        <ui:SimpleStackPanel Spacing="10" Orientation="Vertical">
+                            <Label Content="{Binding VariantPath}" HorizontalAlignment="Center" />
+                            <controls:TraitVariant HorizontalAlignment="Center" />
+                        </ui:SimpleStackPanel>
+                    </DataTemplate>
+                </ui:ItemsRepeater.ItemTemplate>
+            </ui:ItemsRepeater>
+        </ui:SimpleStackPanel>
+    </DataTemplate>
+
+</ResourceDictionary>

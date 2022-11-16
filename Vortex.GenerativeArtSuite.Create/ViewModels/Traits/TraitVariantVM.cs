@@ -1,100 +1,39 @@
-﻿using System.IO;
-using System.Windows.Input;
-using Prism.Commands;
+﻿using System;
 using Prism.Mvvm;
 using Vortex.GenerativeArtSuite.Common.ViewModels;
-using Vortex.GenerativeArtSuite.Create.Models;
+using Vortex.GenerativeArtSuite.Create.Models.Traits;
 using Vortex.GenerativeArtSuite.Create.Services;
+using Vortex.GenerativeArtSuite.Create.ViewModels.Traits.Base;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
 {
-    public class TraitVariantVM : BindableBase, IViewModel<TraitVariant>
+    public class TraitVariantVM : BindableBase, IViewModel<TraitVariant>, ITraitVariantVM
     {
-        private readonly IFileSystem fileSystem;
-
-        public TraitVariantVM(IFileSystem fileSystem, TraitVariant model)
+        public TraitVariantVM(IFileSystem fileSystem, TraitVariant model, Action raiseCanExecuteChanged)
         {
-            this.fileSystem = fileSystem;
+            VariantPath = model.VariantPath;
+
+            Trait = new TraitImageVM(
+                fileSystem,
+                () => model.TraitURI,
+                val => model.TraitURI = val,
+                raiseCanExecuteChanged);
+
+            Mask = new TraitImageVM(
+                fileSystem,
+                () => model.MaskURI,
+                val => model.MaskURI = val,
+                raiseCanExecuteChanged);
 
             Model = model;
-            BrowseImage = new DelegateCommand(OnBrowseImage);
-            ClearImage = new DelegateCommand(OnClearImage);
-            BrowseMask = new DelegateCommand(OnBrowseMask);
-            ClearMask = new DelegateCommand(OnClearMask);
         }
 
-        public string DisplayName => Model.DisplayName;
+        public string VariantPath { get; }
 
-        public string? ImagePath
-        {
-            get => Model.ImagePath;
-            set
-            {
-                if (Model.ImagePath != value && (value is null || File.Exists(value)))
-                {
-                    Model.ImagePath = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
+        public TraitImageVM Trait { get; }
 
-        public string? MaskPath
-        {
-            get => Model.MaskPath;
-            set
-            {
-                if (Model.MaskPath != value && (value is null || File.Exists(value)))
-                {
-                    Model.MaskPath = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
-
-        public int Weight
-        {
-            get => Model.Weight;
-            set
-            {
-                if (Model.Weight != value)
-                {
-                    Model.Weight = value;
-                    RaisePropertyChanged();
-                    RaisePropertyChanged(nameof(WeightLabel));
-                }
-            }
-        }
-
-        public string WeightLabel => $"{Strings.Weight} - {Weight:D3}";
-
-        public ICommand BrowseImage { get; }
-
-        public ICommand ClearImage { get; }
-
-        public ICommand BrowseMask { get; }
-
-        public ICommand ClearMask { get; }
+        public TraitImageVM Mask { get; }
 
         public TraitVariant Model { get; }
-
-        private void OnBrowseImage()
-        {
-            ImagePath = fileSystem.SelectImageFile();
-        }
-
-        private void OnClearImage()
-        {
-            ImagePath = null;
-        }
-
-        private void OnBrowseMask()
-        {
-            MaskPath = fileSystem.SelectImageFile();
-        }
-
-        private void OnClearMask()
-        {
-            MaskPath = null;
-        }
     }
 }
