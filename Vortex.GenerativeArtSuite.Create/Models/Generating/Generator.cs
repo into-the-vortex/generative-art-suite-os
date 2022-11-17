@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Vortex.GenerativeArtSuite.Common.Models;
+using Vortex.GenerativeArtSuite.Create.Models.Sessions;
 using Vortex.GenerativeArtSuite.Create.Models.Settings;
 
 namespace Vortex.GenerativeArtSuite.Create.Models.Generating

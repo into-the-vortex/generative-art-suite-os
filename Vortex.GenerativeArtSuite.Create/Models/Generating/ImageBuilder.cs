@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Vortex.GenerativeArtSuite.Create.Models.Settings;
+using Vortex.GenerativeArtSuite.Create.Models.Sessions;
 
 namespace Vortex.GenerativeArtSuite.Create.Models.Generating
 {
@@ -35,11 +35,11 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
 
                     var images = session.GetTraitURIs()
                         .Concat(session.GetMaskURIs())
-                        .Where(uri => File.Exists(uri));
+                        .Where(uri => File.Exists(uri.Value));
 
                     foreach(var image in images)
                     {
-                        Images[image] = Image.FromFile(image);
+                        Images[image.Value] = Image.FromFile(image.Value);
                         cancellationTokenSource.Token.ThrowIfCancellationRequested();
                     }
                 }

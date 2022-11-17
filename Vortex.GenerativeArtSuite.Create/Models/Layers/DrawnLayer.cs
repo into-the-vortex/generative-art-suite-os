@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using Vortex.GenerativeArtSuite.Create.Extensions;
-using Vortex.GenerativeArtSuite.Create.Models.Settings;
+using Vortex.GenerativeArtSuite.Create.Models.Sessions;
 using Vortex.GenerativeArtSuite.Create.Models.Traits;
 
 namespace Vortex.GenerativeArtSuite.Create.Models.Layers

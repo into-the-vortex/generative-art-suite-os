@@ -1,28 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using Newtonsoft.Json;
-using Vortex.GenerativeArtSuite.Create.Models.Settings;
+using Vortex.GenerativeArtSuite.Common.Models;
+using Vortex.GenerativeArtSuite.Create.Models.Sessions;
 
 namespace Vortex.GenerativeArtSuite.Create.Services
 {
     internal class LocalFileSystem : IFileSystem
     {
+        private const string ROOTPATH = @"%APPDATA%\Vortex Labs\GAS";
         private const string SESSIONFILE = "session.json";
+        private const string SESSIONSFOLDER = "sessions";
+        private const string ICONFOLDER = "icons";
+        private const string TRAITFOLDER = "traits";
+        private const string MASKFOLDER = "masks";
 
         private readonly string rootPath;
         private readonly string sessionsPath;
 
         public LocalFileSystem()
         {
-            rootPath = Environment.ExpandEnvironmentVariables(@"%APPDATA%\Vortex Labs\GAS");
+            rootPath = Environment.ExpandEnvironmentVariables(ROOTPATH);
             if (!Directory.Exists(rootPath))
             {
                 Directory.CreateDirectory(rootPath);
             }
 
-            sessionsPath = Path.Combine(rootPath, "sessions");
+            sessionsPath = Path.Combine(rootPath, SESSIONSFOLDER);
             if (!Directory.Exists(sessionsPath))
             {
                 Directory.CreateDirectory(sessionsPath);
@@ -69,6 +76,10 @@ namespace Vortex.GenerativeArtSuite.Create.Services
                     Directory.CreateDirectory(dir);
                 }
 
+                ManageImages(Path.Combine(dir, ICONFOLDER), session.GetIconURIs());
+                ManageImages(Path.Combine(dir, TRAITFOLDER), session.GetTraitURIs());
+                ManageImages(Path.Combine(dir, MASKFOLDER), session.GetMaskURIs());
+
                 var path = Path.Combine(dir, SESSIONFILE);
                 File.WriteAllText(path, JsonConvert.SerializeObject(session, new JsonSerializerSettings
                 {
@@ -113,6 +124,50 @@ namespace Vortex.GenerativeArtSuite.Create.Services
             dialog.ShowDialog();
 
             return dialog.FileName;
+        }
+
+        private void ManageImages(string dir, List<Reference<string>> images)
+        {
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            var existing = images
+               .Where(img => File.Exists(img.Value))
+               .ToList();
+
+            CleanUnreferenced(dir, existing);
+            SaveAsRelative(dir, existing);
+        }
+
+        private void CleanUnreferenced(string dir, List<Reference<string>> images)
+        {
+            var files = Directory.GetFiles(dir);
+
+            foreach (var file in files)
+            {
+                if (!images.Any(img => img.Value == file))
+                {
+                    File.Delete(file);
+                }
+            }
+        }
+
+        private void SaveAsRelative(string dir, List<Reference<string>> images)
+        {
+            var files = Directory.GetFiles(dir);
+
+            foreach (var image in images)
+            {
+                if (!files.Contains(image.Value))
+                {
+                    var name = $"{Guid.NewGuid()}{new FileInfo(image.Value).Extension}";
+                    var newPath = Path.Join(dir, name);
+                    File.Copy(image.Value, newPath);
+                    image.Value = newPath.Replace(rootPath, ROOTPATH);
+                }
+            }
         }
     }
 }

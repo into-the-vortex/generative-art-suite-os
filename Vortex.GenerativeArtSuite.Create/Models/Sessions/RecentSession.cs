@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vortex.GenerativeArtSuite.Create.Models.Settings
+namespace Vortex.GenerativeArtSuite.Create.Models.Sessions
 {
     public struct RecentSession
     {

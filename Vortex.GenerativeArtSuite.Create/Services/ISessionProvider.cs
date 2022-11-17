@@ -1,5 +1,5 @@
 ﻿using System;
-using Vortex.GenerativeArtSuite.Create.Models.Settings;
+using Vortex.GenerativeArtSuite.Create.Models.Sessions;
 
 namespace Vortex.GenerativeArtSuite.Create.Services
 {

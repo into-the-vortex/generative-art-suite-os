@@ -4,12 +4,14 @@ using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using Vortex.GenerativeArtSuite.Common.Models;
 using Vortex.GenerativeArtSuite.Create.Extensions;
 using Vortex.GenerativeArtSuite.Create.Models.Generating;
 using Vortex.GenerativeArtSuite.Create.Models.Layers;
+using Vortex.GenerativeArtSuite.Create.Models.Settings;
 using Vortex.GenerativeArtSuite.Create.Models.Traits;
 
-namespace Vortex.GenerativeArtSuite.Create.Models.Settings
+namespace Vortex.GenerativeArtSuite.Create.Models.Sessions
 {
     public class Session
     {
@@ -121,27 +123,45 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Settings
             return new Generation(nextId, Hash(dna.Trim()), buildOrder);
         }
 
-        public List<string> GetIconURIs()
+        public List<Reference<string>> GetIconURIs()
         {
-            return Layers.SelectMany(l => l.Traits.Select(t => t.IconURI)).ToList();
+            return Layers.SelectMany(
+                l => l.Traits.Select(
+                    t => new Reference<string>(() => t.IconURI, v => t.IconURI = v))).ToList();
         }
 
-        public List<string> GetTraitURIs()
+        public List<Reference<string>> GetTraitURIs()
         {
-            var result = new List<string>();
+            var result = new List<Reference<string>>();
 
-            result.AddRange(Layers.SelectMany(l => l.Traits.OfType<DrawnTrait>().Select(t => t.TraitURI)));
-            result.AddRange(Layers.SelectMany(l => l.Traits.OfType<DependencyTrait>().SelectMany(v => v.Variants.Select(v => v.TraitURI))));
+            result.AddRange(
+                Layers.SelectMany(
+                    l => l.Traits.OfType<DrawnTrait>().Select(
+                        t => new Reference<string>(() => t.TraitURI, v => t.TraitURI = v))));
+
+            result.AddRange(
+                Layers.SelectMany(
+                    l => l.Traits.OfType<DependencyTrait>().SelectMany(
+                        v => v.Variants.Select(
+                            t => new Reference<string>(() => t.TraitURI, x => t.TraitURI = x)))));
 
             return result;
         }
 
-        public List<string> GetMaskURIs()
+        public List<Reference<string>> GetMaskURIs()
         {
-            var result = new List<string>();
+            var result = new List<Reference<string>>();
 
-            result.AddRange(Layers.SelectMany(l => l.Traits.OfType<DrawnTrait>().Select(t => t.MaskURI)));
-            result.AddRange(Layers.SelectMany(l => l.Traits.OfType<DependencyTrait>().SelectMany(v => v.Variants.Select(v => v.MaskURI))));
+            result.AddRange(
+                Layers.SelectMany(
+                    l => l.Traits.OfType<DrawnTrait>().Select(
+                        t => new Reference<string>(() => t.MaskURI, v => t.MaskURI = v))));
+
+            result.AddRange(
+                Layers.SelectMany(
+                    l => l.Traits.OfType<DependencyTrait>().SelectMany(
+                        v => v.Variants.Select(
+                            t => new Reference<string>(() => t.MaskURI, x => t.MaskURI = x)))));
 
             return result;
         }

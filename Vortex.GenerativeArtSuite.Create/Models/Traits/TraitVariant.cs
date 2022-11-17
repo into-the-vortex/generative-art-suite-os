@@ -1,18 +1,37 @@
-﻿namespace Vortex.GenerativeArtSuite.Create.Models.Traits
+﻿using System;
+using Newtonsoft.Json;
+
+namespace Vortex.GenerativeArtSuite.Create.Models.Traits
 {
     public class TraitVariant
     {
-        public TraitVariant(string variantPath, string imagePath, string maskPath)
+        [JsonProperty(propertyName: "TraitURI")]
+        private string traitURI;
+
+        [JsonProperty(propertyName: "MaskURI")]
+        private string maskURI;
+
+        public TraitVariant(string variantPath, string traitURI, string maskURI)
         {
             VariantPath = variantPath;
-            TraitURI = imagePath;
-            MaskURI = maskPath;
+            this.traitURI = traitURI;
+            this.maskURI = maskURI;
         }
 
         public string VariantPath { get; }
 
-        public string TraitURI { get; set; }
+        [JsonIgnore]
+        public string TraitURI
+        {
+            get => Environment.ExpandEnvironmentVariables(traitURI);
+            set => traitURI = value;
+        }
 
-        public string MaskURI { get; set; }
+        [JsonIgnore]
+        public string MaskURI
+        {
+            get => Environment.ExpandEnvironmentVariables(maskURI);
+            set => maskURI = value;
+        }
     }
 }

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json;
 using Vortex.GenerativeArtSuite.Create.Models.Generating;
 using Vortex.GenerativeArtSuite.Create.Models.Layers;
 
@@ -7,6 +9,12 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Traits
 {
     public class DrawnTrait : Trait
     {
+        [JsonProperty(propertyName: "TraitURI")]
+        private string traitURI;
+
+        [JsonProperty(propertyName: "MaskURI")]
+        private string maskURI;
+
         public DrawnTrait()
             : this(string.Empty, string.Empty, DEFAULTWEIGHT, string.Empty, string.Empty)
         {
@@ -15,13 +23,23 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Traits
         public DrawnTrait(string name, string iconURI, int weight = DEFAULTWEIGHT, string traitURI = "", string maskURI = "")
             : base(name, iconURI, weight)
         {
-            TraitURI = traitURI;
-            MaskURI = maskURI;
+            this.traitURI = traitURI;
+            this.maskURI = maskURI;
         }
 
-        public string TraitURI { get; set; }
+        [JsonIgnore]
+        public string TraitURI
+        {
+            get => Environment.ExpandEnvironmentVariables(traitURI);
+            set => traitURI = value;
+        }
 
-        public string MaskURI { get; set; }
+        [JsonIgnore]
+        public string MaskURI
+        {
+            get => Environment.ExpandEnvironmentVariables(maskURI);
+            set => maskURI = value;
+        }
 
         public override GenerationStep CreateGenerationStep(Layer layer, List<GenerationStep> previousSteps)
         {
