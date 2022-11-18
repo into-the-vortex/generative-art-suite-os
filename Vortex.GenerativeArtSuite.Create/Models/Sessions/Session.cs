@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -123,11 +124,62 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Sessions
             return new Generation(nextId, Hash(dna.Trim()), buildOrder);
         }
 
+        public string HealthCheck()
+        {
+            var traits = Layers.SelectMany(l => l.Traits);
+
+            var problems = new Dictionary<Trait, List<string>>();
+            void RaiseProblems(Trait trait, List<string> traitProblems)
+            {
+                if (problems is null)
+                {
+                    throw new InvalidOperationException();
+                }
+
+                if (!traitProblems.Any())
+                {
+                    return;
+                }
+
+                if (!problems.ContainsKey(trait))
+                {
+                    problems[trait] = new List<string>();
+                }
+
+                problems[trait].AddRange(traitProblems);
+            }
+
+            foreach (var trait in traits)
+            {
+                RaiseProblems(trait, trait.GetProblems());
+            }
+
+            if(problems.Any())
+            {
+                string result = $"{Strings.HealthCheckFailed}:{Environment.NewLine}";
+
+                foreach(var kvp in problems)
+                {
+                    result += $"{Environment.NewLine}{kvp.Key.Name}:{Environment.NewLine}";
+                    foreach(var problem in kvp.Value)
+                    {
+                        result += $" - {problem}{Environment.NewLine}";
+                    }
+                }
+
+                return result;
+            }
+
+            return string.Empty;
+        }
+
         public List<Reference<string>> GetIconURIs()
         {
             return Layers.SelectMany(
                 l => l.Traits.Select(
-                    t => new Reference<string>(() => t.IconURI, v => t.IconURI = v))).ToList();
+                    t => new Reference<string>(() => t.IconURI, v => t.IconURI = v)))
+                .Where(m => File.Exists(m.Value))
+                .ToList();
         }
 
         public List<Reference<string>> GetTraitURIs()
@@ -137,13 +189,15 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Sessions
             result.AddRange(
                 Layers.SelectMany(
                     l => l.Traits.OfType<DrawnTrait>().Select(
-                        t => new Reference<string>(() => t.TraitURI, v => t.TraitURI = v))));
+                        t => new Reference<string>(() => t.TraitURI, v => t.TraitURI = v)))
+                .Where(m => File.Exists(m.Value)));
 
             result.AddRange(
                 Layers.SelectMany(
                     l => l.Traits.OfType<DependencyTrait>().SelectMany(
                         v => v.Variants.Select(
-                            t => new Reference<string>(() => t.TraitURI, x => t.TraitURI = x)))));
+                            t => new Reference<string>(() => t.TraitURI, x => t.TraitURI = x))))
+                .Where(m => File.Exists(m.Value)));
 
             return result;
         }
@@ -155,13 +209,15 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Sessions
             result.AddRange(
                 Layers.SelectMany(
                     l => l.Traits.OfType<DrawnTrait>().Select(
-                        t => new Reference<string>(() => t.MaskURI, v => t.MaskURI = v))));
+                        t => new Reference<string>(() => t.MaskURI, v => t.MaskURI = v)))
+                .Where(m => File.Exists(m.Value)));
 
             result.AddRange(
                 Layers.SelectMany(
                     l => l.Traits.OfType<DependencyTrait>().SelectMany(
                         v => v.Variants.Select(
-                            t => new Reference<string>(() => t.MaskURI, x => t.MaskURI = x)))));
+                            t => new Reference<string>(() => t.MaskURI, x => t.MaskURI = x))))
+                .Where(m => File.Exists(m.Value)));
 
             return result;
         }

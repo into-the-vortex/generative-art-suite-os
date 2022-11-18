@@ -1,0 +1,62 @@
+﻿<UserControl x:Class="Vortex.GenerativeArtSuite.Create.Controls.Generation"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:controls="clr-namespace:Vortex.GenerativeArtSuite.Common.Controls;assembly=Vortex.GenerativeArtSuite.Common"
+             xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <Border Padding="20"
+            Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+            BorderBrush="{DynamicResource SystemControlBackgroundBaseHighBrush}"
+            BorderThickness="1"
+            CornerRadius="10"
+            DataContext="{Binding GenerationVM}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+
+        <ui:SimpleStackPanel Spacing="10">
+
+            <Label Grid.Row="0"
+                   Margin="20,0"
+                   Content="{x:Static strings:Strings.Generate}"
+                   FontSize="32"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center" />
+            <Separator Grid.Row="1" Padding="20,0" />
+            <ui:SimpleStackPanel Grid.Row="2" Spacing="10">
+                <DockPanel>
+                    <ui:SimpleStackPanel Spacing="10"
+                                         HorizontalAlignment="Left"
+                                         Orientation="Horizontal"
+                                         VerticalAlignment="Bottom">
+                        <Label Content="{Binding Elapsed}" />
+                        <Label Content="{Binding Remaining}" />
+                    </ui:SimpleStackPanel>
+                    <ui:SimpleStackPanel Spacing="10"
+                                         HorizontalAlignment="Right"
+                                         Orientation="Horizontal">
+                        <Button HorizontalAlignment="Stretch" Command="{Binding StartGeneration}">
+                            <Grid>
+                                <ui:SymbolIcon Symbol="Play" Visibility="{Binding Running, Converter={StaticResource FalseToVisibleConverter}}" />
+                                <ui:SymbolIcon Symbol="Pause" Visibility="{Binding Running, Converter={StaticResource FalseToCollapsedConverter}}" />
+                            </Grid>
+                        </Button>
+                        <Button HorizontalAlignment="Stretch" Command="{Binding StopGeneration}">
+                            <ui:SymbolIcon Symbol="Stop" />
+                        </Button>
+                    </ui:SimpleStackPanel>
+                </DockPanel>
+                <ui:ProgressBar Height="10"
+                                ShowError="{Binding Error}"
+                                ShowPaused="{Binding Paused}"
+                                Value="{Binding Progress}" />
+                <controls:Console DataContext="{Binding ConsoleVM}" />
+            </ui:SimpleStackPanel>
+        </ui:SimpleStackPanel>
+    </Border>
+</UserControl>

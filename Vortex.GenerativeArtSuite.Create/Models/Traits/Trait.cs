@@ -37,5 +37,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Traits
         public int Weight { get; set; }
 
         public abstract GenerationStep CreateGenerationStep(Layer layer, List<GenerationStep> previousSteps);
+
+        public abstract List<string> GetProblems();
     }
 }

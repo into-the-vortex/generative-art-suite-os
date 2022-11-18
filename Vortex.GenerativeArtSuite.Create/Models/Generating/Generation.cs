@@ -28,22 +28,22 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
 
         public List<GenerationStep> BuildOrder { get; }
 
-        public Bitmap GenerateImage(IRespectCheckpoint checkpoint)
+        public Bitmap GenerateImage(IGenerationProcess process)
         {
-            return ImageBuilder.Build(checkpoint, BuildOrder);
+            return ImageBuilder.Build(process, BuildOrder);
         }
 
-        public void SaveGeneratedImage(IRespectCheckpoint checkpoint, string path)
+        public void SaveGeneratedImage(IGenerationProcess process, string path)
         {
-            checkpoint.RespectCheckpoint();
+            process.RespectCheckpoint();
 
-            using (var bitmap = GenerateImage(checkpoint))
+            using (var bitmap = GenerateImage(process))
             {
-                checkpoint.RespectCheckpoint();
+                process.RespectCheckpoint();
 
                 bitmap.Save(Path.Join(path, $"{Id}.png"), ImageFormat.Png);
 
-                checkpoint.RespectCheckpoint();
+                process.RespectCheckpoint();
             }
         }
 
@@ -53,8 +53,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
             {
                 Attributes = BuildOrder.Select(build => build.Trait),
                 Compiler = "Vortex Labs",
-                // TODO: This time only works in c#, js for example would have a stroke
-                Date = DateTime.Now.ToFileTime(),
+                Date = DateTime.Now,
                 Description = settings.DescriptionTemplate,
                 Dna = DNA,
                 ExternalUrl = null, // TODO: From settings?
@@ -64,12 +63,10 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
             };
         }
 
-        public void SaveGeneratedMetadata(IRespectCheckpoint checkpoint, string path, SessionSettings settings)
+        public void SaveGeneratedMetadata(IGenerationProcess checkpoint, string path, SessionSettings settings)
         {
             var metadata = GenerateMetadata(settings);
-
             checkpoint.RespectCheckpoint();
-
             File.WriteAllText(Path.Join(path, $"{Id}"), JsonConvert.SerializeObject(metadata, Formatting.Indented));
             checkpoint.RespectCheckpoint();
         }

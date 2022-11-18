@@ -25,29 +25,23 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generating
         private ImageGenerationProcess? process;
         private Generation? generation;
         private string? selectedLayer;
-        private byte[] image = Array.Empty<byte>();
-        private string json = string.Empty;
+        private object result;
 
         public CharacterBuilderVM(ISessionProvider sessionProvider, IFileSystem fileSystem)
         {
             this.sessionProvider = sessionProvider;
             this.fileSystem = fileSystem;
             Save = new DelegateCommand(OnSave, CanSave)
-                .ObservesProperty(() => Json)
-                .ObservesProperty(() => Image);
+                .ObservesProperty(() => Result);
             Randomise = new DelegateCommand(OnRandomise);
+
+            result = new CharacterBuilderLoadingVM();
         }
 
-        public string Json
+        public object Result
         {
-            get => json;
-            set => SetProperty(ref json, value);
-        }
-
-        public byte[] Image
-        {
-            get => image;
-            set => SetProperty(ref image, value);
+            get => result;
+            set => SetProperty(ref result, value);
         }
 
         public string? SelectedLayer
@@ -74,14 +68,6 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generating
             OnRandomise();
         }
 
-        private void Redraw()
-        {
-            Image = Array.Empty<byte>();
-            Json = string.Empty;
-
-            StartGeneration();
-        }
-
         private void UpdateSelection()
         {
             Traits.Clear();
@@ -97,6 +83,13 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generating
 
         private void OnTraitClicked(Trait trait)
         {
+            var healthCheck = sessionProvider.Session().HealthCheck();
+            if (!string.IsNullOrEmpty(healthCheck))
+            {
+                OnError(healthCheck);
+                return;
+            }
+
             var layer = GetSelectedLayer();
 
             if (layer is not null && generation is not null)
@@ -109,6 +102,12 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generating
             }
         }
 
+        private void Redraw()
+        {
+            Result = new CharacterBuilderLoadingVM();
+            StartGeneration();
+        }
+
         private void StartGeneration()
         {
             if (generation is null)
@@ -119,65 +118,42 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generating
             if (process is not null)
             {
                 process.ProcessComplete -= OnSuccess;
+                process.ProcessError -= OnError;
                 process.Cancel();
                 process = null;
             }
 
             process = new ImageGenerationProcess();
             process.ProcessComplete += OnSuccess;
+            process.ProcessError += OnError;
 
             Task.Run(() =>
             {
                 var settings = sessionProvider.Session().Settings;
-                var output = settings.BuilderOutputFolder();
 
-                Json = JsonConvert.SerializeObject(generation.GenerateMetadata(settings), Formatting.Indented);
-
-                using (var image = generation.GenerateImage(process))
+                try
                 {
-                    using (var stream = new MemoryStream())
+                    using (var image = generation.GenerateImage(process))
                     {
-                        image.Save(stream, ImageFormat.Png);
-                        Image = stream.ToArray();
+                        using (var stream = new MemoryStream())
+                        {
+                            image.Save(stream, ImageFormat.Png);
+                            Result = new CharacterBuilderResultVM(
+                                JsonConvert.SerializeObject(generation.GenerateMetadata(settings), Formatting.Indented),
+                                stream.ToArray());
+                        }
                     }
-                }
 
-                process.Complete();
+                    process.Complete();
+                }
+                catch (OperationCanceledException)
+                {
+                }
+                catch (Exception e)
+                {
+                    process.Error(e.Message);
+                }
             });
-        }
-
-        private void OnRandomise()
-        {
-            generation = sessionProvider.Session().CreateRandomGeneration(0);
-            Redraw();
-        }
-
-        private void OnSave()
-        {
-            var imageSave = fileSystem.SaveFile("Image|*.PNG;", ".png");
-            if (!string.IsNullOrEmpty(imageSave))
-            {
-                using (var ms = new MemoryStream(Image))
-                {
-                    using (var image = System.Drawing.Image.FromStream(ms))
-                    {
-                        image.Save(imageSave, ImageFormat.Png);
-                    }
-                }
-            }
-
-            var jsonSave = fileSystem.SaveFile("Metadata|*.JSON", ".json");
-            if (!string.IsNullOrEmpty(jsonSave))
-            {
-                File.WriteAllText(jsonSave, Json);
-            }
-        }
-
-        private bool CanSave() => Image.Length > 0 && !string.IsNullOrEmpty(Json);
-
-        private Layer? GetSelectedLayer()
-        {
-            return sessionProvider.Session().Layers.FirstOrDefault(l => l.Name == selectedLayer);
         }
 
         private void OnSuccess()
@@ -188,17 +164,73 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generating
             });
         }
 
+        private void OnError(string error)
+        {
+            Result = new CharacterBuilderErrorVM(error);
+        }
+
+        private void OnRandomise()
+        {
+            var healthCheck = sessionProvider.Session().HealthCheck();
+            if (!string.IsNullOrEmpty(healthCheck))
+            {
+                OnError(healthCheck);
+                return;
+            }
+
+            generation = sessionProvider.Session().CreateRandomGeneration(0);
+            Redraw();
+        }
+
+        private void OnSave()
+        {
+            if (Result is CharacterBuilderResultVM resultVM)
+            {
+                var imageSave = fileSystem.SaveFile("Image|*.PNG;", ".png");
+                if (!string.IsNullOrEmpty(imageSave))
+                {
+                    using (var ms = new MemoryStream(resultVM.Image))
+                    {
+                        using (var image = System.Drawing.Image.FromStream(ms))
+                        {
+                            image.Save(imageSave, ImageFormat.Png);
+                        }
+                    }
+                }
+
+                var jsonSave = fileSystem.SaveFile("Metadata|*.JSON", ".json");
+                if (!string.IsNullOrEmpty(jsonSave))
+                {
+                    File.WriteAllText(jsonSave, resultVM.Json);
+                }
+            }
+        }
+
+        private bool CanSave() => Result is CharacterBuilderResultVM;
+
+        private Layer? GetSelectedLayer()
+        {
+            return sessionProvider.Session().Layers.FirstOrDefault(l => l.Name == selectedLayer);
+        }
+
         private class ImageGenerationProcess : IGenerationProcess
         {
             public event Action? ProcessComplete;
 
-            public event Action? ErrorFound;
-
-            public event Action<double>? ProgressMade;
-
-            public DateTime Start { get; } = DateTime.Now;
+            public event Action<string>? ProcessError;
 
             public CancellationTokenSource TokenSource { get; } = new();
+
+            public void Complete()
+            {
+                Cancel();
+                ProcessComplete?.Invoke();
+            }
+
+            public void Error(string error)
+            {
+                ProcessError?.Invoke(error);
+            }
 
             public void Cancel()
             {
@@ -208,17 +240,6 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generating
             public void RespectCheckpoint()
             {
                 TokenSource.Token.ThrowIfCancellationRequested();
-            }
-
-            public void SetPaused(bool paused)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void Complete()
-            {
-                Cancel();
-                ProcessComplete?.Invoke();
             }
         }
     }

@@ -126,22 +126,7 @@ namespace Vortex.GenerativeArtSuite.Create.Services
             return dialog.FileName;
         }
 
-        private void ManageImages(string dir, List<Reference<string>> images)
-        {
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-
-            var existing = images
-               .Where(img => File.Exists(img.Value))
-               .ToList();
-
-            CleanUnreferenced(dir, existing);
-            SaveAsRelative(dir, existing);
-        }
-
-        private void CleanUnreferenced(string dir, List<Reference<string>> images)
+        private static void CleanUnreferenced(string dir, List<Reference<string>> images)
         {
             var files = Directory.GetFiles(dir);
 
@@ -152,6 +137,17 @@ namespace Vortex.GenerativeArtSuite.Create.Services
                     File.Delete(file);
                 }
             }
+        }
+
+        private void ManageImages(string dir, List<Reference<string>> images)
+        {
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            CleanUnreferenced(dir, images);
+            SaveAsRelative(dir, images);
         }
 
         private void SaveAsRelative(string dir, List<Reference<string>> images)

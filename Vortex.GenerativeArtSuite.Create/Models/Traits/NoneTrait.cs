@@ -17,5 +17,10 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Traits
         {
             return new GenerationStep(layer.Name, Name);
         }
+
+        public override List<string> GetProblems()
+        {
+            return new();
+        }
     }
 }

@@ -322,6 +322,24 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Health check failed.
+        /// </summary>
+        public static string HealthCheckFailed {
+            get {
+                return ResourceManager.GetString("HealthCheckFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to . Check Character Builder for more details..
+        /// </summary>
+        public static string HealthCheckFailedDetails {
+            get {
+                return ResourceManager.GetString("HealthCheckFailedDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Home.
         /// </summary>
         public static string Home {
@@ -453,6 +471,33 @@ namespace Vortex.GenerativeArtSuite.Create {
         public static string Layers {
             get {
                 return ResourceManager.GetString("Layers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to icon image does not exist.
+        /// </summary>
+        public static string MissingIcon {
+            get {
+                return ResourceManager.GetString("MissingIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to mask image does not exist.
+        /// </summary>
+        public static string MissingMask {
+            get {
+                return ResourceManager.GetString("MissingMask", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to trait image does not exist.
+        /// </summary>
+        public static string MissingTrait {
+            get {
+                return ResourceManager.GetString("MissingTrait", resourceCulture);
             }
         }
         

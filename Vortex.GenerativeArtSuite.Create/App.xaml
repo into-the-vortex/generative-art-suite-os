@@ -10,6 +10,7 @@
                 <ui:XamlControlsResources />
                 <ResourceDictionary Source="Controls/Converters.xaml" />
                 <ResourceDictionary Source="Controls/TraitTemplates.xaml" />
+                <ResourceDictionary Source="Controls/CharacterBuilderResults.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

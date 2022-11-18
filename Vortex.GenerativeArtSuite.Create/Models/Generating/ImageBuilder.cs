@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,10 +33,9 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
                     Images.Clear();
 
                     var images = session.GetTraitURIs()
-                        .Concat(session.GetMaskURIs())
-                        .Where(uri => File.Exists(uri.Value));
+                        .Concat(session.GetMaskURIs());
 
-                    foreach(var image in images)
+                    foreach (var image in images)
                     {
                         Images[image.Value] = Image.FromFile(image.Value);
                         cancellationTokenSource.Token.ThrowIfCancellationRequested();
@@ -49,7 +47,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
             });
         }
 
-        public static Bitmap Build(IRespectCheckpoint checkpoint, List<GenerationStep> steps)
+        public static Bitmap Build(IGenerationProcess process, List<GenerationStep> steps)
         {
             WaitForCacheBuild();
 
@@ -76,7 +74,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
             {
                 foreach (var image in images)
                 {
-                    checkpoint.RespectCheckpoint();
+                    process.RespectCheckpoint();
 
                     lock (image)
                     {

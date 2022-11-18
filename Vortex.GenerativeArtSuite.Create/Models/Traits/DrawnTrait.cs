@@ -47,5 +47,27 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Traits
                 new MaskedGenerationStep(layer.Name, Name, TraitURI, MaskURI) :
                 new DrawnGenerationStep(layer.Name, Name, TraitURI);
         }
+
+        public override List<string> GetProblems()
+        {
+            var result = new List<string>();
+
+            if (!File.Exists(IconURI))
+            {
+                result.Add(Strings.MissingIcon);
+            }
+
+            if (!File.Exists(TraitURI))
+            {
+                result.Add(Strings.MissingTrait);
+            }
+
+            if (!string.IsNullOrEmpty(MaskURI) && !File.Exists(maskURI))
+            {
+                result.Add(Strings.MissingMask);
+            }
+
+            return result;
+        }
     }
 }

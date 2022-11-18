@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Vortex.GenerativeArtSuite.Common.Models
@@ -52,7 +53,7 @@ namespace Vortex.GenerativeArtSuite.Common.Models
         /// Not shown on opensea, the generation timestamp.
         /// </summary>
         [JsonProperty(PropertyName = "date")]
-        public long Date { get; set; }
+        public DateTime Date { get; set; }
 
         /// <summary>
         /// Not shown on opensea, the generation compiler.

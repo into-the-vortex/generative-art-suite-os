@@ -204,6 +204,12 @@
   <data name="GenerationFailureNotEnoughTraits" xml:space="preserve">
     <value>Generation failed to complete, unique DNA threshold was broken, try to add more traits or reduce the collection size.</value>
   </data>
+  <data name="HealthCheckFailed" xml:space="preserve">
+    <value>Health check failed</value>
+  </data>
+  <data name="HealthCheckFailedDetails" xml:space="preserve">
+    <value>. Check Character Builder for more details.</value>
+  </data>
   <data name="Home" xml:space="preserve">
     <value>Home</value>
   </data>
@@ -248,6 +254,15 @@
   </data>
   <data name="Layers" xml:space="preserve">
     <value>Layers</value>
+  </data>
+  <data name="MissingIcon" xml:space="preserve">
+    <value>icon image does not exist</value>
+  </data>
+  <data name="MissingMask" xml:space="preserve">
+    <value>mask image does not exist</value>
+  </data>
+  <data name="MissingTrait" xml:space="preserve">
+    <value>trait image does not exist</value>
   </data>
   <data name="Modified" xml:space="preserve">
     <value>Modified</value>

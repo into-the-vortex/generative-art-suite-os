@@ -6,7 +6,6 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Settings
     {
         private const string IMAGEPATH = "images";
         private const string JSONPATH = "json";
-        private const string BUILDERPATH = "builder";
 
         public SessionSettings()
         {
@@ -30,8 +29,6 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Settings
         public string ImageOutputFolder() => CreateOutputFolder(IMAGEPATH);
 
         public string JsonOutputFolder() => CreateOutputFolder(JSONPATH);
-
-        public string BuilderOutputFolder() => CreateOutputFolder(BUILDERPATH);
 
         private string CreateOutputFolder(string type)
         {

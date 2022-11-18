@@ -41,5 +41,30 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Traits
             Variants.RemoveAll(v => !expected.Contains(v.VariantPath));
             Variants.AddRange(expected.Where(d => !Variants.Any(v => v.VariantPath == d)).Select(d => new TraitVariant(d, string.Empty, string.Empty)));
         }
+
+        public override List<string> GetProblems()
+        {
+            var result = new List<string>();
+
+            if (!File.Exists(IconURI))
+            {
+                result.Add(Strings.MissingIcon);
+            }
+
+            foreach(var variant in Variants)
+            {
+                if (!File.Exists(variant.TraitURI))
+                {
+                    result.Add($"{variant.VariantPath} - {Strings.MissingTrait}");
+                }
+
+                if (!string.IsNullOrEmpty(variant.MaskURI) && !File.Exists(variant.MaskURI))
+                {
+                    result.Add($"{variant.VariantPath} - {Strings.MissingMask}");
+                }
+            }
+
+            return result;
+        }
     }
 }

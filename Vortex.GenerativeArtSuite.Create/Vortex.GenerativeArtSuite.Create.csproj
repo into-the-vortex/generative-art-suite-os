@@ -65,10 +65,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModels\Generating\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Resources\None.png" />
   </ItemGroup>
 

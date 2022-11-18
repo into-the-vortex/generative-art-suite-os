@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Vortex.GenerativeArtSuite.Common.Models;
 using Vortex.GenerativeArtSuite.Create.Models.Sessions;
@@ -11,11 +10,11 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
 {
     public static class Generator
     {
-        private const double WEIGHTSUNIQUE = 0.000025;
-        private const double WEIGHTJSON = 0.000365;
-        private const double WEIGHTIMAGE = 0.999610;
+        private const double WEIGHTSUNIQUE = 0.005;
+        private const double WEIGHTJSON = 0.05;
+        private const double WEIGHTIMAGE = 0.945;
 
-        public static IGenerationProcess GenerateFor(Session session, DebugConsole console)
+        public static GenerationProcess GenerateFor(Session session, DebugConsole console)
         {
             var process = new GenerationProcess(console, session.Settings.CollectionSize);
 
@@ -23,13 +22,19 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
             {
                 try
                 {
-                    var toGenerate = process.DefineUniqueTokens(session, console);
+                    process.RespectCheckpoint();
+
+                    process.EnsureHealthCheck(session);
+
+                    process.RespectCheckpoint();
+
+                    var toGenerate = process.DefineUniqueTokens(session);
 
                     Task.WaitAll(process.CreateFiles(toGenerate, session.Settings), process.Token);
 
                     if (!process.IsCancellationRequested)
                     {
-                        process.InvokeProcessComplete();
+                        process.Complete();
                     }
                 }
                 catch (OperationCanceledException)
@@ -37,14 +42,23 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
                 }
                 catch (Exception e)
                 {
-                    console.Error(e.Message);
+                    process.Error(e.Message);
                 }
             });
 
             return process;
         }
 
-        private static List<Generation> DefineUniqueTokens(this GenerationProcess gp, Session session, DebugConsole console)
+        private static void EnsureHealthCheck(this GenerationProcess gp, Session session)
+        {
+            var healthResult = session.HealthCheck();
+            if (!string.IsNullOrEmpty(healthResult))
+            {
+                throw new InvalidOperationException($"{Strings.HealthCheckFailed}{Strings.HealthCheckFailedDetails}");
+            }
+        }
+
+        private static List<Generation> DefineUniqueTokens(this GenerationProcess gp, Session session)
         {
             var result = new List<Generation>();
 
@@ -57,7 +71,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
             var currentDuplicateDNA = 0;
             var maxDuplicateDNA = 100; // TODO: Get from setting.
 
-            console.Log($"Creating {session.Settings.CollectionSize} unique DNA sequences");
+            gp.Console.Log($"Creating {session.Settings.CollectionSize} unique DNA sequences");
 
             while (usedDNA.Count != session.Settings.CollectionSize)
             {
@@ -71,8 +85,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
 
                     if (currentDuplicateDNA > maxDuplicateDNA)
                     {
-                        console.Error("Could not create enough unique DNA sequences, add more variety or try again.");
-                        gp.InvokeErrorFound();
+                        gp.Error("Could not create enough unique DNA sequences, add more variety or try again.");
                     }
                 }
                 else
@@ -86,7 +99,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
 
             if (result.Count == session.Settings.CollectionSize)
             {
-                console.Log($"Successfully created {session.Settings.CollectionSize} unique DNA sequences");
+                gp.Console.Log($"Successfully created {session.Settings.CollectionSize} unique DNA sequences");
             }
 
             return result;
@@ -114,99 +127,9 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
                 }
                 catch (Exception e)
                 {
-                    gp.Console.Error(e.Message);
+                    gp.Error(e.Message);
                 }
             }, gp.Token)).ToArray();
-        }
-
-        private class GenerationProcess : IGenerationProcess
-        {
-            private readonly CancellationTokenSource processTokenSource = new();
-            private readonly ManualResetEvent pauseHandle = new(false);
-            private readonly DateTime start = DateTime.Now;
-            private readonly double maxProgress;
-
-            private double progress;
-            private bool isPaused;
-            private DateTime lastPausePoint;
-            private TimeSpan pauseOffset;
-
-            public GenerationProcess(DebugConsole console, double maxProgress)
-            {
-                Console = console;
-                this.maxProgress = maxProgress;
-            }
-
-            public event Action? ProcessComplete;
-
-            public event Action? ErrorFound;
-
-            public event Action<double>? ProgressMade;
-
-            public DebugConsole Console { get; }
-
-            public DateTime Start => start + pauseOffset;
-
-            public bool IsCancellationRequested => processTokenSource.IsCancellationRequested;
-
-            public CancellationToken Token => processTokenSource.Token;
-
-            public void RespectCheckpoint()
-            {
-                if (isPaused)
-                {
-                    pauseHandle.WaitOne();
-                }
-
-                Token.ThrowIfCancellationRequested();
-            }
-
-            public void Cancel()
-            {
-                CancelInternal();
-                Console.Warn("Generation cancelled");
-            }
-
-            public void InvokeProcessComplete()
-            {
-                CancelInternal();
-                Console.Log("Generation successful");
-                ProcessComplete?.Invoke();
-            }
-
-            public void InvokeErrorFound()
-            {
-                CancelInternal();
-                ErrorFound?.Invoke();
-            }
-
-            public void ProgressBy(double weight)
-            {
-                progress += weight;
-                ProgressMade?.Invoke(progress / maxProgress * 100);
-            }
-
-            public void SetPaused(bool paused)
-            {
-                isPaused = paused;
-
-                if (paused)
-                {
-                    pauseHandle.Reset();
-                    lastPausePoint = DateTime.Now;
-                }
-                else
-                {
-                    pauseHandle.Set();
-                    pauseOffset += DateTime.Now - lastPausePoint;
-                }
-            }
-
-            private void CancelInternal()
-            {
-                pauseHandle.Set();
-                processTokenSource.Cancel();
-            }
         }
     }
 }

@@ -1,18 +1,10 @@
-﻿using System;
-
-namespace Vortex.GenerativeArtSuite.Create.Models.Generating
+﻿namespace Vortex.GenerativeArtSuite.Create.Models.Generating
 {
-    public interface IGenerationProcess : IRespectCheckpoint
+    public interface IGenerationProcess
     {
-        event Action? ProcessComplete;
+        void RespectCheckpoint();
 
-        event Action? ErrorFound;
-
-        event Action<double>? ProgressMade;
-
-        DateTime Start { get; }
-
-        void SetPaused(bool paused);
+        void Error(string error);
 
         void Cancel();
     }

@@ -10,24 +10,20 @@ namespace Vortex.GenerativeArtSuite.Create.Services
 
         public void Capture()
         {
-            if(locked)
+            if(!locked)
             {
-                throw new InvalidOperationException("Lock already captured");
+                locked = true;
+                LockChanged?.Invoke(locked);
             }
-
-            locked = true;
-            LockChanged?.Invoke(locked);
         }
 
         public void Release()
         {
-            if (!locked)
+            if (locked)
             {
-                throw new InvalidOperationException("Lock already released");
+                locked = false;
+                LockChanged?.Invoke(locked);
             }
-
-            locked = false;
-            LockChanged?.Invoke(locked);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generating
 
         private string remaining = string.Empty;
         private string elapsed = string.Empty;
-        private IGenerationProcess? process;
+        private GenerationProcess? process;
         private double progress;
         private bool running;
         private bool paused;
