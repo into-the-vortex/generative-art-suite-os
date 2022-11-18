@@ -54,6 +54,11 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Layers
 
             EditInChildren(this);
 
+            if(oldDep.Name == Name)
+            {
+                result |= true;
+            }
+
             if (Dependencies.Contains(oldDep))
             {
                 Dependencies.Replace(oldDep, newDep);
