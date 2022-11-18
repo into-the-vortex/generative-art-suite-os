@@ -592,6 +592,24 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remote Repository.
+        /// </summary>
+        public static string RemoteLabel {
+            get {
+                return ResourceManager.GetString("RemoteLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/user/project.git.
+        /// </summary>
+        public static string RemotePlaceholder {
+            get {
+                return ResourceManager.GetString("RemotePlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Restart.
         /// </summary>
         public static string Restart {

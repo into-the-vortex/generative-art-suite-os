@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using Newtonsoft.Json;
 using Vortex.GenerativeArtSuite.Common.Models;
 using Vortex.GenerativeArtSuite.Create.Extensions;
 using Vortex.GenerativeArtSuite.Create.Models.Generating;
@@ -16,14 +17,26 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Sessions
 {
     public class Session
     {
+        public Session()
+        {
+            Name = string.Empty;
+            Settings = new();
+            GitHandler = new();
+            Layers = new();
+        }
+
         public Session(string name, SessionSettings settings)
         {
             Name = name;
             Settings = settings;
+            GitHandler = new();
             Layers = new List<Layer>();
         }
 
         public string Name { get; }
+
+        [JsonIgnore]
+        public GitHandler GitHandler { get; set; }
 
         public SessionSettings Settings { get; }
 

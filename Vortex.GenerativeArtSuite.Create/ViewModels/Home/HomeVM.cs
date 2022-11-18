@@ -48,9 +48,9 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
             navigationLock.Release();
         }
 
-        private void OpenNewSession(string name, SessionSettings sessionSettings)
+        private void OpenNewSession(string name, string remote, SessionSettings sessionSettings)
         {
-            sessionManager.CreateNewSession(name, sessionSettings);
+            sessionManager.CreateNewSession(name, remote, sessionSettings);
             navigationService.NavigateTo(NavigationService.Layers);
         }
 

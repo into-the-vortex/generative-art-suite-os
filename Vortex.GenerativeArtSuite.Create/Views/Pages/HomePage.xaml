@@ -35,6 +35,9 @@
             <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.SessionNameLabel}"
                      ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.SessionNamePlaceholder}"
                      Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.RemoteLabel}"
+                     ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.RemotePlaceholder}"
+                     Text="{Binding Remote, UpdateSourceTrigger=PropertyChanged}" />
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />

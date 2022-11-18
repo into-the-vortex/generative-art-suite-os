@@ -294,6 +294,12 @@
   <data name="Remaining" xml:space="preserve">
     <value>Remaining</value>
   </data>
+  <data name="RemoteLabel" xml:space="preserve">
+    <value>Remote Repository</value>
+  </data>
+  <data name="RemotePlaceholder" xml:space="preserve">
+    <value>https://github.com/user/project.git</value>
+  </data>
   <data name="Restart" xml:space="preserve">
     <value>Restart</value>
   </data>

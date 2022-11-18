@@ -35,9 +35,9 @@ namespace Vortex.GenerativeArtSuite.Create.Services
             return false;
         }
 
-        public void CreateNewSession(string name, SessionSettings sessionSettings)
+        public void CreateNewSession(string name, string remote, SessionSettings sessionSettings)
         {
-            fileSystem.SaveSession(session = new Session(name, sessionSettings));
+            session = fileSystem.CreateSession(name, remote, sessionSettings);
             OnNewSessionContext();
         }
 

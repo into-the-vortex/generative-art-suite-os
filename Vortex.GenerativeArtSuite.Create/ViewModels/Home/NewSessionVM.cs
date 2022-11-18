@@ -10,16 +10,18 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
     public class NewSessionVM : SessionSettingsVM
     {
         private readonly Func<string, bool> validateName;
+        private string remote;
         private string name;
 
-        public NewSessionVM(IFileSystem fileSystem, Func<string, bool> validateName, Action<string, SessionSettings> onCreate)
+        public NewSessionVM(IFileSystem fileSystem, Func<string, bool> validateName, Action<string, string, SessionSettings> onCreate)
             : base(fileSystem, new SessionSettings())
         {
             this.validateName = validateName;
 
+            remote = string.Empty;
             name = string.Empty;
 
-            var create = new DelegateCommand(() => onCreate(name, Settings), CanCreate);
+            var create = new DelegateCommand(() => onCreate(name, remote, Settings), CanCreate);
             PropertyChanged += (s, e) =>
             {
                 create.RaiseCanExecuteChanged();
@@ -34,6 +36,12 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
             set => SetProperty(ref name, value);
         }
 
+        public string Remote
+        {
+            get => remote;
+            set => SetProperty(ref remote, value);
+        }
+
         public ICommand Create { get; }
 
         public void Clear()
@@ -41,6 +49,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
             var reference = new SessionSettings();
 
             Name = string.Empty;
+            Remote = string.Empty;
             OutputFolder = reference.OutputFolder;
             NamePrefix = reference.NamePrefix;
             DescriptionTemplate = reference.DescriptionTemplate;
