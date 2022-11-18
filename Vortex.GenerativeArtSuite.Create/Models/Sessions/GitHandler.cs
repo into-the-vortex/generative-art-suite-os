@@ -59,7 +59,14 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Sessions
             using (var repo = new Repository(Local))
             {
                 var origin = repo.Network.Remotes.Add(ORIGIN, remote);
+
                 Push(repo);
+
+                repo.Branches.Update(repo.Head, (BranchUpdater updater) =>
+                {
+                    updater.Remote = origin.Name;
+                    updater.UpstreamBranch = repo.Head.CanonicalName;
+                });
             }
 
             Remote = remote;
@@ -145,7 +152,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Sessions
             repo.Network.Push(
                 origin,
                 ORIGINMASTER,
-                new PushOptions() { CredentialsProvider = CredentialsHandler });
+                new PushOptions() { CredentialsProvider = CredentialsHandler,  });
         }
 
         private Credentials CredentialsHandler(string url, string usernameFromUrl, SupportedCredentialTypes types)
