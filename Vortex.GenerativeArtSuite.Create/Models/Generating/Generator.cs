@@ -16,7 +16,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
 
         public static GenerationProcess GenerateFor(Session session, DebugConsole console)
         {
-            var process = new GenerationProcess(console, session.Settings.CollectionSize);
+            var process = new GenerationProcess(console, session.GenerationSettings.CollectionSize);
 
             Task.Run(() =>
             {
@@ -30,7 +30,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
 
                     var toGenerate = process.DefineUniqueTokens(session);
 
-                    Task.WaitAll(process.CreateFiles(toGenerate, session.Settings), process.Token);
+                    Task.WaitAll(process.CreateFiles(toGenerate, session.UserSettings, session.GenerationSettings), process.Token);
 
                     if (!process.IsCancellationRequested)
                     {
@@ -54,7 +54,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
             var healthResult = session.HealthCheck();
             if (!string.IsNullOrEmpty(healthResult))
             {
-                throw new InvalidOperationException($"{Strings.HealthCheckFailed}{Strings.HealthCheckFailedDetails}");
+                gp.Error($"{Strings.HealthCheckFailed}{Strings.HealthCheckFailedDetails}");
             }
         }
 
@@ -69,11 +69,10 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
 
             var usedDNA = new List<string>();
             var currentDuplicateDNA = 0;
-            var maxDuplicateDNA = 100; // TODO: Get from setting.
 
-            gp.Console.Log($"Creating {session.Settings.CollectionSize} unique DNA sequences");
+            gp.Console.Log($"Creating {session.GenerationSettings.CollectionSize} unique DNA sequences");
 
-            while (usedDNA.Count != session.Settings.CollectionSize)
+            while (usedDNA.Count != session.GenerationSettings.CollectionSize)
             {
                 gp.RespectCheckpoint();
 
@@ -83,7 +82,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
                 {
                     currentDuplicateDNA++;
 
-                    if (currentDuplicateDNA > maxDuplicateDNA)
+                    if (currentDuplicateDNA > session.UserSettings.MaxDuplicateDNAThreshold)
                     {
                         gp.Error("Could not create enough unique DNA sequences, add more variety or try again.");
                     }
@@ -97,15 +96,19 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
                 gp.ProgressBy(WEIGHTSUNIQUE);
             }
 
-            if (result.Count == session.Settings.CollectionSize)
+            if (result.Count == session.GenerationSettings.CollectionSize)
             {
-                gp.Console.Log($"Successfully created {session.Settings.CollectionSize} unique DNA sequences");
+                gp.Console.Log($"Successfully created {session.GenerationSettings.CollectionSize} unique DNA sequences");
             }
 
             return result;
         }
 
-        private static Task[] CreateFiles(this GenerationProcess gp, List<Generation> toGenerate, SessionSettings settings)
+        private static Task[] CreateFiles(
+            this GenerationProcess gp,
+            List<Generation> toGenerate,
+            UserSettings userSettings,
+            GenerationSettings generationSettings)
         {
             return toGenerate.Select(tg => Task.Run(
                 () =>
@@ -113,11 +116,11 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
                 try
                 {
                     gp.RespectCheckpoint();
-                    tg.SaveGeneratedMetadata(gp, settings.JsonOutputFolder(), settings);
+                    tg.SaveGeneratedMetadata(gp, userSettings.JsonOutputFolder(), generationSettings);
                     gp.ProgressBy(WEIGHTJSON);
 
                     gp.RespectCheckpoint();
-                    tg.SaveGeneratedImage(gp, settings.ImageOutputFolder());
+                    tg.SaveGeneratedImage(gp, userSettings.ImageOutputFolder());
                     gp.ProgressBy(WEIGHTIMAGE);
 
                     gp.Console.Log($"Successfully created asset #{tg.Id}");

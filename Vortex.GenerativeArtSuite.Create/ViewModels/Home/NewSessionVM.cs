@@ -1,33 +1,35 @@
 ﻿using System;
-using System.Windows.Input;
 using Prism.Commands;
-using Vortex.GenerativeArtSuite.Create.Models.Settings;
+using Prism.Mvvm;
+using Vortex.GenerativeArtSuite.Create.Models.Sessions;
 using Vortex.GenerativeArtSuite.Create.Services;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Settings;
 
 namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
 {
-    public class NewSessionVM : SessionSettingsVM
+    public class NewSessionVM : BindableBase
     {
         private readonly Func<string, bool> validateName;
+        private readonly IFileSystem fileSystem;
+
+        private GenerationSettingsVM generationSettings;
+        private UserSettingsVM userSettings;
         private string remote;
         private string name;
 
-        public NewSessionVM(IFileSystem fileSystem, Func<string, bool> validateName, Action<string, string, SessionSettings> onCreate)
-            : base(fileSystem, new SessionSettings())
+        public NewSessionVM(IFileSystem fileSystem, Func<string, bool> validateName, Action<string, Session> onCreate)
         {
+            this.fileSystem = fileSystem;
             this.validateName = validateName;
 
+            generationSettings = new GenerationSettingsVM(new());
+            userSettings = new UserSettingsVM(fileSystem, new());
             remote = string.Empty;
             name = string.Empty;
 
-            var create = new DelegateCommand(() => onCreate(name, remote, Settings), CanCreate);
-            PropertyChanged += (s, e) =>
-            {
-                create.RaiseCanExecuteChanged();
-            };
-
-            Create = create;
+            Create = new DelegateCommand(() => onCreate(remote, new Session(Name, userSettings.Model, generationSettings.Model)), CanCreate)
+                .ObservesProperty(() => Name)
+                .ObservesProperty(() => Remote);
         }
 
         public string Name
@@ -42,29 +44,41 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
             set => SetProperty(ref remote, value);
         }
 
-        public ICommand Create { get; }
+        public UserSettingsVM UserSettingsVM
+        {
+            get => userSettings;
+            set => SetProperty(ref userSettings, value, () => HookupEvents(UserSettingsVM));
+        }
+
+        public GenerationSettingsVM GenerationSettingsVM
+        {
+            get => generationSettings;
+            set => SetProperty(ref generationSettings, value, () => HookupEvents(GenerationSettingsVM));
+        }
+
+        public DelegateCommand Create { get; }
 
         public void Clear()
         {
-            var reference = new SessionSettings();
-
             Name = string.Empty;
             Remote = string.Empty;
-            OutputFolder = reference.OutputFolder;
-            NamePrefix = reference.NamePrefix;
-            DescriptionTemplate = reference.DescriptionTemplate;
-            BaseURI = reference.BaseURI;
-            CollectionSize = reference.CollectionSize;
+            UserSettingsVM = new UserSettingsVM(fileSystem, new());
+            GenerationSettingsVM = new GenerationSettingsVM(new());
+        }
+
+        private void HookupEvents(BindableBase bb)
+        {
+            bb.PropertyChanged += (s, e) =>
+            {
+                Create.RaiseCanExecuteChanged();
+            };
         }
 
         private bool CanCreate()
         {
             return validateName(name) &&
-                !string.IsNullOrWhiteSpace(OutputFolder) &&
-                !string.IsNullOrWhiteSpace(NamePrefix) &&
-                !string.IsNullOrWhiteSpace(DescriptionTemplate) &&
-                !string.IsNullOrWhiteSpace(BaseURI) &&
-                CollectionSize > 0;
+                userSettings.IsValid() &&
+                generationSettings.IsValid();
         }
     }
 }

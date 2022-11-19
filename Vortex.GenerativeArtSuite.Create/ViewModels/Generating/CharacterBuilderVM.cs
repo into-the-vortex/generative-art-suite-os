@@ -129,7 +129,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generating
 
             Task.Run(() =>
             {
-                var settings = sessionProvider.Session().Settings;
+                var settings = sessionProvider.Session().GenerationSettings;
 
                 try
                 {
@@ -177,7 +177,6 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generating
                 OnError(healthCheck);
                 return;
             }
-
             generation = sessionProvider.Session().CreateRandomGeneration(0);
             Redraw();
         }

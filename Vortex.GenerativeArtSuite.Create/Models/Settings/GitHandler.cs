@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using LibGit2Sharp;
+using Newtonsoft.Json;
 
-namespace Vortex.GenerativeArtSuite.Create.Models.Sessions
+namespace Vortex.GenerativeArtSuite.Create.Models.Settings
 {
     public class GitHandler
     {
@@ -18,12 +20,16 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Sessions
             InitialisedRemote = false;
         }
 
+        [JsonProperty]
         public string Local { get; private set; }
 
+        [JsonProperty]
         public bool InitialisedLocal { get; private set; }
 
+        [JsonProperty]
         public string Remote { get; private set; }
 
+        [JsonProperty]
         public bool InitialisedRemote { get; private set; }
 
         public void InitialiseLocal(string directory)
@@ -32,6 +38,8 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Sessions
             {
                 throw new InvalidOperationException("Already initialised locally");
             }
+
+            CreateGitIgnore(directory);
 
             var root = Repository.Init(directory);
             using (var repo = new Repository(root))
@@ -62,7 +70,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Sessions
 
                 Push(repo);
 
-                repo.Branches.Update(repo.Head, (BranchUpdater updater) =>
+                repo.Branches.Update(repo.Head, (updater) =>
                 {
                     updater.Remote = origin.Name;
                     updater.UpstreamBranch = repo.Head.CanonicalName;
@@ -73,9 +81,9 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Sessions
             InitialisedRemote = true;
         }
 
-        public void Save()
+        public void Save(string message)
         {
-            if (!InitialisedLocal || !InitialisedRemote)
+            if (!InitialisedLocal)
             {
                 return;
             }
@@ -85,7 +93,12 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Sessions
             using (var repo = new Repository(Local))
             {
                 StageAll(repo);
-                Push(repo);
+                Commit(repo, message);
+
+                if(InitialisedRemote)
+                {
+                    Push(repo);
+                }
             }
         }
 
@@ -110,8 +123,13 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Sessions
 
         private static void InitialCommit(Repository repo)
         {
+            Commit(repo, "Initial Commit");
+        }
+
+        private static void Commit(Repository repo, string message)
+        {
             var vortexClient = ClientSigner();
-            repo.Commit("Initial Commit", vortexClient, vortexClient);
+            repo.Commit(message, vortexClient, vortexClient);
         }
 
         private static void StageAll(Repository repo)
@@ -119,9 +137,14 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Sessions
             Commands.Stage(repo, "*");
         }
 
+        private static void CreateGitIgnore(string dir)
+        {
+            File.WriteAllText(Path.Combine(dir, ".gitignore"), "user.json");
+        }
+
         private static Signature ClientSigner()
         {
-            return new Signature("vortex client", "vortex.client@outlook.com", DateTime.Now);
+            return new Signature("Vortex Labs", "vortex.client@outlook.com", DateTime.Now);
         }
 
         private void Fetch(Repository repo)
@@ -152,7 +175,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Sessions
             repo.Network.Push(
                 origin,
                 ORIGINMASTER,
-                new PushOptions() { CredentialsProvider = CredentialsHandler,  });
+                new PushOptions() { CredentialsProvider = CredentialsHandler, });
         }
 
         private Credentials CredentialsHandler(string url, string usernameFromUrl, SupportedCredentialTypes types)

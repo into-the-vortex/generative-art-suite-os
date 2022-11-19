@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
+        xmlns:controls="clr-namespace:Vortex.GenerativeArtSuite.Create.Controls"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.Settings"
         Margin="50"
@@ -19,34 +19,9 @@
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch">
 
-    <ui:SimpleStackPanel Spacing="10" DataContext="{Binding Settings}">
-        <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.NamePrefixLabel}"
-                 ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.NamePrefixPlaceholder}"
-                 Text="{Binding NamePrefix, UpdateSourceTrigger=PropertyChanged}" />
-        <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.DescriptionLabel}"
-                 ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.DescriptionPlaceholder}"
-                 Text="{Binding DescriptionTemplate, UpdateSourceTrigger=PropertyChanged}" />
-        <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.BaseURILabel}"
-                 ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.BaseURIPlaceholder}"
-                 Text="{Binding BaseURI, UpdateSourceTrigger=PropertyChanged}" />
-        <ui:NumberBox ui:ControlHelper.Header="{x:Static strings:Strings.CollectionSizeLabel}"
-                      ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.CollectionSizePlaceholder}"
-                      Minimum="1"
-                      Value="{Binding CollectionSize, UpdateSourceTrigger=PropertyChanged}" />
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="auto" />
-            </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0"
-                     ui:ControlHelper.Header="{x:Static strings:Strings.OutputFolderLabel}"
-                     ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.OutputFolderPlaceholder}"
-                     IsReadOnly="True"
-                     Text="{Binding OutputFolder}" />
-            <Button Grid.Column="1"
-                    Content="  ...  "
-                    VerticalAlignment="Bottom"
-                    Command="{Binding BrowseOutputFolder}" />
-        </Grid>
+    <ui:SimpleStackPanel Spacing="10">
+        <controls:UserSettings DataContext="{Binding UserSettings}" />
+        <Separator />
+        <controls:GenerationSettings DataContext="{Binding GenerationSettings}" />
     </ui:SimpleStackPanel>
 </Border>

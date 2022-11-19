@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using Prism.Regions;
-using Vortex.GenerativeArtSuite.Create.Models.Settings;
+using Vortex.GenerativeArtSuite.Create.Models.Sessions;
 using Vortex.GenerativeArtSuite.Create.Services;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
 
@@ -48,9 +48,9 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
             navigationLock.Release();
         }
 
-        private void OpenNewSession(string name, string remote, SessionSettings sessionSettings)
+        private void OpenNewSession(string remote, Session session)
         {
-            sessionManager.CreateNewSession(name, remote, sessionSettings);
+            sessionManager.CreateNewSession(remote, session);
             navigationService.NavigateTo(NavigationService.Layers);
         }
 

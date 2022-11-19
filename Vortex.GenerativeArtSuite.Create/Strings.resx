@@ -198,6 +198,12 @@
   <data name="ExitSave" xml:space="preserve">
     <value>Save and exit</value>
   </data>
+  <data name="ExternalUrlLabel" xml:space="preserve">
+    <value>External Url</value>
+  </data>
+  <data name="ExternalUrlPlaceholder" xml:space="preserve">
+    <value>https://intothevortex.xyz/collection/{0} where {0} is the token id</value>
+  </data>
   <data name="Generate" xml:space="preserve">
     <value>Generate</value>
   </data>
@@ -254,6 +260,12 @@
   </data>
   <data name="Layers" xml:space="preserve">
     <value>Layers</value>
+  </data>
+  <data name="MaxDuplicateDNAThresholdLabel" xml:space="preserve">
+    <value>Duplicate NFT retry amount</value>
+  </data>
+  <data name="MaxDuplicateDNAThresholdPlaceholder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="MissingIcon" xml:space="preserve">
     <value>icon image does not exist</value>

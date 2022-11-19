@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Vortex.GenerativeArtSuite.Create.Models.Sessions;
 using Vortex.GenerativeArtSuite.Create.Models.Traits;
 
@@ -24,15 +23,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Layers
 
         public override void EnsureTraitsRemainValid(Session session)
         {
-            _ = session; // TODO: inform session on any changes made.
-
-            for (int i = 0; i < Traits.Count; i++)
-            {
-                if (Traits[i] is not PathingTrait)
-                {
-                    throw new NotImplementedException(); // This should not currently occur.
-                }
-            }
+            _ = session;
         }
     }
 }

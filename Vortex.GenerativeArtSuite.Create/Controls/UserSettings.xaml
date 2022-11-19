@@ -1,0 +1,39 @@
+﻿<ui:SimpleStackPanel x:Class="Vortex.GenerativeArtSuite.Create.Controls.UserSettings"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     mc:Ignorable="d"
+                     xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
+                     xmlns:ui="http://schemas.modernwpf.com/2019"
+                     xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.Settings"
+                     Spacing="10"
+                     d:DataContext="{d:DesignInstance vms:UserSettingsVM}"
+                     d:DesignHeight="450"
+                     d:DesignWidth="800"
+                     HorizontalAlignment="Stretch"
+                     Orientation="Vertical"
+                     VerticalAlignment="Stretch">
+
+    <ui:NumberBox ui:ControlHelper.Header="{x:Static strings:Strings.MaxDuplicateDNAThresholdLabel}"
+                  ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.MaxDuplicateDNAThresholdPlaceholder}"
+                  Minimum="1"
+                  Value="{Binding MaxDuplicateDNAThreshold, UpdateSourceTrigger=PropertyChanged}" />
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+        </Grid.ColumnDefinitions>
+        <TextBox Grid.Column="0"
+                 ui:ControlHelper.Header="{x:Static strings:Strings.OutputFolderLabel}"
+                 ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.OutputFolderPlaceholder}"
+                 IsReadOnly="True"
+                 Text="{Binding OutputFolder}" />
+        <Button Grid.Column="1"
+                Content="  ...  "
+                VerticalAlignment="Bottom"
+                Command="{Binding BrowseOutputFolder}" />
+    </Grid>
+
+</ui:SimpleStackPanel>

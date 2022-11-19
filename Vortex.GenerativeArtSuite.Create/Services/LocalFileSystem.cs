@@ -13,16 +13,15 @@ namespace Vortex.GenerativeArtSuite.Create.Services
     internal class LocalFileSystem : IFileSystem
     {
         private const string ROOTPATH = @"%APPDATA%\Vortex Labs\GAS";
-        private const string GITHANDLERFOLDER = "githandles";
         private const string SESSIONSFOLDER = "sessions";
         private const string SESSIONFILE = "session.json";
+        private const string USERFILE = "user.json";
         private const string ICONFOLDER = "icons";
         private const string TRAITFOLDER = "traits";
         private const string MASKFOLDER = "masks";
 
         private readonly string rootPath;
         private readonly string sessionsPath;
-        private readonly string gitHandlerPath;
 
         public LocalFileSystem()
         {
@@ -37,17 +36,10 @@ namespace Vortex.GenerativeArtSuite.Create.Services
             {
                 Directory.CreateDirectory(sessionsPath);
             }
-
-            gitHandlerPath = Path.Combine(rootPath, GITHANDLERFOLDER);
-            if (!Directory.Exists(gitHandlerPath))
-            {
-                Directory.CreateDirectory(gitHandlerPath);
-            }
         }
 
         public IEnumerable<RecentSession> RecentSessions()
         {
-            // TODO: clean old githandlers
             var directories = Directory.GetDirectories(sessionsPath);
             foreach (var directory in directories)
             {
@@ -61,40 +53,23 @@ namespace Vortex.GenerativeArtSuite.Create.Services
             }
         }
 
-        public Session CreateSession(string name, string remote, SessionSettings sessionSettings)
+        public Session CreateSession(string remote, Session session)
         {
-            var session = new Session(name, sessionSettings);
+            SaveSessionFile(session);
+            SaveUserSettings(session);
 
-            string dir = SessionDirectory(session);
-            SaveSessionFile(session, dir);
-
-            session.GitHandler.InitialiseLocal(dir);
-            if (!string.IsNullOrWhiteSpace(remote))
-            {
-                session.GitHandler.InitialiseRemote(remote);
-            }
-
-            SaveGitHandler(name, session.GitHandler);
+            session.InitialiseRepository(SessionDirectory(session.Name), remote);
 
             return session;
         }
 
         public Session LoadSession(string name)
         {
-            var path = Path.Combine(sessionsPath, name, SESSIONFILE);
+            var userSettings = LoadUserSettings(name);
+            userSettings.LoadRepository();
 
-            if (!File.Exists(path))
-            {
-                throw new ArgumentException($"{name} does not refer to an existing session", nameof(name));
-            }
-
-            var session = JsonConvert.DeserializeObject<Session>(File.ReadAllText(path), new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.Objects,
-            }) ?? throw new ArgumentException($"{name} could not be loaded", nameof(name));
-
-            session.GitHandler = LoadGitHandler(name);
-            session.GitHandler.Load();
+            var session = LoadSessionFile(name);
+            session.UserSettings = userSettings;
 
             return session;
         }
@@ -103,16 +78,16 @@ namespace Vortex.GenerativeArtSuite.Create.Services
         {
             try
             {
-                string dir = SessionDirectory(session);
+                string dir = SessionDirectory(session.Name);
 
                 ManageImages(Path.Combine(dir, ICONFOLDER), session.GetIconURIs());
                 ManageImages(Path.Combine(dir, TRAITFOLDER), session.GetTraitURIs());
                 ManageImages(Path.Combine(dir, MASKFOLDER), session.GetMaskURIs());
 
-                SaveSessionFile(session, dir);
+                SaveSessionFile(session);
+                SaveUserSettings(session);
 
-                session.GitHandler.Save();
-                SaveGitHandler(session.Name, session.GitHandler);
+                session.SaveRepository("Saving Session");
             }
             catch (Exception e)
             {
@@ -151,16 +126,6 @@ namespace Vortex.GenerativeArtSuite.Create.Services
             dialog.ShowDialog();
 
             return dialog.FileName;
-        }
-
-        private static void SaveSessionFile(Session session, string dir)
-        {
-            var path = Path.Combine(dir, SESSIONFILE);
-            File.WriteAllText(path, JsonConvert.SerializeObject(session, new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.Objects,
-                TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
-            }));
         }
 
         private static void CleanUnreferenced(string dir, List<Reference<string>> images)
@@ -203,9 +168,9 @@ namespace Vortex.GenerativeArtSuite.Create.Services
             }
         }
 
-        private string SessionDirectory(Session session)
+        private string SessionDirectory(string name)
         {
-            var dir = Path.Combine(sessionsPath, session.Name);
+            var dir = Path.Combine(sessionsPath, name);
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
@@ -214,29 +179,54 @@ namespace Vortex.GenerativeArtSuite.Create.Services
             return dir;
         }
 
-        private void SaveGitHandler(string name, GitHandler handler)
+        private void SaveSessionFile(Session session)
         {
-            var path = Path.Combine(gitHandlerPath, $"{name}.json");
-            File.WriteAllText(path, JsonConvert.SerializeObject(handler, new JsonSerializerSettings
+            var path = Path.Combine(SessionDirectory(session.Name), SESSIONFILE);
+            File.WriteAllText(path, JsonConvert.SerializeObject(session, new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Objects,
                 TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
             }));
         }
 
-        private GitHandler LoadGitHandler(string name)
+        private Session LoadSessionFile(string name)
         {
-            var path = Path.Combine(gitHandlerPath, $"{name}.json");
+            var path = Path.Combine(sessionsPath, name, SESSIONFILE);
 
             if (!File.Exists(path))
             {
-                throw new ArgumentException($"{name} does not refer to an existing git handler", nameof(name));
+                throw new ArgumentException($"{name} does not refer to an existing session", nameof(name));
             }
 
-            return JsonConvert.DeserializeObject<GitHandler>(File.ReadAllText(path), new JsonSerializerSettings
+            return JsonConvert.DeserializeObject<Session>(File.ReadAllText(path), new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Objects,
             }) ?? throw new ArgumentException($"{name} could not be loaded", nameof(name));
+        }
+
+        private void SaveUserSettings(Session session)
+        {
+            var path = Path.Combine(SessionDirectory(session.Name), USERFILE);
+            File.WriteAllText(path, JsonConvert.SerializeObject(session.UserSettings, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Objects,
+                TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
+            }));
+        }
+
+        private UserSettings LoadUserSettings(string name)
+        {
+            var path = Path.Combine(SessionDirectory(name), USERFILE);
+
+            if (!File.Exists(path))
+            {
+                throw new ArgumentException($"{name} does not have any user settings", nameof(name));
+            }
+
+            return JsonConvert.DeserializeObject<UserSettings>(File.ReadAllText(path), new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Objects,
+            }) ?? throw new ArgumentException($"{name} could not load user settings", nameof(name));
         }
     }
 }

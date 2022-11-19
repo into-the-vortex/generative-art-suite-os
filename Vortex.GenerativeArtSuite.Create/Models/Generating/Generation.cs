@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using DynamicData;
@@ -47,7 +48,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
             }
         }
 
-        public ERC721Metadata GenerateMetadata(SessionSettings settings)
+        public ERC721Metadata GenerateMetadata(GenerationSettings settings)
         {
             return new ERC721Metadata
             {
@@ -56,14 +57,14 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
                 Date = DateTime.Now,
                 Description = settings.DescriptionTemplate,
                 Dna = DNA,
-                ExternalUrl = null, // TODO: From settings?
+                ExternalUrl = string.Format(CultureInfo.InvariantCulture, settings.ExternalUrl, Id),
                 Id = Id,
                 Image = Path.Join(settings.BaseURI, $"{Id}.png"),
                 Name = $"{settings.NamePrefix} #{Id}",
             };
         }
 
-        public void SaveGeneratedMetadata(IGenerationProcess checkpoint, string path, SessionSettings settings)
+        public void SaveGeneratedMetadata(IGenerationProcess checkpoint, string path, GenerationSettings settings)
         {
             var metadata = GenerateMetadata(settings);
             checkpoint.RespectCheckpoint();

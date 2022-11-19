@@ -304,6 +304,24 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to External Url.
+        /// </summary>
+        public static string ExternalUrlLabel {
+            get {
+                return ResourceManager.GetString("ExternalUrlLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://intothevortex.xyz/collection/{0} where {0} is the token id.
+        /// </summary>
+        public static string ExternalUrlPlaceholder {
+            get {
+                return ResourceManager.GetString("ExternalUrlPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Generate.
         /// </summary>
         public static string Generate {
@@ -471,6 +489,24 @@ namespace Vortex.GenerativeArtSuite.Create {
         public static string Layers {
             get {
                 return ResourceManager.GetString("Layers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate NFT retry amount.
+        /// </summary>
+        public static string MaxDuplicateDNAThresholdLabel {
+            get {
+                return ResourceManager.GetString("MaxDuplicateDNAThresholdLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1.
+        /// </summary>
+        public static string MaxDuplicateDNAThresholdPlaceholder {
+            get {
+                return ResourceManager.GetString("MaxDuplicateDNAThresholdPlaceholder", resourceCulture);
             }
         }
         

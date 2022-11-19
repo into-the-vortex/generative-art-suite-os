@@ -20,26 +20,29 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Sessions
         public Session()
         {
             Name = string.Empty;
-            Settings = new();
-            GitHandler = new();
+            GenerationSettings = new();
+            UserSettings = new();
             Layers = new();
         }
 
-        public Session(string name, SessionSettings settings)
+        public Session(string name, UserSettings userSettings, GenerationSettings settings)
         {
             Name = name;
-            Settings = settings;
-            GitHandler = new();
+            GenerationSettings = settings;
+            UserSettings = userSettings;
             Layers = new List<Layer>();
         }
 
-        public string Name { get; }
+        [JsonProperty]
+        public string Name { get; private set; }
 
         [JsonIgnore]
-        public GitHandler GitHandler { get; set; }
+        public UserSettings UserSettings { get; set; }
 
-        public SessionSettings Settings { get; }
+        [JsonProperty]
+        public GenerationSettings GenerationSettings { get; }
 
+        [JsonProperty]
         public List<Layer> Layers { get; }
 
         public bool CanMoveLayer(int from, int to)
@@ -167,14 +170,14 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Sessions
                 RaiseProblems(trait, trait.GetProblems());
             }
 
-            if(problems.Any())
+            if (problems.Any())
             {
                 string result = $"{Strings.HealthCheckFailed}:{Environment.NewLine}";
 
-                foreach(var kvp in problems)
+                foreach (var kvp in problems)
                 {
                     result += $"{Environment.NewLine}{kvp.Key.Name}:{Environment.NewLine}";
-                    foreach(var problem in kvp.Value)
+                    foreach (var problem in kvp.Value)
                     {
                         result += $" - {problem}{Environment.NewLine}";
                     }
@@ -184,6 +187,21 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Sessions
             }
 
             return string.Empty;
+        }
+
+        public void InitialiseRepository(string local, string remote)
+        {
+            UserSettings.InitialiseRepository(local, remote);
+        }
+
+        public void SaveRepository(string commitMessage)
+        {
+            UserSettings.SaveRepository(commitMessage);
+        }
+
+        public void LoadRepository()
+        {
+            UserSettings.LoadRepository();
         }
 
         public List<Reference<string>> GetIconURIs()

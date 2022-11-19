@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Vortex.GenerativeArtSuite.Create.Models.Sessions;
-using Vortex.GenerativeArtSuite.Create.Models.Settings;
 
 namespace Vortex.GenerativeArtSuite.Create.Services
 {
@@ -35,9 +34,9 @@ namespace Vortex.GenerativeArtSuite.Create.Services
             return false;
         }
 
-        public void CreateNewSession(string name, string remote, SessionSettings sessionSettings)
+        public void CreateNewSession(string remote, Session session)
         {
-            session = fileSystem.CreateSession(name, remote, sessionSettings);
+            this.session = fileSystem.CreateSession(remote, session);
             OnNewSessionContext();
         }
 

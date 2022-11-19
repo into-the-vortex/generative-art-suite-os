@@ -4,6 +4,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       mc:Ignorable="d"
+      xmlns:controls="clr-namespace:Vortex.GenerativeArtSuite.Create.Controls"
       xmlns:strings="clr-namespace:Vortex.GenerativeArtSuite.Create"
       xmlns:ui="http://schemas.modernwpf.com/2019"
       xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels.Home"
@@ -38,36 +39,10 @@
             <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.RemoteLabel}"
                      ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.RemotePlaceholder}"
                      Text="{Binding Remote, UpdateSourceTrigger=PropertyChanged}" />
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="auto" />
-                </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0"
-                         ui:ControlHelper.Header="{x:Static strings:Strings.OutputFolderLabel}"
-                         ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.OutputFolderPlaceholder}"
-                         IsReadOnly="True"
-                         Text="{Binding OutputFolder}" />
-                <Button Grid.Column="1"
-                        Content="  ...  "
-                        VerticalAlignment="Bottom"
-                        Command="{Binding BrowseOutputFolder}" />
-            </Grid>
             <Separator />
-            <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.NamePrefixLabel}"
-                     ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.NamePrefixPlaceholder}"
-                     Text="{Binding NamePrefix, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.DescriptionLabel}"
-                     ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.DescriptionPlaceholder}"
-                     Text="{Binding DescriptionTemplate, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.BaseURILabel}"
-                     ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.BaseURIPlaceholder}"
-                     Text="{Binding BaseURI, UpdateSourceTrigger=PropertyChanged}" />
-            <ui:NumberBox ui:ControlHelper.Header="{x:Static strings:Strings.CollectionSizeLabel}"
-                          ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.CollectionSizePlaceholder}"
-                          Minimum="1"
-                          Value="{Binding CollectionSize, UpdateSourceTrigger=PropertyChanged}" />
+            <controls:UserSettings DataContext="{Binding UserSettingsVM}" />
             <Separator />
+            <controls:GenerationSettings DataContext="{Binding GenerationSettingsVM}" />
             <Button Margin="50,0"
                     Content="{x:Static strings:Strings.CreateSession}"
                     HorizontalAlignment="Stretch"
