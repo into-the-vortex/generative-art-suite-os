@@ -32,6 +32,22 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Settings
         [JsonProperty]
         public bool InitialisedRemote { get; private set; }
 
+        public static GitHandler Clone(string from, string to)
+        {
+            var local = Repository.Clone(from, to, new CloneOptions
+            {
+                CredentialsProvider = CredentialsHandler,
+            });
+
+            return new GitHandler
+            {
+                Local = local,
+                InitialisedLocal = true,
+                Remote = from,
+                InitialisedRemote = true,
+            };
+        }
+
         public void InitialiseLocal(string directory)
         {
             if (InitialisedLocal)
@@ -95,7 +111,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Settings
                 StageAll(repo);
                 Commit(repo, message);
 
-                if(InitialisedRemote)
+                if (InitialisedRemote)
                 {
                     Push(repo);
                 }
@@ -121,6 +137,11 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Settings
             return repo.Network.Remotes[ORIGIN];
         }
 
+        private static void StageAll(Repository repo)
+        {
+            Commands.Stage(repo, "*");
+        }
+
         private static void InitialCommit(Repository repo)
         {
             Commit(repo, "Initial Commit");
@@ -132,9 +153,35 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Settings
             repo.Commit(message, vortexClient, vortexClient);
         }
 
-        private static void StageAll(Repository repo)
+        private static void Fetch(Repository repo)
         {
-            Commands.Stage(repo, "*");
+            var origin = Origin(repo);
+            Commands.Fetch(
+                repo,
+                origin.Name,
+                origin.FetchRefSpecs.Select(x => x.Specification),
+                new FetchOptions() { CredentialsProvider = CredentialsHandler },
+                "vortex client fetch");
+        }
+
+        private static void Pull(Repository repo)
+        {
+            var pullOptions = new PullOptions()
+            {
+                FetchOptions = new FetchOptions() { CredentialsProvider = CredentialsHandler },
+                MergeOptions = new MergeOptions() { FastForwardStrategy = FastForwardStrategy.Default },
+            };
+
+            Commands.Pull(repo, ClientSigner(), pullOptions);
+        }
+
+        private static void Push(Repository repo)
+        {
+            var origin = Origin(repo);
+            repo.Network.Push(
+                origin,
+                ORIGINMASTER,
+                new PushOptions() { CredentialsProvider = CredentialsHandler, });
         }
 
         private static void CreateGitIgnore(string dir)
@@ -147,38 +194,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Settings
             return new Signature("Vortex Labs", "vortex.client@outlook.com", DateTime.Now);
         }
 
-        private void Fetch(Repository repo)
-        {
-            var origin = Origin(repo);
-            Commands.Fetch(
-                repo,
-                origin.Name,
-                origin.FetchRefSpecs.Select(x => x.Specification),
-                new FetchOptions() { CredentialsProvider = CredentialsHandler },
-                "vortex client fetch");
-        }
-
-        private void Pull(Repository repo)
-        {
-            var pullOptions = new PullOptions()
-            {
-                FetchOptions = new FetchOptions() { CredentialsProvider = CredentialsHandler },
-                MergeOptions = new MergeOptions() { FastForwardStrategy = FastForwardStrategy.Default },
-            };
-
-            Commands.Pull(repo, ClientSigner(), pullOptions);
-        }
-
-        private void Push(Repository repo)
-        {
-            var origin = Origin(repo);
-            repo.Network.Push(
-                origin,
-                ORIGINMASTER,
-                new PushOptions() { CredentialsProvider = CredentialsHandler, });
-        }
-
-        private Credentials CredentialsHandler(string url, string usernameFromUrl, SupportedCredentialTypes types)
+        private static Credentials CredentialsHandler(string url, string usernameFromUrl, SupportedCredentialTypes types)
         {
             var startInfo = new ProcessStartInfo
             {

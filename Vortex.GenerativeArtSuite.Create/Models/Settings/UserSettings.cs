@@ -22,7 +22,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Settings
         public string OutputFolder { get; set; }
 
         [JsonProperty]
-        public GitHandler GitHandler { get; }
+        public GitHandler GitHandler { get; set; }
 
         public void InitialiseRepository(string local, string remote)
         {

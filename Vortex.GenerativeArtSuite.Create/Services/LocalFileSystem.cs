@@ -56,11 +56,19 @@ namespace Vortex.GenerativeArtSuite.Create.Services
         public Session CreateSession(string remote, Session session)
         {
             SaveSessionFile(session);
-            SaveUserSettings(session);
+            SaveUserSettings(session.Name, session.UserSettings);
 
             session.InitialiseRepository(SessionDirectory(session.Name), remote);
 
             return session;
+        }
+
+        public Session CloneSession(string name, string remote, UserSettings userSettings)
+        {
+            userSettings.GitHandler = GitHandler.Clone(remote, SessionDirectory(name));
+            SaveUserSettings(name, userSettings);
+
+            return LoadSession(name);
         }
 
         public Session LoadSession(string name)
@@ -85,7 +93,7 @@ namespace Vortex.GenerativeArtSuite.Create.Services
                 ManageImages(Path.Combine(dir, MASKFOLDER), session.GetMaskURIs());
 
                 SaveSessionFile(session);
-                SaveUserSettings(session);
+                SaveUserSettings(session.Name, session.UserSettings);
 
                 session.SaveRepository("Saving Session");
             }
@@ -204,10 +212,10 @@ namespace Vortex.GenerativeArtSuite.Create.Services
             }) ?? throw new ArgumentException($"{name} could not be loaded", nameof(name));
         }
 
-        private void SaveUserSettings(Session session)
+        private void SaveUserSettings(string name, UserSettings userSettings)
         {
-            var path = Path.Combine(SessionDirectory(session.Name), USERFILE);
-            File.WriteAllText(path, JsonConvert.SerializeObject(session.UserSettings, new JsonSerializerSettings
+            var path = Path.Combine(SessionDirectory(name), USERFILE);
+            File.WriteAllText(path, JsonConvert.SerializeObject(userSettings, new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Objects,
                 TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,

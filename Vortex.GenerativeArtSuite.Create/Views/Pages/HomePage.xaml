@@ -20,88 +20,125 @@
     </Grid.ColumnDefinitions>
 
     <Border Grid.Column="0"
-            Padding="20"
             Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
             BorderBrush="{DynamicResource SystemControlBackgroundBaseHighBrush}"
             BorderThickness="1"
             CornerRadius="10"
             DataContext="{Binding NewSession}">
 
-        <ui:SimpleStackPanel Spacing="10"
-                             HorizontalAlignment="Stretch"
-                             Orientation="Vertical"
-                             VerticalAlignment="Stretch">
-            <Label FontSize="32" FontWeight="Bold">Create Session</Label>
-            <Separator />
-            <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.SessionNameLabel}"
-                     ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.SessionNamePlaceholder}"
-                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.RemoteLabel}"
-                     ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.RemotePlaceholder}"
-                     Text="{Binding Remote, UpdateSourceTrigger=PropertyChanged}" />
-            <Separator />
-            <controls:UserSettings DataContext="{Binding UserSettingsVM}" />
-            <Separator />
-            <controls:GenerationSettings DataContext="{Binding GenerationSettingsVM}" />
-            <Button Margin="50,0"
-                    Content="{x:Static strings:Strings.CreateSession}"
-                    HorizontalAlignment="Stretch"
-                    Command="{Binding Create}" />
-        </ui:SimpleStackPanel>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0"
+                   Margin="20,10"
+                   Content="{x:Static strings:Strings.NewSession}"
+                   FontSize="32"
+                   FontWeight="Bold" />
+            <Separator Grid.Row="1" Margin="20,0" />
+            <ScrollViewer Grid.Row="2">
+                <ui:SimpleStackPanel Spacing="10"
+                                     Margin="20,10"
+                                     Orientation="Vertical">
+                    <TextBox ui:ControlHelper.Header="{x:Static strings:Strings.SessionNameLabel}"
+                             ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.SessionNamePlaceholder}"
+                             IsReadOnly="{Binding NameLock}"
+                             Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0"
+                                 ui:ControlHelper.Header="{x:Static strings:Strings.RemoteLabel}"
+                                 ui:ControlHelper.PlaceholderText="{x:Static strings:Strings.RemotePlaceholder}"
+                                 Text="{Binding Remote, UpdateSourceTrigger=PropertyChanged}" />
+                        <ui:ToggleSwitch Grid.Column="1"
+                                         Margin="10,0,0,0"
+                                         ui:ControlHelper.Header="{x:Static strings:Strings.IsClone}"
+                                         IsOn="{Binding Clone}"
+                                         OffContent="{x:Static strings:Strings.IsCloneOff}"
+                                         OnContent="{x:Static strings:Strings.IsCloneOn}"
+                                         Width="100" />
+                    </Grid>
+                    <Separator />
+                    <controls:UserSettings DataContext="{Binding UserSettingsVM}" />
+                    <ui:SimpleStackPanel Spacing="10"
+                                         Orientation="Vertical"
+                                         Visibility="{Binding Clone, Converter={StaticResource FalseToVisibleConverter}}">
+                        <Separator />
+                        <controls:GenerationSettings DataContext="{Binding GenerationSettingsVM}" />
+                    </ui:SimpleStackPanel>
+
+                    <Separator />
+                    <Button Content="{Binding ButtonCTA}"
+                            HorizontalAlignment="Stretch"
+                            Command="{Binding NewSessionCommand}" />
+                </ui:SimpleStackPanel>
+            </ScrollViewer>
+        </Grid>
+
     </Border>
 
     <Border Grid.Column="2"
-            Padding="20"
             Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
             BorderBrush="{DynamicResource SystemControlBackgroundBaseHighBrush}"
             BorderThickness="1"
             CornerRadius="10"
             HorizontalAlignment="Stretch">
 
-        <ui:SimpleStackPanel Spacing="10"
-                             HorizontalAlignment="Stretch"
-                             Orientation="Vertical"
-                             VerticalAlignment="Stretch">
-            <Label FontSize="32" FontWeight="Bold">Recent Sessions</Label>
-            <Separator />
-            <ItemsControl ItemsSource="{Binding RecentSessions}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Button Margin="0,5"
-                                HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Stretch"
-                                Command="{Binding OnClick}">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="auto" />
-                                </Grid.ColumnDefinitions>
-                                <Label Grid.Row="0"
-                                       Grid.ColumnSpan="3"
-                                       Content="{Binding Name}"
-                                       FontWeight="Bold"
-                                       HorizontalAlignment="Left" />
-                                <Label Grid.Row="1"
-                                       Grid.Column="0"
-                                       Content="{Binding Created}"
-                                       HorizontalAlignment="Left" />
-                                <Label Grid.Row="1"
-                                       Grid.Column="2"
-                                       Content="{Binding Modified}"
-                                       HorizontalAlignment="Left" />
-                            </Grid>
-                        </Button>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ui:SimpleStackPanel>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0"
+                   Margin="20,10"
+                   Content="{x:Static strings:Strings.OpenSession}"
+                   FontSize="32"
+                   FontWeight="Bold" />
+            <Separator Grid.Row="1" Margin="20,0" />
+            <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Disabled">
+                <ItemsControl Margin="20,10" ItemsSource="{Binding RecentSessions}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Margin="0,5"
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Stretch"
+                                    Command="{Binding OnClick}">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Row="0"
+                                           Grid.ColumnSpan="3"
+                                           Content="{Binding Name}"
+                                           FontWeight="Bold"
+                                           HorizontalAlignment="Left" />
+                                    <Label Grid.Row="1"
+                                           Grid.Column="0"
+                                           Content="{Binding Created}"
+                                           HorizontalAlignment="Left" />
+                                    <Label Grid.Row="1"
+                                           Grid.Column="2"
+                                           Content="{Binding Modified}"
+                                           HorizontalAlignment="Left" />
+                                </Grid>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
     </Border>
-
-
 
 </Grid>

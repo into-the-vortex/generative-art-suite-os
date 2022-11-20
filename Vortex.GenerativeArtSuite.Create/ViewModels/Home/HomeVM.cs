@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Prism.Regions;
 using Vortex.GenerativeArtSuite.Create.Models.Sessions;
+using Vortex.GenerativeArtSuite.Create.Models.Settings;
 using Vortex.GenerativeArtSuite.Create.Services;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
 
@@ -22,7 +23,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
             this.navigationLock = navigationLock;
             this.navigationService = navigationService;
 
-            NewSession = new NewSessionVM(fileSystem, NameIsValid, OpenNewSession);
+            NewSession = new NewSessionVM(fileSystem, NameIsValid, OpenNewSession, CloneNewSession);
             RecentSessions = new ObservableCollection<RecentSessionVM>();
         }
 
@@ -51,6 +52,12 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
         private void OpenNewSession(string remote, Session session)
         {
             sessionManager.CreateNewSession(remote, session);
+            navigationService.NavigateTo(NavigationService.Layers);
+        }
+
+        private void CloneNewSession(string name, string remote, UserSettings userSettings)
+        {
+            sessionManager.CloneNewSession(name, remote, userSettings);
             navigationService.NavigateTo(NavigationService.Layers);
         }
 

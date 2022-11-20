@@ -141,6 +141,9 @@
   <data name="CharacterBuilder" xml:space="preserve">
     <value>Character Builder</value>
   </data>
+  <data name="CloneSession" xml:space="preserve">
+    <value>Clone Session</value>
+  </data>
   <data name="CollectionSizeLabel" xml:space="preserve">
     <value>Collection Size</value>
   </data>
@@ -228,6 +231,15 @@
   <data name="IsAffectedByMaskOn" xml:space="preserve">
     <value>Affected by layer mask</value>
   </data>
+  <data name="IsClone" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="IsCloneOff" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="IsCloneOn" xml:space="preserve">
+    <value>Clone</value>
+  </data>
   <data name="IsDNA" xml:space="preserve">
     <value>Include in DNA</value>
   </data>
@@ -288,6 +300,9 @@
   <data name="NamePrefixPlaceholder" xml:space="preserve">
     <value>Collection Item</value>
   </data>
+  <data name="NewSession" xml:space="preserve">
+    <value>New Session</value>
+  </data>
   <data name="No" xml:space="preserve">
     <value>No</value>
   </data>
@@ -296,6 +311,9 @@
   </data>
   <data name="None" xml:space="preserve">
     <value>None</value>
+  </data>
+  <data name="OpenSession" xml:space="preserve">
+    <value>Open Session</value>
   </data>
   <data name="OutputFolderLabel" xml:space="preserve">
     <value>Output Folder</value>

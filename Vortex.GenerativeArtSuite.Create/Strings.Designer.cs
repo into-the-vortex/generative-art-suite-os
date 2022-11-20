@@ -133,6 +133,15 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clone Session.
+        /// </summary>
+        public static string CloneSession {
+            get {
+                return ResourceManager.GetString("CloneSession", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Collection Size.
         /// </summary>
         public static string CollectionSizeLabel {
@@ -394,6 +403,33 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Action.
+        /// </summary>
+        public static string IsClone {
+            get {
+                return ResourceManager.GetString("IsClone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create.
+        /// </summary>
+        public static string IsCloneOff {
+            get {
+                return ResourceManager.GetString("IsCloneOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clone.
+        /// </summary>
+        public static string IsCloneOn {
+            get {
+                return ResourceManager.GetString("IsCloneOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Include in DNA.
         /// </summary>
         public static string IsDNA {
@@ -574,6 +610,15 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New Session.
+        /// </summary>
+        public static string NewSession {
+            get {
+                return ResourceManager.GetString("NewSession", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         public static string No {
@@ -597,6 +642,15 @@ namespace Vortex.GenerativeArtSuite.Create {
         public static string None {
             get {
                 return ResourceManager.GetString("None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Session.
+        /// </summary>
+        public static string OpenSession {
+            get {
+                return ResourceManager.GetString("OpenSession", resourceCulture);
             }
         }
         
