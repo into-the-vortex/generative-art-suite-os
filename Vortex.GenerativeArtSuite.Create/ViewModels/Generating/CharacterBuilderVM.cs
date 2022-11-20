@@ -172,11 +172,13 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generating
         private void OnRandomise()
         {
             var healthCheck = sessionProvider.Session().HealthCheck();
+
             if (!string.IsNullOrEmpty(healthCheck))
             {
                 OnError(healthCheck);
                 return;
             }
+
             generation = sessionProvider.Session().CreateRandomGeneration(0);
             Redraw();
         }

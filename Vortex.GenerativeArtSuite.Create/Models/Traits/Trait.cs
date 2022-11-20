@@ -8,10 +8,10 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Traits
 {
     public abstract class Trait : IWeighted
     {
+        public const int DEFAULTWEIGHT = 50;
+
         [JsonProperty(propertyName: "IconURI")]
         private string iconURI;
-
-        public const int DEFAULTWEIGHT = 50;
 
         protected Trait()
             : this(string.Empty, string.Empty, DEFAULTWEIGHT)

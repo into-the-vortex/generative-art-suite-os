@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Input;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -46,7 +47,12 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
 
         private void OnBrowse()
         {
-            URI = fileSystem.SelectImageFile();
+            var selected = fileSystem.SelectImageFile();
+
+            if (File.Exists(selected))
+            {
+                URI = selected;
+            }
         }
 
         private void OnClear()
