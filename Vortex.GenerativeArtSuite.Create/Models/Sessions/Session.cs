@@ -104,7 +104,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Sessions
             var dna = string.Empty;
             var buildOrder = new List<GenerationStep>();
 
-            foreach (var layer in Layers)
+            foreach (var layer in Layers.Where(l => l.Traits.Any()))
             {
                 var trait = layer.SelectRandomTrait();
 
