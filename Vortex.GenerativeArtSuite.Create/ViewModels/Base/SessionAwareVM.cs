@@ -31,12 +31,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Base
 
             if (navigationContext.Uri.OriginalString == NavigationService.Home && sessionProvider.CanSaveSession())
             {
-                var param = new DialogParameters
-                {
-                    { nameof(YesNoDialogVM.Message), Strings.SaveQuestion },
-                };
-
-                dialogService.ShowDialog(DialogVM.ConfirmSaveDialog, param, ConfirmSaveCallback);
+                dialogService.ShowDialog(DialogVM.ConfirmSaveDialog, ConfirmSaveCallback);
             }
         }
 
@@ -44,9 +39,9 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Base
 
         private void ConfirmSaveCallback(IDialogResult dialogResult)
         {
-            if(dialogResult.Result == ButtonResult.OK)
+            if(dialogResult.Result == ButtonResult.None)
             {
-                sessionProvider.SaveSession();
+                
             }
         }
     }

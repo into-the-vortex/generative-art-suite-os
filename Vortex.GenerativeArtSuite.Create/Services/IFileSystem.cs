@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Vortex.GenerativeArtSuite.Create.Models.Sessions;
 using Vortex.GenerativeArtSuite.Create.Models.Settings;
 
@@ -8,13 +9,15 @@ namespace Vortex.GenerativeArtSuite.Create.Services
     {
         IEnumerable<RecentSession> RecentSessions();
 
-        Session CreateSession(string remote, Session session);
+        Task<Session> CreateSession(string remote, Session session);
 
-        Session CloneSession(string name, string remote, UserSettings userSettings);
+        Task<Session> CloneSession(string name, string remote, UserSettings userSettings);
 
-        Session LoadSession(string name);
+        Task<Session> LoadSession(string name);
 
-        void SaveSession(Session session);
+        Task SaveSession(string commitMessage, Session session);
+
+        void DeleteSession(string name);
 
         string SelectFolder();
 

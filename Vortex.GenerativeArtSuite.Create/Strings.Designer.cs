@@ -160,6 +160,15 @@ namespace Vortex.GenerativeArtSuite.Create {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Commit Message.
+        /// </summary>
+        public static string CommitMessage {
+            get {
+                return ResourceManager.GetString("CommitMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm.
         /// </summary>
         public static string Confirm {
@@ -777,6 +786,15 @@ namespace Vortex.GenerativeArtSuite.Create {
         public static string Stop {
             get {
                 return ResourceManager.GetString("Stop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Syncing... This may take a while.
+        /// </summary>
+        public static string Syncing {
+            get {
+                return ResourceManager.GetString("Syncing", resourceCulture);
             }
         }
         

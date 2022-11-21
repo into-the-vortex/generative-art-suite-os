@@ -1,9 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
+using System.Windows;
 using Prism.Commands;
 using Prism.Mvvm;
 using Vortex.GenerativeArtSuite.Create.Models.Sessions;
-using Vortex.GenerativeArtSuite.Create.Models.Settings;
 using Vortex.GenerativeArtSuite.Create.Services;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Settings;
 
@@ -11,28 +12,31 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
 {
     public class NewSessionVM : BindableBase
     {
-        private readonly Action<string, string, UserSettings> onClone;
-        private readonly Action<string, Session> onCreate;
         private readonly Func<string, bool> validateName;
         private readonly IFileSystem fileSystem;
+        private readonly ISessionManager sessionManager;
+        private readonly INavigationService navigationService;
 
         private GenerationSettingsVM generationSettings;
         private UserSettingsVM userSettings;
+
         private bool nameLock;
         private bool clone;
+        private bool busy;
+
         private string buttonCTA;
         private string remote;
         private string name;
 
         public NewSessionVM(
             IFileSystem fileSystem,
-            Func<string, bool> validateName,
-            Action<string, Session> onCreate,
-            Action<string, string, UserSettings> onClone)
+            ISessionManager sessionManager,
+            INavigationService navigationService,
+            Func<string, bool> validateName)
         {
             this.fileSystem = fileSystem;
-            this.onClone = onClone;
-            this.onCreate = onCreate;
+            this.sessionManager = sessionManager;
+            this.navigationService = navigationService;
             this.validateName = validateName;
 
             generationSettings = new GenerationSettingsVM(new());
@@ -41,16 +45,28 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
             remote = string.Empty;
             name = string.Empty;
 
+            sessionManager.OnBusyChanged += busy =>
+            {
+                Busy = busy;
+            };
+
             NewSessionCommand = new DelegateCommand(OnNewSession, CanCreateNewSession)
                 .ObservesProperty(() => Name)
+                .ObservesProperty(() => Busy)
                 .ObservesProperty(() => Clone)
                 .ObservesProperty(() => Remote);
+        }
+
+        public bool Busy
+        {
+            get => busy;
+            set => SetProperty(ref busy, value, UpdateCTA);
         }
 
         public bool Clone
         {
             get => clone;
-            set => SetProperty(ref clone, value, OnCloneChanged);
+            set => SetProperty(ref clone, value, UpdateCTA);
         }
 
         public bool NameLock
@@ -102,19 +118,34 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
 
         private void OnNewSession()
         {
-            if (clone)
+            Task.Run(async () =>
             {
-                onClone(name, remote, userSettings.Model);
-            }
-            else
-            {
-                onCreate(remote, new Session(Name, userSettings.Model, generationSettings.Model));
-            }
+                try
+                {
+                    if (clone)
+                    {
+                        await sessionManager.CloneNewSession(name, remote, userSettings.Model);
+                    }
+                    else
+                    {
+                        await sessionManager.CreateNewSession(remote, new Session(name, userSettings.Model, generationSettings.Model));
+                    }
+
+                    navigationService.NavigateTo(NavigationService.Layers);
+                }
+                catch (Exception e)
+                {
+                    fileSystem.DeleteSession(name);
+                    MessageBox.Show(e.Message);
+                    Clear();
+                }
+            });
         }
 
         private bool CanCreateNewSession()
         {
-            return validateName(name) &&
+            return !busy &&
+                validateName(name) &&
                 userSettings.IsValid() &&
                 (clone || generationSettings.IsValid());
         }
@@ -127,11 +158,11 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
             };
         }
 
-        private void OnCloneChanged()
+        private void UpdateCTA()
         {
-            ButtonCTA = clone
-                ? Strings.CloneSession
-                : Strings.CreateSession;
+            ButtonCTA = busy
+                ? Strings.Syncing
+                : (clone ? Strings.CloneSession : Strings.CreateSession);
         }
 
         private void CheckForNameLock()

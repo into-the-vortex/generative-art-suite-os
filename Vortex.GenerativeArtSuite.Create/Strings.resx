@@ -150,6 +150,9 @@
   <data name="CollectionSizePlaceholder" xml:space="preserve">
     <value>10000</value>
   </data>
+  <data name="CommitMessage" xml:space="preserve">
+    <value>Commit Message</value>
+  </data>
   <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>
   </data>
@@ -356,6 +359,9 @@
   </data>
   <data name="Stop" xml:space="preserve">
     <value>Stop</value>
+  </data>
+  <data name="Syncing" xml:space="preserve">
+    <value>Syncing... This may take a while</value>
   </data>
   <data name="Traits" xml:space="preserve">
     <value>Traits</value>

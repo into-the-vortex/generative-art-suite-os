@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Windows;
 using Prism.Mvvm;
 using Prism.Regions;
 
@@ -30,16 +30,6 @@ namespace Vortex.GenerativeArtSuite.Create.Services
             set => SetProperty(ref currentView, value);
         }
 
-        public void GoHome()
-        {
-            if (mainRegion is null && !TryGetMainRegion())
-            {
-                return;
-            }
-
-            mainRegion.RequestNavigate(Home, OnNavigation);
-        }
-
         public void NavigateTo(string? tag, NavigationParameters? parameters = null)
         {
             if (tag is null || (mainRegion is null && !TryGetMainRegion()))
@@ -47,7 +37,10 @@ namespace Vortex.GenerativeArtSuite.Create.Services
                 return;
             }
 
-            mainRegion.RequestNavigate(tag, OnNavigation, parameters);
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                mainRegion.RequestNavigate(tag, OnNavigation, parameters);
+            });
         }
 
         private bool TryGetMainRegion()
@@ -74,7 +67,7 @@ namespace Vortex.GenerativeArtSuite.Create.Services
             }
             else
             {
-                throw new InvalidOperationException();
+                RaisePropertyChanged(nameof(CurrentView));
             }
         }
 

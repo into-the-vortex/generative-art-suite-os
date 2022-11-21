@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using Prism.Regions;
-using Vortex.GenerativeArtSuite.Create.Models.Sessions;
-using Vortex.GenerativeArtSuite.Create.Models.Settings;
 using Vortex.GenerativeArtSuite.Create.Services;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
 
@@ -23,7 +21,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
             this.navigationLock = navigationLock;
             this.navigationService = navigationService;
 
-            NewSession = new NewSessionVM(fileSystem, NameIsValid, OpenNewSession, CloneNewSession);
+            NewSession = new NewSessionVM(fileSystem, sessionManager, navigationService, NameIsValid);
             RecentSessions = new ObservableCollection<RecentSessionVM>();
         }
 
@@ -37,7 +35,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
 
             NewSession.Clear();
             RecentSessions.Clear();
-            RecentSessions.AddRange(fileSystem.RecentSessions().Select(s => new RecentSessionVM(s, OpenRecentSession)));
+            RecentSessions.AddRange(fileSystem.RecentSessions().Select(s => new RecentSessionVM(s, sessionManager, navigationService)));
 
             navigationLock.Capture();
         }
@@ -45,26 +43,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Home
         public override void OnNavigatedFrom(NavigationContext navigationContext)
         {
             base.OnNavigatedFrom(navigationContext);
-
             navigationLock.Release();
-        }
-
-        private void OpenNewSession(string remote, Session session)
-        {
-            sessionManager.CreateNewSession(remote, session);
-            navigationService.NavigateTo(NavigationService.Layers);
-        }
-
-        private void CloneNewSession(string name, string remote, UserSettings userSettings)
-        {
-            sessionManager.CloneNewSession(name, remote, userSettings);
-            navigationService.NavigateTo(NavigationService.Layers);
-        }
-
-        private void OpenRecentSession(string name)
-        {
-            sessionManager.OpenExistingSession(name);
-            navigationService.NavigateTo(NavigationService.Layers);
         }
 
         private bool NameIsValid(string name)

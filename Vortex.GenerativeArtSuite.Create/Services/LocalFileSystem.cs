@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Windows;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Vortex.GenerativeArtSuite.Common.Models;
 using Vortex.GenerativeArtSuite.Create.Models.Sessions;
@@ -53,53 +54,69 @@ namespace Vortex.GenerativeArtSuite.Create.Services
             }
         }
 
-        public Session CreateSession(string remote, Session session)
+        public async Task<Session> CreateSession(string remote, Session session)
         {
-            SaveSessionFile(session);
-            SaveUserSettings(session.Name, session.UserSettings);
+            await SaveSessionFile(session);
+            await SaveUserSettings(session.Name, session.UserSettings);
 
             session.InitialiseRepository(SessionDirectory(session.Name), remote);
 
             return session;
         }
 
-        public Session CloneSession(string name, string remote, UserSettings userSettings)
+        public async Task<Session> CloneSession(string name, string remote, UserSettings userSettings)
         {
             userSettings.GitHandler = GitHandler.Clone(remote, SessionDirectory(name));
-            SaveUserSettings(name, userSettings);
+            await SaveUserSettings(name, userSettings);
 
-            return LoadSession(name);
+            return await LoadSession(name);
         }
 
-        public Session LoadSession(string name)
+        public async Task<Session> LoadSession(string name)
         {
-            var userSettings = LoadUserSettings(name);
+            var userSettings = await LoadUserSettings(name);
             userSettings.LoadRepository();
 
-            var session = LoadSessionFile(name);
+            var session = await LoadSessionFile(name);
             session.UserSettings = userSettings;
 
             return session;
         }
 
-        public void SaveSession(Session session)
+        public async Task SaveSession(string commitMessage, Session session)
         {
-            try
+            string dir = SessionDirectory(session.Name);
+
+            ManageImages(Path.Combine(dir, ICONFOLDER), session.GetIconURIs());
+            ManageImages(Path.Combine(dir, TRAITFOLDER), session.GetTraitURIs());
+            ManageImages(Path.Combine(dir, MASKFOLDER), session.GetMaskURIs());
+
+            await SaveSessionFile(session);
+            await SaveUserSettings(session.Name, session.UserSettings);
+
+            session.SaveRepository(commitMessage);
+        }
+
+        public void DeleteSession(string name)
+        {
+            var dir = Path.Combine(sessionsPath, name);
+            if (Directory.Exists(dir))
             {
-                string dir = SessionDirectory(session.Name);
+                var startInfo = new ProcessStartInfo
+                {
+                    FileName = "cmd.exe",
+                    WorkingDirectory = sessionsPath,
+                    Arguments = $"/C rmdir {name} /s /q",
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    CreateNoWindow = true,
+                };
 
-                ManageImages(Path.Combine(dir, ICONFOLDER), session.GetIconURIs());
-                ManageImages(Path.Combine(dir, TRAITFOLDER), session.GetTraitURIs());
-                ManageImages(Path.Combine(dir, MASKFOLDER), session.GetMaskURIs());
+                var process = new Process
+                {
+                    StartInfo = startInfo,
+                };
 
-                SaveSessionFile(session);
-                SaveUserSettings(session.Name, session.UserSettings);
-
-                session.SaveRepository("Saving Session");
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Unexpected error saving the session: " + e);
+                process.Start();
             }
         }
 
@@ -187,17 +204,17 @@ namespace Vortex.GenerativeArtSuite.Create.Services
             return dir;
         }
 
-        private void SaveSessionFile(Session session)
+        private async Task SaveSessionFile(Session session)
         {
             var path = Path.Combine(SessionDirectory(session.Name), SESSIONFILE);
-            File.WriteAllText(path, JsonConvert.SerializeObject(session, new JsonSerializerSettings
+            await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(session, new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Objects,
                 TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
             }));
         }
 
-        private Session LoadSessionFile(string name)
+        private async Task<Session> LoadSessionFile(string name)
         {
             var path = Path.Combine(sessionsPath, name, SESSIONFILE);
 
@@ -206,23 +223,23 @@ namespace Vortex.GenerativeArtSuite.Create.Services
                 throw new ArgumentException($"{name} does not refer to an existing session", nameof(name));
             }
 
-            return JsonConvert.DeserializeObject<Session>(File.ReadAllText(path), new JsonSerializerSettings
+            return JsonConvert.DeserializeObject<Session>(await File.ReadAllTextAsync(path), new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Objects,
             }) ?? throw new ArgumentException($"{name} could not be loaded", nameof(name));
         }
 
-        private void SaveUserSettings(string name, UserSettings userSettings)
+        private async Task SaveUserSettings(string name, UserSettings userSettings)
         {
             var path = Path.Combine(SessionDirectory(name), USERFILE);
-            File.WriteAllText(path, JsonConvert.SerializeObject(userSettings, new JsonSerializerSettings
+            await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(userSettings, new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Objects,
                 TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
             }));
         }
 
-        private UserSettings LoadUserSettings(string name)
+        private async Task<UserSettings> LoadUserSettings(string name)
         {
             var path = Path.Combine(SessionDirectory(name), USERFILE);
 
@@ -231,7 +248,7 @@ namespace Vortex.GenerativeArtSuite.Create.Services
                 throw new ArgumentException($"{name} does not have any user settings", nameof(name));
             }
 
-            return JsonConvert.DeserializeObject<UserSettings>(File.ReadAllText(path), new JsonSerializerSettings
+            return JsonConvert.DeserializeObject<UserSettings>(await File.ReadAllTextAsync(path), new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Objects,
             }) ?? throw new ArgumentException($"{name} could not load user settings", nameof(name));
