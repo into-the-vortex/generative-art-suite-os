@@ -133,6 +133,16 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
                         Path.GetFileNameWithoutExtension(new FileInfo(file).Name),
                         file);
 
+                    switch (model)
+                    {
+                        case DrawnTrait dt:
+                            dt.TraitURI = file;
+                            break;
+                        case DependencyTrait dt:
+                            dt.Variants[0].TraitURI = file;
+                            break;
+                    }
+
                     var param = new DialogParameters
                     {
                          { TraitDialogParameters.ExistingTraits, Model.Traits.Select(l => l.Name).ToList() },
