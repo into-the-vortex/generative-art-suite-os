@@ -12,6 +12,7 @@
         xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:vms="clr-namespace:Vortex.GenerativeArtSuite.Create.ViewModels"
         Title="MainWindow"
+        Icon="../Resources/icon.png"
         d:DataContext="{d:DesignInstance vms:MainWindowVM}"
         ui:TitleBar.ExtendViewIntoTitleBar="True"
         ui:TitleBar.IsBackButtonVisible="False"

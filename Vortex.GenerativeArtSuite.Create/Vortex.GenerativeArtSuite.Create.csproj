@@ -5,9 +5,11 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\icon.png" />
     <None Remove="Resources\None.png" />
   </ItemGroup>
 
@@ -73,6 +75,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\icon.png" />
     <Resource Include="Resources\None.png" />
   </ItemGroup>
 
