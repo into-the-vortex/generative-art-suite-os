@@ -9,15 +9,23 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
 {
     public class TraitImageVM : BindableBase
     {
+        private readonly Action? onBrowseSuccess;
         private readonly IFileSystem fileSystem;
         private readonly Action<string> set;
         private readonly Func<string> get;
 
-        public TraitImageVM(IFileSystem fileSystem, Func<string> get, Action<string> set, Action raiseCanExecuteChanged, string addPrompt)
+        public TraitImageVM(
+            IFileSystem fileSystem,
+            string addPrompt,
+            Func<string> get,
+            Action<string> set,
+            Action raiseCanExecuteChanged,
+            Action? onBrowseSuccess = null)
         {
-            this.fileSystem = fileSystem;
             this.get = get;
             this.set = set;
+            this.fileSystem = fileSystem;
+            this.onBrowseSuccess = onBrowseSuccess;
 
             AddPrompt = addPrompt;
             BrowseImage = new DelegateCommand(OnBrowse);
@@ -52,6 +60,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
             if (File.Exists(selected))
             {
                 URI = selected;
+                onBrowseSuccess?.Invoke();
             }
         }
 

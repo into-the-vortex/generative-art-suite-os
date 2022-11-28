@@ -9,23 +9,24 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
 {
     public class TraitVariantVM : BindableBase, IViewModel<TraitVariant>, ITraitVariantVM
     {
-        public TraitVariantVM(IFileSystem fileSystem, TraitVariant model, Action raiseCanExecuteChanged)
+        public TraitVariantVM(IFileSystem fileSystem, TraitVariant model, Action raiseCanExecuteChanged, Action<TraitVariantVM> onTraitBrowseSuccess)
         {
             VariantPath = model.VariantPath;
 
             Trait = new TraitImageVM(
                 fileSystem,
+                Strings.AddTrait,
                 () => model.TraitURI,
                 val => model.TraitURI = val,
                 raiseCanExecuteChanged,
-                Strings.AddTrait);
+                () => onTraitBrowseSuccess(this));
 
             Mask = new TraitImageVM(
                 fileSystem,
+                Strings.AddMask,
                 () => model.MaskURI,
                 val => model.MaskURI = val,
-                raiseCanExecuteChanged,
-                Strings.AddMask);
+                raiseCanExecuteChanged);
 
             Model = model;
         }

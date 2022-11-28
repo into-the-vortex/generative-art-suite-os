@@ -14,7 +14,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
         public DependencyTraitVM(IFileSystem fileSystem, DependencyTraitStagingArea traitStagingArea, Action raiseCanExecuteChanged)
             : base(fileSystem, traitStagingArea, raiseCanExecuteChanged)
         {
-            VariantVMs.ConnectModelCollection(traitStagingArea.Variants, m => new TraitVariantVM(fileSystem, m, raiseCanExecuteChanged));
+            VariantVMs.ConnectModelCollection(traitStagingArea.Variants, m => new TraitVariantVM(fileSystem, m, raiseCanExecuteChanged, OnTraitBrowseSuccess));
         }
 
         public ObservableCollection<TraitVariantVM> VariantVMs { get; } = new();
@@ -23,6 +23,18 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
         {
             return VariantVMs.All(v => File.Exists(v.Trait.URI)) &&
                 base.CanConfirm();
+        }
+
+        private void OnTraitBrowseSuccess(TraitVariantVM traitVariantVM)
+        {
+            if (traitVariantVM != VariantVMs.Last())
+            {
+                var next = VariantVMs[VariantVMs.IndexOf(traitVariantVM) + 1];
+                if (!File.Exists(next.Trait.URI))
+                {
+                    next.Trait.BrowseImage.Execute(null);
+                }
+            }
         }
     }
 }

@@ -16,10 +16,10 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits.Base
 
             Icon = new TraitImageVM(
                 fileSystem,
+                Strings.AddIcon,
                 () => traitStagingArea.IconURI.Value,
                 val => traitStagingArea.IconURI.Value = val,
-                raiseCanExecuteChanged,
-                Strings.AddIcon);
+                raiseCanExecuteChanged);
 
             PropertyChanged += (s, e) =>
             {
