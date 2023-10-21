@@ -7,6 +7,7 @@ using Vortex.GenerativeArtSuite.Create.ViewModels;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Base;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Generating;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Home;
+using Vortex.GenerativeArtSuite.Create.ViewModels.Layers;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Layers.Create;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Layers.Delete;
 using Vortex.GenerativeArtSuite.Create.ViewModels.Layers.Edit;
