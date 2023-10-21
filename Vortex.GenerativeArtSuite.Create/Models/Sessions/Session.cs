@@ -116,7 +116,11 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Sessions
                 buildOrder.Add(trait.CreateGenerationStep(layer, buildOrder));
             }
 
-            return new Generation(nextId, Hash(dna.Trim()), buildOrder);
+            var noneTrait = new NoneTrait();
+
+            var gen = new Generation(nextId, Hash(dna.Trim()), Layers, buildOrder).ApplyRules();
+
+            return gen.IsValidConfig() ? gen : CreateRandomGeneration(nextId);
         }
 
         public Generation CreateGeneration(int nextId, List<GenerationStep> steps)
@@ -137,7 +141,7 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Sessions
                 buildOrder.Add(trait.CreateGenerationStep(layer, buildOrder));
             }
 
-            return new Generation(nextId, Hash(dna.Trim()), buildOrder);
+            return new Generation(nextId, Hash(dna.Trim()), Layers, buildOrder).ApplyRules();
         }
 
         public string HealthCheck()

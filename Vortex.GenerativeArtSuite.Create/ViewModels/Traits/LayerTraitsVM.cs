@@ -129,9 +129,18 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits
 
                 foreach (var file in files)
                 {
+                    string ironUri = string.Empty;
+
+                    FileAttributes attr = File.GetAttributes(file);
+
+                    if ((attr & FileAttributes.Directory) != FileAttributes.Directory)
+                    {
+                        ironUri = file;
+                    }
+
                     var model = Model.CreateTrait(
                         Path.GetFileNameWithoutExtension(new FileInfo(file).Name),
-                        file);
+                        ironUri);
 
                     switch (model)
                     {

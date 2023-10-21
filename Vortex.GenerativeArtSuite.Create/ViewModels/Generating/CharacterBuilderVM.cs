@@ -158,10 +158,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Generating
 
         private void OnSuccess()
         {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                UpdateSelection();
-            });
+            Application.Current.Dispatcher.Invoke(UpdateSelection);
         }
 
         private void OnError(string error)

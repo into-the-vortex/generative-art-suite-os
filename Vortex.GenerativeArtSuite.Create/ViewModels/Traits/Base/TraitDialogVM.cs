@@ -38,7 +38,7 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits.Base
             set => SetProperty(ref traitVM, value);
         }
 
-        public ICommand Confirm { get; }
+        public DelegateCommand Confirm { get; }
 
         public ICommand Cancel { get; }
 
@@ -54,6 +54,8 @@ namespace Vortex.GenerativeArtSuite.Create.ViewModels.Traits.Base
                 this.traitStagingArea = traitStagingArea;
                 TraitVM = CreateVM(traitStagingArea);
             }
+
+            Confirm.RaiseCanExecuteChanged();
         }
 
         protected override IDialogParameters GetDialogParameters(string parameter)

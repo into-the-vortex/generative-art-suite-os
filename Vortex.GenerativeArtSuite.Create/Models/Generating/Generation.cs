@@ -16,11 +16,15 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
 {
     public class Generation
     {
-        public Generation(int id, string dna, List<GenerationStep> buildOrder)
+        private readonly List<Layer> layers;
+
+        public Generation(int id, string dna, List<Layer> layers, List<GenerationStep> buildOrder)
         {
             Id = id;
             DNA = dna;
             BuildOrder = buildOrder;
+
+            this.layers = layers;
         }
 
         public int Id { get; }
@@ -89,6 +93,111 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
                 newStep);
 
             return this;
+        }
+
+        public Generation ApplyRules()
+        {
+            var notRequired = new List<GenerationStep>();
+            var item = BuildOrder[7];
+            var armLayer = layers.First(l => l.Name == "Arm");
+
+            if (item.Trait.TraitName == "None")
+            {
+                BuildOrder[1] = armLayer.Traits[0].CreateGenerationStep(armLayer, notRequired);
+            }
+            else
+            {
+                var skin = BuildOrder[2];
+                switch (skin.Trait.TraitName)
+                {
+                    case "None":
+                        BuildOrder[1] = armLayer.Traits[0].CreateGenerationStep(armLayer, notRequired);
+                        break;
+                    case "Blue Two-Toned Curly":
+                        BuildOrder[1] = armLayer.Traits[1].CreateGenerationStep(armLayer, notRequired);
+                        break;
+                    case "Brown Quetzalcoatl":
+                        BuildOrder[1] = armLayer.Traits[2].CreateGenerationStep(armLayer, notRequired);
+                        break;
+                    case "Brown":
+                        BuildOrder[1] = armLayer.Traits[3].CreateGenerationStep(armLayer, notRequired);
+                        break;
+                    case "Galaxy":
+                        BuildOrder[1] = armLayer.Traits[4].CreateGenerationStep(armLayer, notRequired);
+                        break;
+                    case "Magma":
+                        BuildOrder[1] = armLayer.Traits[5].CreateGenerationStep(armLayer, notRequired);
+                        break;
+                    case "Green":
+                        BuildOrder[1] = armLayer.Traits[6].CreateGenerationStep(armLayer, notRequired);
+                        break;
+                    case "Pink":
+                        BuildOrder[1] = armLayer.Traits[7].CreateGenerationStep(armLayer, notRequired);
+                        break;
+                    case "Tweeter":
+                        BuildOrder[1] = armLayer.Traits[8].CreateGenerationStep(armLayer, notRequired);
+                        break;
+                    case "Cream":
+                        BuildOrder[1] = armLayer.Traits[9].CreateGenerationStep(armLayer, notRequired);
+                        break;
+                    case "Green Curly":
+                        BuildOrder[1] = armLayer.Traits[10].CreateGenerationStep(armLayer, notRequired);
+                        break;
+                    case "Quetzalcoatl":
+                        BuildOrder[1] = armLayer.Traits[11].CreateGenerationStep(armLayer, notRequired);
+                        break;
+                    case "Red Curly":
+                        BuildOrder[1] = armLayer.Traits[12].CreateGenerationStep(armLayer, notRequired);
+                        break;
+                    case "Rock":
+                        BuildOrder[1] = armLayer.Traits[13].CreateGenerationStep(armLayer, notRequired);
+                        break;
+                    case "Tan Shades":
+                        BuildOrder[1] = armLayer.Traits[14].CreateGenerationStep(armLayer, notRequired);
+                        break;
+                    case "Water":
+                        BuildOrder[1] = armLayer.Traits[15].CreateGenerationStep(armLayer, notRequired);
+                        break;
+                    case "White Quetzalcoatl":
+                        BuildOrder[1] = armLayer.Traits[16].CreateGenerationStep(armLayer, notRequired);
+                        break;
+                    case "Yellow":
+                        BuildOrder[1] = armLayer.Traits[17].CreateGenerationStep(armLayer, notRequired);
+                        break;
+
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+
+            return this;
+        }
+
+        public bool IsValidConfig()
+        {
+            var troublesomeEyes = new string[]
+            {
+                "3d Glasses",
+                "Wooden Glasses",
+                "Red Glasses",
+            };
+            var troublesomeHead = new string[]
+            {
+                "Green Croc Headdress",
+                "Red Croc Headdress",
+                "Blue Eagle Headdress",
+                "Red Eagle Headdress",
+                "Golden Headdress",
+                "Green Headdress",
+                "Blue Headdress",
+                "Leopard Headdress",
+                "Golden Leopard Headdress",
+            };
+
+            var eyes = BuildOrder[3];
+            var head = BuildOrder[5];
+
+            return !(troublesomeEyes.Contains(eyes.Trait.TraitName) && troublesomeHead.Contains(head.Trait.TraitName));
         }
     }
 }
