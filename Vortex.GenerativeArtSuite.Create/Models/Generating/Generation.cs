@@ -194,8 +194,8 @@ namespace Vortex.GenerativeArtSuite.Create.Models.Generating
                 "Golden Leopard Headdress",
             };
 
-            var eyes = BuildOrder[3];
-            var head = BuildOrder[5];
+            var eyes = BuildOrder[4];
+            var head = BuildOrder[6];
 
             return !(troublesomeEyes.Contains(eyes.Trait.TraitName) && troublesomeHead.Contains(head.Trait.TraitName));
         }
